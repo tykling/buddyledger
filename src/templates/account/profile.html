@@ -1,0 +1,28 @@
+{% extends "skeleton.html" %}
+{% load tz %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+{% if message or form.errors %}
+    <div class="alert alert-block">
+        {% if message %}
+            {{ message }}
+        {% endif %}
+{% if form.errors %}
+        <p>The following form fields contain errors:</p>
+        <ol>
+            {% for error in form.errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+        </ol>
+        <p>Please correct them and try again</p>
+        {% endif %}
+    </div>
+{% endif %}
+
+<legend>Profile</legend>
+{{ form }}
+
+{% endblock content %}
