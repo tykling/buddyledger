@@ -26,8 +26,8 @@ def ShowLedger(request, ledgerid):
 def EditLedger(request, ledgerid):
     ### Check if the ledger exists - bail out if not
     try:
-        Ledger = Ledger.objects.get(pk = ledgerid)
-    except Ledger.DoesNotExist:
+        ledger = Ledger.objects.get(pk = ledgerid)
+    except ledger.DoesNotExist:
         response = render_to_response('ledgerdoesnotexist.html')
         return response
 
