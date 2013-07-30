@@ -15,8 +15,12 @@ def CreateLedger(request):
         'form': form,
     })
 
+
 def ShowLedger(request, ledgerid):
-    return
+    return render(request, 'showledger.html', {
+        'ledgerid': ledgerid,
+    })
+
 
 def EditLedger(request, ledgerid):
     ### Check if the ledger exists - bail out if not
@@ -25,3 +29,7 @@ def EditLedger(request, ledgerid):
     except Ledger.DoesNotExist:
         response = render_to_response('ledgerdoesnotexist.html')
         return response
+
+    return render(request, 'editledger.html', {
+        'ledgerid': ledgerid,
+    })
