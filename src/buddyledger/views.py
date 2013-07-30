@@ -18,8 +18,15 @@ def CreateLedger(request):
 
 
 def ShowLedger(request, ledgerid=0):
+    ### Check if the ledger exists - bail out if not
+    try:
+        ledger = Ledger.objects.get(pk = ledgerid)
+    except ledger.DoesNotExist:
+        response = render_to_response('ledgerdoesnotexist.html')
+        return response
+    
     return render(request, 'showledger.html', {
-        'ledgerid': ledgerid,
+        'ledger': ledger
     })
 
 
