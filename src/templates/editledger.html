@@ -3,6 +3,7 @@
 <h2>Editing ledger {{ ledgerid }}</h2>
 <form method="POST">
     {% csrf_token %}
+    <input type="hidden" name="id" value="{{ ledgerid }}">
     <table>
     {{form}}
     </table>

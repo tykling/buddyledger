@@ -41,4 +41,5 @@ def EditLedger(request, ledgerid):
 
     return render(request, 'editledger.html', {
         'form': form,
+        'ledgerid': ledgerid
     })
