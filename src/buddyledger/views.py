@@ -6,8 +6,8 @@ def CreateLedger(request):
     if request.method == 'POST': # If the form has been submitted...
         form = LedgerForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            form.save() # save the new ledger
-            return HttpResponseRedirect('/ledger/%s' % form.id) # return to the ledger page
+            ledger = form.save() # save the new ledger
+            return HttpResponseRedirect('/ledger/%s' % ledger.id) # return to the ledger page
     else:
         form = LedgerForm()
 
