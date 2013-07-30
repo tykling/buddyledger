@@ -58,12 +58,12 @@ def EditLedger(request, ledgerid=0):
     })
 
 
-def AddPerson(request):
+def AddPerson(request,ledgerid):
     if request.method == 'POST': # If the form has been submitted...
         form = PersonForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
             person = form.save() # save the new person
-            return HttpResponseRedirect('/ledger/%s' % ledger.id) # return to the ledger page
+            return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page
     else:
         form = PersonForm()
 
