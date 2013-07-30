@@ -15,10 +15,10 @@ def CreateLedger(request):
         'form': form,
     })
 
-def ShowLedger(request):
+def ShowLedger(request, ledgerid):
     return
 
-def EditLedger(request):
+def EditLedger(request, ledgerid):
     ### Check if the ledger exists - bail out if not
     try:
         ledger = Ledger.objects.get(pk = ledgerid)
