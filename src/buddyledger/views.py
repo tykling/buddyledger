@@ -14,3 +14,13 @@ def CreateLedger(request):
     return render(request, 'createledger.html', {
         'form': form,
     })
+
+def ShowLedger(request):
+    
+def EditLedger(request):
+    ### Check if the ledger exists - bail out if not
+    try:
+        ledger = Ledger.objects.get(pk = ledgerid)
+    except Ledger.DoesNotExist:
+        response = render_to_response('ledgerdoesnotexist.html')
+        return response
