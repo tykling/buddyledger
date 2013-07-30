@@ -67,6 +67,6 @@ def AddPerson(request):
     else:
         form = PersonForm()
 
-    return render(request, 'createledger.html', {
+    return render(request, 'addperson.html', {
         'form': form,
     })
