@@ -5,8 +5,9 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^accounts/profile/$', 'account.views.profile'),
-    # Uncomment the next line to enable the admin:
+    url(r'^/$', 'ledger.views.create'),
+    url(r'^/ledger/(?P<ledgerid>\d+)/$', 'ledger.views.show'),
+    url(r'^/ledger/(?P<ledgerid>\d+)/edit/$', 'ledger.views.edit'),
+    # Admin urls
     url(r'^admin/', include(admin.site.urls)),
 )
-
