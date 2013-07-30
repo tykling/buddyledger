@@ -16,7 +16,8 @@ def CreateLedger(request):
     })
 
 def ShowLedger(request):
-    
+    return
+
 def EditLedger(request):
     ### Check if the ledger exists - bail out if not
     try:
