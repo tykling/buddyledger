@@ -13,19 +13,6 @@
             <div class="navbar-inner">
                 <div class="container-fluid">
                     <a class="brand" href="/">BuddyLedger</a>
-
-                    <div class="nav-collapse collapse">
-                        {% if user.is_authenticated %}
-                    <p>authenticated</p>
-                        {% else %}
-                            <ul class="nav pull-right">
-                                <li><a href="/accounts/register/" data-toggle="modal"><i class="icon-globe icon-white"></i> Sign up</a></li>
-                                <li class="divider-vertical"></li>
-                                <li><a href="/accounts/login/" data-toggle="modal"><i class="icon-user icon-white"></i> Sign in</a></li>
-                                </li>
-                            </ul>
-                        {% endif %}
-                    </div>
                 </div>
             </div>
         </div>
@@ -37,7 +24,6 @@
             <div class="row">
                 <div class="span10 offset1">
                     {% block content %}
-
                     {% endblock %}
                 </div>
             </div>
