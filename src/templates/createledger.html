@@ -1,6 +1,7 @@
 {% extends "skeleton.html" %}
 {% block content %}
 <form method="POST">
+    {% csrf_token %}
     <table>
     {{form}}
     </table>
