@@ -1,6 +1,7 @@
 {% extends "skeleton.html" %}
 {% block content %}
 <h2>Showing ledger {{ ledger.id }}: {{ ledger.name }}</h2>
+<h3>People involved:</h3>
 <ul>
 {% for person in people %}
 <li>{{ person.name }}</li>
