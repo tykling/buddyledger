@@ -34,7 +34,8 @@ def EditLedger(request, ledgerid):
     if request.method == 'POST': # If the form has been submitted...
         form = LedgerForm(request.POST) # A form bound to the ledger data
         if form.is_valid(): # All validation rules pass
-            ledger = form.save() # save the new ledger
+            ledger.name = form.name()
+            ledger.save()
             return HttpResponseRedirect('/ledger/%s' % ledger.id) # return to the ledger page
         else:
             form = LedgerForm(request.POST)
