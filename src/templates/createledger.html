@@ -1,7 +1,9 @@
 {% extends "skeleton.html" %}
 {% block content %}
-<table>
-{{form}}
-</table>
-<input type="submit" method="POST">
+<form method="POST">
+    <table>
+    {{form}}
+    </table>
+    <input type="submit" method="POST">
+</form>
 {% endblock %}
