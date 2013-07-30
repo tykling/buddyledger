@@ -32,10 +32,12 @@ def EditLedger(request, ledgerid):
         return response
 
     if request.method == 'POST': # If the form has been submitted...
-        form = LedgerForm(instance=ledger) # A form bound to the ledger data
+        form = LedgerForm(request.POST) # A form bound to the ledger data
         if form.is_valid(): # All validation rules pass
             ledger = form.save() # save the new ledger
             return HttpResponseRedirect('/ledger/%s' % ledger.id) # return to the ledger page
+        else:
+            form = LedgerForm(request.POST)
     else:
         form = LedgerForm(instance=ledger)
 
