@@ -38,3 +38,6 @@ class Payment(models.Model):
 class Currency(models.Model):
     iso4217_code = models.CharField(max_length=3)
     danish_ore_price = models.BigIntegerField()
+
+    def __unicode__(self):
+        return self.iso4217_code
