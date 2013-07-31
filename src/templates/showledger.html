@@ -1,7 +1,8 @@
 {% extends "skeleton.html" %}
 {% block content %}
 <h2>Ledger: {{ ledger.name }}</h2>
-<h3>People involved:</h3>
+
+<h3>People:</h3>
 <table class="table table-bordered table-striped" style="width: 50%;">
 <tr><th>Name</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
 {% for person in people %}
@@ -9,6 +10,19 @@
 <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
 <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td></tr>
 {% endfor %}
-</table>>
+</table>
 <a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary">Add person</a>
+
+<h3>Expenses:</h3>
+<table class="table table-bordered table-striped" style="width: 50%;">
+<tr><th>Name</th><th style="width: 5em; text-align: center">Amount</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
+{% for expense in expenses %}
+<tr><td>{{ expense.name }}</td>
+<td>{{ expense.amount }}</td>
+<td style="width: 5em; text-align: center"><a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
+<td style="width: 5em; text-align: center"><a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td></tr>
+{% endfor %}
+</table>
+<a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
+
 {% endblock %}

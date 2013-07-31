@@ -27,9 +27,13 @@ def ShowLedger(request, ledgerid=0):
     
     ### get all people related to this ledger
     people = Person.objects.filter(ledger_id=ledgerid)
+    
+    ### get all expenses related to this ledger
+    ledgers = Expense.objects.filter(ledger_id=ledgerid)
     return render(request, 'showledger.html', {
         'ledger': ledger,
-        'people': people
+        'people': people,
+        'ledgers': ledgers
     })
 
 
