@@ -3,6 +3,7 @@
 <h2>Ledger: {{ ledger.name }}</h2>
 
 <h3>People:</h3>
+{% if people %}
 <table class="table table-bordered table-striped" style="width: 50%;">
 <tr><th>Name</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
 {% for person in people %}
@@ -11,9 +12,13 @@
 <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td></tr>
 {% endfor %}
 </table>
+{% else %}
+No people found!
+{% endif %}
 <a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary">Add person</a>
 
 <h3>Expenses:</h3>
+{% if expenses %}
 <table class="table table-bordered table-striped" style="width: 50%;">
 <tr><th>Name</th><th style="width: 5em; text-align: center">Amount</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
 {% for expense in expenses %}
@@ -23,6 +28,9 @@
 <td style="width: 5em; text-align: center"><a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td></tr>
 {% endfor %}
 </table>
+{% else %}
+No expenses found!
+{% endif %}
 <a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
 
 {% endblock %}
