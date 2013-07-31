@@ -97,3 +97,15 @@ def EditPerson(request, personid=0):
         'form': form,
         'person': person
     })
+
+def RemovePerson(request, personid=0):
+    ### Check if the person exists - bail out if not
+    try:
+        person = Person.objects.get(pk = personid)
+    except person.DoesNotExist:
+        response = render_to_response('persondoesnotexist.html')
+        return response
+
+    ledgerid = person.ledger.id
+    person.delete()
+    return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page
