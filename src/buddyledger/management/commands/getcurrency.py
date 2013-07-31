@@ -12,8 +12,12 @@ class Command(BaseCommand):
         f.close()
         tree = etree.fromstring(xml)
         for child in tree[0]:
-            rate = child.attrib['rate'].replace(",", ".");
-            rate = rate / 100
+            if child.attrib['rate'] == '-':
+                rate = 0
+            else:
+                rate = float(child.attrib['rate'].replace(".", "").replace(",", "."))
+                rate = int(rate * 100)
+
             try:
                 currency = Currency.objects.get(iso4217_code=child.attrib['code'])
                 currency.danish_ore_price=rate
