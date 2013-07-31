@@ -23,7 +23,7 @@ class Command(BaseCommand):
                 currency.danish_ore_price=rate
                 temp = ""
             except Currency.DoesNotExist:
-                currency = Currency(code=child.attrib['code'],danish_ore_price=rate)
+                currency = Currency(iso4217_code=child.attrib['code'],danish_ore_price=rate)
                 temp = " new"
             
             currency.save()
