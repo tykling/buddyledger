@@ -137,7 +137,7 @@ def AddExpense(request, ledgerid=0):
     if request.method == 'POST': # If the form has been submitted...
         form = ExpenseForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=form['amount'].data)
+            expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=form['amount'].data,currency_id=form['currency'].data)
             expense.save() # save the new expense
             return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page
         else:
@@ -163,6 +163,7 @@ def EditExpense(request, expenseid=0):
         if form.is_valid(): # All validation rules pass
             expense.name = form['name'].data
             expense.amount = form['amount'].data
+            expense.currency = form['currency'].data
             expense.save()
             return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
         else:
