@@ -12,13 +12,15 @@ class Command(BaseCommand):
         f.close()
         tree = etree.fromstring(xml)
         for child in tree[0]:
+            rate = child.attrib['rate'].replace(",", ".");
+            rate = rate / 100
             try:
                 currency = Currency.objects.get(iso4217_code=child.attrib['code'])
-                currency.danish_ore_price=child.attrib['rate']/100
+                currency.danish_ore_price=rate
                 temp = ""
             except Currency.DoesNotExist:
-                currency = Currency(code=child.attrib['code'],danish_ore_price=child.attrib['rate']/100)
+                currency = Currency(code=child.attrib['code'],danish_ore_price=rate)
                 temp = " new"
             
             currency.save()
-            self.stdout.write('Saved%s rate: 100 %s costs %s danish ore' % (temp, child.attrib['code'],child.attrib['rate']/100))
+            self.stdout.write('Saved%s rate: 100 %s costs %s danish ore' % (temp, child.attrib['code'],rate))
