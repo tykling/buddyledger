@@ -23,12 +23,19 @@
 <tr>
     <th>Name</th>
     <th style="width: 5em; text-align: center">Amount</th>
+    <th style="width: 5em; text-align: center">People</th>
     <th style="width: 5em; text-align: center">Edit</th>
     <th style="width: 5em; text-align: center">Remove</th>
 </tr>
 {% for expense in expenses %}
 <tr><td>{{ expense.name }}</td>
 <td>{{ expense.amount }} {{ expense.currency.iso4217_code }}</td>
+<td>
+{% for person in expense.expenseperson %}
+{{ person.name }}<br>
+{% endfor %}
+</td>
+<td style="width: 5em; text-align: center"><a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
 <td style="width: 5em; text-align: center"><a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
 <td style="width: 5em; text-align: center"><a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td></tr>
 {% endfor %}

@@ -189,3 +189,48 @@ def RemoveExpense(request, expenseid=0):
     ledgerid = expense.ledger.id
     expense.delete()
     return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page
+
+def ExpenseAddPerson(request, expenseid=0, personid=0):
+    ### Check if the expense exists - bail out if not
+    try:
+        expense = Expense.objects.get(pk = expenseid)
+    except Expense.DoesNotExist:
+        response = render_to_response('expensedoesnotexist.html')
+        return response
+
+    ### Check if the person exists - bail out if not
+    try:
+        person = Person.objects.get(pk = personid)
+    except Person.DoesNotExist:
+        response = render_to_response('persondoesnotexist.html')
+        return response
+
+    ### add this person to this expense
+    ep = ExpensePerson(expense_id=expenseid,person_id=personid)
+    ep.save()
+    return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
+
+def ExpenseRemovePerson(request, expenseid=0, personid=0):
+    ### Check if the expense exists - bail out if not
+    try:
+        expense = Expense.objects.get(pk = expenseid)
+    except Expense.DoesNotExist:
+        response = render_to_response('expensedoesnotexist.html')
+        return response
+
+    ### Check if the person exists - bail out if not
+    try:
+        person = Person.objects.get(pk = personid)
+    except Person.DoesNotExist:
+        response = render_to_response('persondoesnotexist.html')
+        return response
+
+    ### remove this person from this expense
+    try:
+        ep = ExpensePerson.objects.filter(expense_id=expenseid,person_id=personid)
+    except ExpensePerson.DoesNotExist:
+        response = render_to_response('expensepersondoesnotexist.html')
+        return response
+
+    ep.delete()
+    return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
