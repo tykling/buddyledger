@@ -11,7 +11,8 @@ class Person(models.Model):
     ledger = models.ForeignKey(Ledger,editable=False)
     def __unicode__(self):
         return self.name
-
+    class Meta:
+        ordering = ('name',)
 
 class Expense(models.Model):
     name = models.CharField(max_length=100)
@@ -41,3 +42,5 @@ class Currency(models.Model):
 
     def __unicode__(self):
         return self.iso4217_code
+    class Meta:
+        ordering = ('iso4217_code',)
