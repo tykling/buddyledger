@@ -9,8 +9,8 @@ urlpatterns = patterns('',
     url(r'^ledger/(?P<ledgerid>\d+)/$', 'buddyledger.views.ShowLedger'),
     url(r'^ledger/(?P<ledgerid>\d+)/edit/$', 'buddyledger.views.EditLedger'),
     url(r'^ledger/(?P<ledgerid>\d+)/addperson$', 'buddyledger.views.AddPerson'),
-    url(r'^person/edit/(?P<personid>\d+)/$', 'buddyledger.views.EditPerson'),
-    url(r'^person/remove/(?P<personid>\d+)/$', 'buddyledger.views.RemovePerson'),
+    url(r'^person/(?P<personid>\d+)/edit/$', 'buddyledger.views.EditPerson'),
+    url(r'^person/(?P<personid>\d+)/remove/$', 'buddyledger.views.RemovePerson'),
     
     # Admin urls
     url(r'^admin/', include(admin.site.urls)),
