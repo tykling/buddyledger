@@ -16,7 +16,7 @@ class Person(models.Model):
 class Expense(models.Model):
     name = models.CharField(max_length=100)
     amount = models.BigIntegerField()
-    currency = models.ForeignKey(Currency)
+    currency = models.ForeignKey('Currency')
     ledger = models.ForeignKey(Ledger,editable=False)
     
     def __unicode__(self):
@@ -24,15 +24,15 @@ class Expense(models.Model):
 
 
 class ExpensePerson(models.Model):
-    expense = models.ForeignKey(Expense)
-    person = models.ForeignKey(Person)
+    expense = models.ForeignKey('Expense')
+    person = models.ForeignKey('Person')
 
 
 class Payment(models.Model):
-    expense = models.ForeignKey(Expense)
-    person = models.ForeignKey(Person)
+    expense = models.ForeignKey('Expense')
+    person = models.ForeignKey('Person')
     amount = models.BigIntegerField()
-    currency = models.ForeignKey(Currency)
+    currency = models.ForeignKey('Currency')
 
 
 class Currency(models.Model):
