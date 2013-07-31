@@ -21,7 +21,7 @@ def ShowLedger(request, ledgerid=0):
     ### Check if the ledger exists - bail out if not
     try:
         ledger = Ledger.objects.get(pk = ledgerid)
-    except ledger.DoesNotExist:
+    except Ledger.DoesNotExist:
         response = render_to_response('ledgerdoesnotexist.html')
         return response
     
@@ -41,7 +41,7 @@ def EditLedger(request, ledgerid=0):
     ### Check if the ledger exists - bail out if not
     try:
         ledger = Ledger.objects.get(pk = ledgerid)
-    except ledger.DoesNotExist:
+    except Ledger.DoesNotExist:
         response = render_to_response('ledgerdoesnotexist.html')
         return response
 
@@ -66,7 +66,7 @@ def AddPerson(request,ledgerid=0):
     ### check if the ledger exists, bail out if not
     try:
         ledger = Ledger.objects.get(pk = ledgerid)
-    except ledger.DoesNotExist:
+    except Ledger.DoesNotExist:
         response = render_to_response('ledgerdoesnotexist.html')
         return response
 
@@ -90,7 +90,7 @@ def EditPerson(request, personid=0):
     ### Check if the person exists - bail out if not
     try:
         person = Person.objects.get(pk = personid)
-    except person.DoesNotExist:
+    except Person.DoesNotExist:
         response = render_to_response('persondoesnotexist.html')
         return response
 
@@ -115,7 +115,7 @@ def RemovePerson(request, personid=0):
     ### Check if the person exists - bail out if not
     try:
         person = Person.objects.get(pk = personid)
-    except person.DoesNotExist:
+    except Person.DoesNotExist:
         response = render_to_response('persondoesnotexist.html')
         return response
 
@@ -128,7 +128,7 @@ def AddExpense(request, ledgerid=0):
     ### check if the ledger exists, bail out if not
     try:
         ledger = Ledger.objects.get(pk = ledgerid)
-    except ledger.DoesNotExist:
+    except Ledger.DoesNotExist:
         response = render_to_response('ledgerdoesnotexist.html')
         return response
     
@@ -152,7 +152,7 @@ def EditExpense(request, expenseid=0):
     ### Check if the expense exists - bail out if not
     try:
         expense = Expense.objects.get(pk = expenseid)
-    except expense.DoesNotExist:
+    except Expense.DoesNotExist:
         response = render_to_response('expensedoesnotexist.html')
         return response
 
@@ -178,7 +178,7 @@ def RemoveExpense(request, expenseid=0):
     ### Check if the expense exists - bail out if not
     try:
         expense = Expense.objects.get(pk = expenseid)
-    except expense.DoesNotExist:
+    except Expense.DoesNotExist:
         response = render_to_response('expensedoesnotexist.html')
         return response
 
