@@ -13,7 +13,7 @@
 {% endfor %}
 </table>
 {% else %}
-No people found!
+<p class="text-warning">No people found!</p>
 {% endif %}
 <a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary">Add person</a>
 
@@ -29,7 +29,7 @@ No people found!
 {% endfor %}
 </table>
 {% else %}
-No expenses found!
+<p class="text-warning">No expenses found!</p>
 {% endif %}
 <a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
 
