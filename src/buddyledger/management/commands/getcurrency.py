@@ -12,19 +12,20 @@ class Command(BaseCommand):
         f.close()
         tree = etree.fromstring(xml)
         for child in tree[0]:
-            if child.attrib['rate'] == '-':
-                rate = 0
-            else:
+            if child.attrib['rate'] != '-':
                 rate = float(child.attrib['rate'].replace(".", "").replace(",", "."))
                 rate = int(rate * 100)
 
-            try:
-                currency = Currency.objects.get(iso4217_code=child.attrib['code'])
-                currency.danish_ore_price=rate
-                temp = ""
-            except Currency.DoesNotExist:
-                currency = Currency(iso4217_code=child.attrib['code'],danish_ore_price=rate)
-                temp = " new"
+                try:
+                    currency = Currency.objects.get(iso4217_code=child.attrib['code'])
+                    currency.danish_ore_price=rate
+                    temp = ""
+                except Currency.DoesNotExist:
+                    currency = Currency(iso4217_code=child.attrib['code'],danish_ore_price=rate)
+                    temp = " new"
             
-            currency.save()
-            self.stdout.write('Saved%s rate: 100 %s costs %s danish ore' % (temp, child.attrib['code'],rate))
+                currency.save()
+                self.stdout.write('Saved%s rate: 100 %s costs %s danish ore' % (temp, child.attrib['code'],rate))
+            else:
+                self.stdout.write('Skipping currency %s - no price found' % child.attrib['code'])
+        self.stdout.write('Done.')
