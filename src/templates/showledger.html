@@ -1,13 +1,14 @@
 {% extends "skeleton.html" %}
 {% block content %}
-<h2>Showing ledger {{ ledger.id }}: {{ ledger.name }}</h2>
+<h2>Ledger: {{ ledger.name }}</h2>
 <h3>People involved:</h3>
-<ul>
+<table class="table table-bordered table-striped" style="width: 50%;">
+<tr><th>Name</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
 {% for person in people %}
-<li>{{ person.name }} 
-<a href="/person/{{ person.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>
-<a href="/person/{{ person.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></li>
+<tr><td>{{ person.name }}</td>  
+<td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
+<td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td></tr>
 {% endfor %}
-</ul>
+</table>>
 <a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary">Add person</a>
 {% endblock %}
