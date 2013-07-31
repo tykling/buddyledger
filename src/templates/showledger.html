@@ -20,10 +20,15 @@
 <h3>Expenses:</h3>
 {% if expenses %}
 <table class="table table-bordered table-striped" style="width: 50%;">
-<tr><th>Name</th><th style="width: 5em; text-align: center">Amount</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
+<tr>
+    <th>Name</th>
+    <th style="width: 5em; text-align: center">Amount</th>
+    <th style="width: 5em; text-align: center">Edit</th>
+    <th style="width: 5em; text-align: center">Remove</th>
+</tr>
 {% for expense in expenses %}
 <tr><td>{{ expense.name }}</td>
-<td>{{ expense.amount }}</td>
+<td>{{ expense.amount }} {{ expense.currency.iso4217_code }}</td>
 <td style="width: 5em; text-align: center"><a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
 <td style="width: 5em; text-align: center"><a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td></tr>
 {% endfor %}
