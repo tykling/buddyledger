@@ -7,7 +7,7 @@ class Ledger(models.Model):
 
 class Person(models.Model):
     name = models.CharField(max_length=100)
-    ledger = models.ForeignKey(Ledger)
+    ledger = models.ForeignKey(Ledger,editable=False)
     def __unicode__(self):
         return self.name
 

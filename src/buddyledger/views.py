@@ -62,8 +62,11 @@ def AddPerson(request,ledgerid):
     if request.method == 'POST': # If the form has been submitted...
         form = PersonForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            person = form.save() # save the new person
+            person = new Person(ledger_id=ledgerid,name=form['name'])
+            person.save() # save the new person
             return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page
+        else:
+            form = PersonForm(request.POST)
     else:
         form = PersonForm()
 
