@@ -14,6 +14,7 @@ class Person(models.Model):
 class Expense(models.Model):
     name = models.CharField(max_length=100)
     amount = models.BigIntegerField()
+    ledger = models.ForeignKey(Ledger,editable=False)
     
     def __unicode__(self):
         return self.name
