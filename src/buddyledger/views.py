@@ -163,7 +163,8 @@ def EditExpense(request, expenseid=0):
         if form.is_valid(): # All validation rules pass
             expense.name = form['name'].data
             expense.amount = form['amount'].data
-            expense.currency = form['currency'].data
+            currency = Currency.objects.get(pk = form['currency'].data)
+            expense.currency = currency
             expense.save()
             return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
         else:
