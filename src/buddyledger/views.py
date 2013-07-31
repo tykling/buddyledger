@@ -73,3 +73,27 @@ def AddPerson(request,ledgerid):
     return render(request, 'addperson.html', {
         'form': form,
     })
+
+def EditPerson(request, personid=0):
+    ### Check if the person exists - bail out if not
+    try:
+        person = Person.objects.get(pk = personid)
+    except person.DoesNotExist:
+        response = render_to_response('persondoesnotexist.html')
+        return response
+
+    if request.method == 'POST': # If the form has been submitted...
+        form = LedgerForm(request.POST) # A form bound to the person data
+        if form.is_valid(): # All validation rules pass
+            person.name = form['name'].data
+            person.save()
+            return HttpResponseRedirect('/ledger/%s' % person.ledger.id) # return to the ledger page
+        else:
+            form = PersonForm(request.POST)
+    else:
+        form = PersonForm(instance=person)
+
+    return render(request, 'editperson.html', {
+        'form': form,
+        'person': person
+    })
