@@ -38,7 +38,7 @@
 {{ payment.person.name }} - {{ payment.amount }} {{ payment.currency.iso4217_code }}<br>
 {% endif %}
 {% endfor %}
-<a href="/expense/{{expense.id}}/addpayment" class="btn btn-mini btn-success"><i class="icon-plus"></i></a><br>
+<a href="/expense/{{expense.id}}/addpayment" class="btn btn-mini btn-success"><i class="icon-plus"></i> Add new payment</a><br>
 </td>
 <td>
 {% for person in expense.people.all %}
