@@ -139,6 +139,9 @@ def AddExpense(request, ledgerid=0):
         if form.is_valid(): # All validation rules pass
             expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=form['amount'].data,currency_id=form['currency'].data)
             expense.save() # save the new expense
+            for personid in form['people'].data:
+                person = Person.objects.get(pk = personid)
+                expense.people.add(person)
             return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page
         else:
             form = ExpenseForm(request.POST)
@@ -166,6 +169,10 @@ def EditExpense(request, expenseid=0):
             currency = Currency.objects.get(pk = form['currency'].data)
             expense.currency = currency
             expense.save()
+            expense.people.clear()
+            for personid in form['people'].data:
+                person = Person.objects.get(pk = personid)
+                expense.people.add(person)
             return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
         else:
             form = ExpenseForm(request.POST)
@@ -190,6 +197,7 @@ def RemoveExpense(request, expenseid=0):
     expense.delete()
     return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page
 
+
 def ExpenseAddPerson(request, expenseid=0, personid=0):
     ### Check if the expense exists - bail out if not
     try:
@@ -208,6 +216,7 @@ def ExpenseAddPerson(request, expenseid=0, personid=0):
     ### add this person to this expense
     expense.people.add(person)
     return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
+
 
 def ExpenseRemovePerson(request, expenseid=0, personid=0):
     ### Check if the expense exists - bail out if not
