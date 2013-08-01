@@ -261,9 +261,9 @@ def AddPayment(request, expenseid=0):
             payment.save() # save the new payment
             return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
         else:
-            form = ExpenseForm(request.POST)
+            form = PaymentForm(request.POST)
     else:
-        form = ExpenseForm()
+        form = PaymentForm()
 
     return render(request, 'addpayment.html', {
         'form': form,
