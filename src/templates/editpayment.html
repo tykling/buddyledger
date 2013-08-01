@@ -2,6 +2,7 @@
 {% block content %}
 <h2>Editing payment for expense: {{ payment.expense.name }}</h2>
 <p>The total price for this expense is: {{ payment.expense.amount }} {{ payment.expense.currency }}</p>
+<p class="text-warning">Note: Payments are implicitly the same currency as the expense, in this case {{ payment.expense.currency }}</p>
 
     {% if form.errors %}
      <h3>Form errors:</h3>
