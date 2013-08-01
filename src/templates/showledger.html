@@ -71,7 +71,7 @@
 <h3>Result:</h3>
 <ul>
 {% for result in resultlist %}
-<li>{{ result.payer }} owes {{ result.receiver }} {{ result.amount }} {{ ledger.currency.name }}</li>
+<li>{{ result.receiver }} owes {{ result.payer }} {{ result.amount }} {{ ledger.currency.name }}</li>
 {% endfor %}
 </ul>
 
