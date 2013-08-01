@@ -44,7 +44,7 @@ def ShowLedger(request, ledgerid=0):
         expensepeople = []
         for person in expense.people.all():
             expensepeople.append(person.id)
-        internaldata.append(dict(amount=expense.amount,payments=paymentlist,users=expensepeople))
+        internaldata.append(dict(payments=paymentlist,users=expensepeople))
         
     ### render and return response
     return render(request, 'showledger.html', {

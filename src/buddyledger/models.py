@@ -25,6 +25,8 @@ class Expense(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        ordering = ('id',)
 
 class Payment(models.Model):
     expense = models.ForeignKey('Expense',editable=False)
