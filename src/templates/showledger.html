@@ -23,12 +23,12 @@
 <table class="table table-bordered">
 <tr>
     <th>Name</th>
-    <th style="width: 5em; text-align: center">Amount</th>
-    <th style="width: 5em; text-align: center">Amount {{ ledger.currency.iso4217_code }}</th>
+    <th style="width: 3em; text-align: center">Amount</th>
+    <th style="width: 3em; text-align: center">Amount {{ ledger.currency.iso4217_code }}</th>
     <th>Payments</th>
     <th>In</th>
     <th>Not in</th>
-    <th style="width: 5em; text-align: center">Action</th>
+    <th style="width: 3em; text-align: center">Action</th>
 </tr>
 {% for expense in expenses %}
 <tr><td>{{ expense.name }}</td>
@@ -56,7 +56,7 @@
     {% endif %}
 {% endfor %}
 </td>
-<td style="width: 5em; text-align: center">
+<td style="width: 3em; text-align: center">
 <a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>
 <a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a>
 </td>
