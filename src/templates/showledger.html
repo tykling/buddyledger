@@ -28,8 +28,7 @@
     <th>Payments</th>
     <th>In</th>
     <th>Not in</th>
-    <th style="width: 5em; text-align: center">Edit</th>
-    <th style="width: 5em; text-align: center">Remove</th>
+    <th style="width: 5em; text-align: center">Action</th>
 </tr>
 {% for expense in expenses %}
 <tr><td>{{ expense.name }}</td>
@@ -38,7 +37,7 @@
 <td>
 {% for payment in payments %}
 {% if payment.expense_id = expense.id %}
-{{ payment.person.name }} - {{ payment.amount }} {{ payment.currency.iso4217_code }} 
+{{ payment.person.name }}: {{ payment.amount }} {{ payment.currency.iso4217_code }}&nbsp;&nbsp;
 <a href="/payment/{{ payment.id }}/remove/" class="btn btn-danger btn-mini pull-right"><i class="icon-remove"></i></a> 
 <a href="/payment/{{ payment.id }}/edit/" class="btn btn-info btn-mini pull-right"><i class="icon-edit"></i></a><br>
 {% endif %}
@@ -57,8 +56,11 @@
     {% endif %}
 {% endfor %}
 </td>
-<td style="width: 5em; text-align: center"><a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
-<td style="width: 5em; text-align: center"><a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td></tr>
+<td style="width: 5em; text-align: center">
+<a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>
+<a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a>
+</td>
+</tr>
 {% endfor %}
 </table>
 {% else %}
