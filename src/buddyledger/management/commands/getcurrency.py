@@ -17,10 +17,10 @@ class Command(BaseCommand):
 
                 try:
                     currency = Currency.objects.get(iso4217_code=child.attrib['code'])
-                    currency.dkk_price_for_1=rate/100
+                    currency.dkk_price=rate/100
                     temp = ""
                 except Currency.DoesNotExist:
-                    currency = Currency(iso4217_code=child.attrib['code'],dkk_price_for_1=rate)
+                    currency = Currency(iso4217_code=child.attrib['code'],dkk_price=rate)
                     temp = " new"
             
                 currency.save()
@@ -31,10 +31,10 @@ class Command(BaseCommand):
         ### add DKK
         try:
             currency = Currency.objects.get(iso4217_code='DKK')
-            currency.dkk_price_for_1=1
+            currency.dkk_price=1
             temp = ""
         except Currency.DoesNotExist:
-            currency = Currency(iso4217_code='DKK',dkk_price_for_1=1)
+            currency = Currency(iso4217_code='DKK',dkk_price=1)
             temp = " new"
         currency.save()
         self.stdout.write('Saved%s rate: 1 DKK costs 1 DKK ... ofcourse' % temp)

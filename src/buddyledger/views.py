@@ -162,7 +162,7 @@ def AddExpense(request, ledgerid=0):
     if request.method == 'POST':
         form = ExpenseForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=float(form['amount'].data),amount_dkk=ConvertToDKK(float(form['amount'].data),form['currency'].data),currency_id=form['currency'].data)
+            expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=float(form['amount'].data),amount_native=ConvertCurrency(float(form['amount'].data),form['currency'].data,ledger.currency.id),currency_id=form['currency'].data)
             expense.save() # save the new expense
             for personid in form['people'].data:
                 person = Person.objects.get(pk = personid)
@@ -192,7 +192,7 @@ def EditExpense(request, expenseid=0):
         if form.is_valid(): # All validation rules pass
             expense.name = form['name'].data
             expense.amount = float(form['amount'].data)
-            expense.amount_dkk = ConvertToDKK(float(form['amount'].data),form['currency'].data)
+            expense.amount_native=ConvertCurrency(float(form['amount'].data),form['currency'].data,ledger.currency.id)
             currency = Currency.objects.get(pk = form['currency'].data)
             expense.currency = currency
             expense.save()
@@ -280,7 +280,7 @@ def AddPayment(request, expenseid=0):
             expense = Expense.objects.get(pk = expenseid)
             person = Person.objects.get(pk = form['person'].data)
             currency = expense.currency
-            payment = Payment(expense=expense,person=person,currency=currency,amount=float(form['amount'].data),amount_dkk=ConvertToDKK(float(form['amount'].data),form['currency'].data))
+            payment = Payment(expense=expense,person=person,currency=currency,amount=float(form['amount'].data),amount_native=ConvertCurrency(float(form['amount'].data),form['currency'].data,expense.ledger.currency.id),form['currency'].data))
             payment.save() # save the new payment
             return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
         else:
@@ -306,7 +306,7 @@ def EditPayment(request, paymentid=0):
         if form.is_valid(): # All validation rules pass
             payment.person = Person.objects.get(pk = form['person'].data)
             payment.amount = float(form['amount'].data)
-            payment.amount_dkk=ConvertToDKK(float(form['amount'].data),form['currency'].data)
+            payment.amount_native=ConvertCurrency(float(form['amount'].data),form['currency'].data,payment.expense.ledger.currency.id)
             payment.currency = payment.expense.currency
             payment.save()
             return HttpResponseRedirect('/ledger/%s' % payment.expense.ledger.id) # return to the ledger page
@@ -320,6 +320,7 @@ def EditPayment(request, paymentid=0):
         'payment': payment
     })
 
+
 def RemovePayment(request, payment=0):
     ### Check if the payment exists - bail out if not
     try:
@@ -331,7 +332,13 @@ def RemovePayment(request, payment=0):
     ledgerid = payment.expense.ledger.id
     payment.delete()
     return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page
-    
-def ConvertToDKK(amount,currencyid):
-    rate = Currency.objects.get(pk=currencyid)
-    return amount*rate.dkk_price_for_1
+
+
+def ConvertCurrency(amount,fromcurrencyid,tocurrencyid):
+    fromcurrency = Currency.objects.get(pk=fromcurrencyid)
+    tocurrency = Currency.objects.get(pk=tocurrencyid)
+    ### first convert to DKK
+    dkkamount = amount*fromcurrency.dkk_price
+    ### convert to tocurrency
+    returnamount = dkkamount / tocurrency.dkk_price
+    return returnamount
