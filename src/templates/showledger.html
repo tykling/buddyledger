@@ -23,7 +23,8 @@
 <tr>
     <th>Name</th>
     <th style="width: 5em; text-align: center">Amount</th>
-    <th style="width: 5em; text-align: center">People</th>
+    <th style="width: 5em; text-align: center">In</th>
+    <th style="width: 5em; text-align: center">Not in</th>
     <th style="width: 5em; text-align: center">Edit</th>
     <th style="width: 5em; text-align: center">Remove</th>
 </tr>
@@ -35,7 +36,13 @@
 {{ person.name }}<br>
 {% endfor %}
 </td>
-<td style="width: 5em; text-align: center"><a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
+<td>
+{% for person in people %}
+    {% if person not in expense.expenseperson %}
+        {{ person.name }}<br>
+    {% endif %}
+{% endfor %}
+</td>
 <td style="width: 5em; text-align: center"><a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
 <td style="width: 5em; text-align: center"><a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td></tr>
 {% endfor %}
