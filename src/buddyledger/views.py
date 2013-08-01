@@ -141,7 +141,7 @@ def AddExpense(request, ledgerid=0):
     if request.method == 'POST':
         form = ExpenseForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=int(float(form['amount'].data)*100),currency_id=form['currency'].data)
+            expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=float(form['amount'].data),currency_id=form['currency'].data)
             expense.save() # save the new expense
             for personid in form['people'].data:
                 person = Person.objects.get(pk = personid)
@@ -170,7 +170,7 @@ def EditExpense(request, expenseid=0):
         form = ExpenseForm(request.POST) # A form bound to the expense data
         if form.is_valid(): # All validation rules pass
             expense.name = form['name'].data
-            expense.amount = int(float(form['amount'].data)*100)
+            expense.amount = float(form['amount'].data)
             currency = Currency.objects.get(pk = form['currency'].data)
             expense.currency = currency
             expense.save()
@@ -258,7 +258,7 @@ def AddPayment(request, expenseid=0):
             expense = Expense.objects.get(pk = expenseid)
             person = Person.objects.get(pk = form['person'].data)
             currency = expense.currency
-            payment = Payment(expense=expense,person=person,currency=currency,amount=int(float(form['amount'].data)*100))
+            payment = Payment(expense=expense,person=person,currency=currency,amount=float(form['amount'].data))
             
             payment.save() # save the new payment
             return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
@@ -287,7 +287,7 @@ def EditPayment(request, paymentid=0):
             payment.person = person
             currency = Currency.objects.get(pk = form['currency'].data)
             payment.currency = currency
-            payment.amount = int(float(form['amount'].data)*100)
+            payment.amount = float(form['amount'].data)
             payment.save
             return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
         else:
