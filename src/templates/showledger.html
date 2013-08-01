@@ -33,21 +33,22 @@
 <tr><td>{{ expense.name }}</td>
 <td>{{ expense.amount }} {{ expense.currency.iso4217_code }}</td>
 <td>
-{% for payment in payments }}
+{% for payment in payments %}
 {% if payment.expense_id = expense.id %}
 {{ payment.person.name }} - {{ payment.amount }} {{ payment.currency.iso4217_code }}<br>
 {% endif %}
 {% endfor %}
+<a href="/expense/{{expense.id}}/addpayment" class="btn btn-mini btn-success"><i class="icon-plus"></i></a><br>
 </td>
 <td>
 {% for person in expense.people.all %}
-{{ person.name }} <a href="/expense/{{ expense.id }}/removeperson/{{ person.id }}/" class="btn btn-mini btn-danger"><i class="icon-remove"></i></a><br>
+<p>{{ person.name }} <a href="/expense/{{ expense.id }}/removeperson/{{ person.id }}/" class="btn btn-mini btn-danger pull-right"><i class="icon-remove"></i></a></p>
 {% endfor %}
 </td>
 <td>
 {% for person in people %}
     {% if person not in expense.people.all %}
-        {{ person.name }} <a href="/expense/{{ expense.id }}/addperson/{{ person.id }}/" class="btn btn-mini btn-success"><i class="icon-plus"></i></a><br>
+        <p>{{ person.name }} <a href="/expense/{{ expense.id }}/addperson/{{ person.id }}/" class="btn btn-mini btn-success pull-right"><i class="icon-plus"></i></a></p>
     {% endif %}
 {% endfor %}
 </td>
