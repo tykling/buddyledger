@@ -151,7 +151,8 @@ def AddExpense(request, ledgerid=0):
             form = ExpenseForm(request.POST)
     else:
         form = ExpenseForm()
-
+    
+    form.fields["people"].queryset = expense.people.all
     return render(request, 'addexpense.html', {
         'form': form,
     })
@@ -182,7 +183,8 @@ def EditExpense(request, expenseid=0):
             form = ExpenseForm(request.POST)
     else:
         form = ExpenseForm(instance=expense)
-
+    
+    form.fields["people"].queryset = expense.people.all
     return render(request, 'editexpense.html', {
         'form': form,
         'expense': expense
