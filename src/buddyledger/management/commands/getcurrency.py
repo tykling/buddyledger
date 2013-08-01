@@ -37,6 +37,7 @@ class Command(BaseCommand):
         except Currency.DoesNotExist:
             currency = Currency(iso4217_code='DKK',danish_ore_price=10000)
             temp = " new"
-        self.stdout.write('Saved%s rate: 100 %s costs %s danish ore' % (temp, child.attrib['code'],rate))
+        currency.save()
+        self.stdout.write('Saved%s rate: 100 DKK costs 10000 danish ore')
 
         self.stdout.write('Done.')
