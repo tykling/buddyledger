@@ -38,7 +38,7 @@
 </td>
 <td>
 {% for person in people %}
-    {% if person not in expense.people %}
+    {% if person not in expense.people.all %}
         {{ person.name }}<br>
     {% endif %}
 {% endfor %}
