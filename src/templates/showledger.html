@@ -39,7 +39,7 @@
 <td>
 {% for person in people %}
     {% if person not in expense.people.all %}
-        {{ person.name }} <a href="/expense/{{ expense.id }}/addperson/{{ person.id }}/" class="btn btn-info btn-mini"><i class="icon-remove"></i></a><br>
+        {{ person.name }} <a href="/expense/{{ expense.id }}/addperson/{{ person.id }}/" class="btn btn-info btn-mini"><i class="icon-add"></i></a><br>
     {% endif %}
 {% endfor %}
 </td>
