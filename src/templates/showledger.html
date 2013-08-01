@@ -36,8 +36,8 @@
 {% for payment in payments %}
 {% if payment.expense_id = expense.id %}
 {{ payment.person.name }} - {{ payment.amount }} {{ payment.currency.iso4217_code }} 
-<a href="/payment/{{ payment.id }}/edit/" class="btn btn-info btn-mini pull-right"><i class="icon-edit"></i></a> 
-<a href="/payment/{{ payment.id }}/remove/" class="btn btn-danger btn-mini pull-right"><i class="icon-remove"></i></a><br>
+<a href="/payment/{{ payment.id }}/remove/" class="btn btn-danger btn-mini pull-right"><i class="icon-remove"></i></a> 
+<a href="/payment/{{ payment.id }}/edit/" class="btn btn-info btn-mini pull-right"><i class="icon-edit"></i></a><br>
 {% endif %}
 {% endfor %}
 <a href="/expense/{{expense.id}}/addpayment" class="btn btn-mini btn-success"><i class="icon-plus"></i> Add new payment</a><br>
