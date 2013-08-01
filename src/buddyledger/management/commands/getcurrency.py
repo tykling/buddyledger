@@ -17,26 +17,26 @@ class Command(BaseCommand):
 
                 try:
                     currency = Currency.objects.get(iso4217_code=child.attrib['code'])
-                    currency.dkk_price_for_100=rate
+                    currency.dkk_price_for_1=rate/100
                     temp = ""
                 except Currency.DoesNotExist:
-                    currency = Currency(iso4217_code=child.attrib['code'],dkk_price_for_100=rate)
+                    currency = Currency(iso4217_code=child.attrib['code'],dkk_price_for_1=rate)
                     temp = " new"
             
                 currency.save()
-                self.stdout.write('Saved%s rate: 100 %s costs %s DKK' % (temp, child.attrib['code'],rate))
+                self.stdout.write('Saved%s rate: 1 %s costs %s DKK' % (temp, child.attrib['code'],rate))
             else:
                 self.stdout.write('Skipping currency %s - no price found' % child.attrib['code'])
 
         ### add DKK
         try:
             currency = Currency.objects.get(iso4217_code='DKK')
-            currency.dkk_price_for_100=100
+            currency.dkk_price_for_1=1
             temp = ""
         except Currency.DoesNotExist:
-            currency = Currency(iso4217_code='DKK',dkk_price_for_100=100)
+            currency = Currency(iso4217_code='DKK',dkk_price_for_1=1)
             temp = " new"
         currency.save()
-        self.stdout.write('Saved%s rate: 100 DKK costs 100 DKK ... ofcourse' % temp)
+        self.stdout.write('Saved%s rate: 1 DKK costs 1 DKK ... ofcourse' % temp)
 
         self.stdout.write('Done.')

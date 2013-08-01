@@ -1,4 +1,3 @@
-#!/usr/bin/python
 import random
 
 class MonoPayment:
@@ -8,10 +7,6 @@ class MonoPayment:
         self.amount   = amount
 
 class PaymentProcessor:
-#18:57 < Tykling> borgtu: [{'amount': 100, 'payments': [{'amount': 100, 'user': 1}], 'users': [1, 2, 3]}, {'amount': 1000, 'payments': [{'amount': 100, 'user': 2}, 
-#                 {'amount': 900, 'user': 1}], 'users': [2, 3]}]
-#18:58 < Tykling> {'amount': 100, 'payments': [{'amount': 100, 'user': 1}], 'users': [1, 2, 3]}
-#18:58 < Tykling> {'amount': 1000, 'payments': [{'amount': 100, 'user': 2}], 'users': [2, 3]}
 
     def create_monopayments(self,paymentdictlist): 
         ### create (mono)payments list from payments list

@@ -2,12 +2,14 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, PaymentForm
 from buddyledger.models import Ledger, Person, Expense, Payment, Currency
+from paymentprocessor import PaymentProcessor, MonoPayment
 
 def CreateLedger(request):
     if request.method == 'POST':
         form = LedgerForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            ledger = form.save() # save the new ledger
+            ledger = Ledger(name=form['name'].data,currency_id=form['currency'].data)
+            ledger.save()
             return HttpResponseRedirect('/ledger/%s' % ledger.id) # return to the ledger page
     else:
         form = LedgerForm()
@@ -45,14 +47,19 @@ def ShowLedger(request, ledgerid=0):
         for person in expense.people.all():
             expensepeople.append(person.id)
         internaldata.append(dict(payments=paymentlist,users=expensepeople))
-        
+    
+    ### get calculated result
+    pp = PaymentProcessor(internaldata)
+    
+    
     ### render and return response
     return render(request, 'showledger.html', {
         'ledger': ledger,
         'people': people,
         'expenses': expenses,
         'payments': payments,
-        'internaldata': internaldata
+        'internaldata': internaldata,
+        'resultlist': pp.monopayment
     })
 
 
@@ -68,6 +75,7 @@ def EditLedger(request, ledgerid=0):
         form = LedgerForm(request.POST) # A form bound to the ledger data
         if form.is_valid(): # All validation rules pass
             ledger.name = form['name'].data
+            ledger.currency_id = form['currency'].data
             ledger.save()
             return HttpResponseRedirect('/ledger/%s' % ledger.id) # return to the ledger page
         else:
@@ -154,7 +162,7 @@ def AddExpense(request, ledgerid=0):
     if request.method == 'POST':
         form = ExpenseForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=float(form['amount'].data),currency_id=form['currency'].data)
+            expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=float(form['amount'].data),amount_dkk=ConvertToDKK(float(form['amount'].data),form['currency'].data),currency_id=form['currency'].data)
             expense.save() # save the new expense
             for personid in form['people'].data:
                 person = Person.objects.get(pk = personid)
@@ -184,6 +192,7 @@ def EditExpense(request, expenseid=0):
         if form.is_valid(): # All validation rules pass
             expense.name = form['name'].data
             expense.amount = float(form['amount'].data)
+            expense.amount_dkk = ConvertToDKK(float(form['amount'].data),form['currency'].data)
             currency = Currency.objects.get(pk = form['currency'].data)
             expense.currency = currency
             expense.save()
@@ -271,8 +280,7 @@ def AddPayment(request, expenseid=0):
             expense = Expense.objects.get(pk = expenseid)
             person = Person.objects.get(pk = form['person'].data)
             currency = expense.currency
-            payment = Payment(expense=expense,person=person,currency=currency,amount=float(form['amount'].data))
-            
+            payment = Payment(expense=expense,person=person,currency=currency,amount=float(form['amount'].data),amount_dkk=ConvertToDKK(float(form['amount'].data),form['currency'].data))
             payment.save() # save the new payment
             return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
         else:
@@ -298,6 +306,7 @@ def EditPayment(request, paymentid=0):
         if form.is_valid(): # All validation rules pass
             payment.person = Person.objects.get(pk = form['person'].data)
             payment.amount = float(form['amount'].data)
+            payment.amount_dkk=ConvertToDKK(float(form['amount'].data),form['currency'].data)
             payment.currency = payment.expense.currency
             payment.save()
             return HttpResponseRedirect('/ledger/%s' % payment.expense.ledger.id) # return to the ledger page
@@ -322,3 +331,7 @@ def RemovePayment(request, payment=0):
     ledgerid = payment.expense.ledger.id
     payment.delete()
     return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page
+    
+def ConvertToDKK(amount,currencyid):
+    rate = Currency.objects.get(pk=currencyid)
+    return amount*rate.dkk_price_for_1

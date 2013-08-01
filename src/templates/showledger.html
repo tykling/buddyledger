@@ -1,6 +1,7 @@
 {% extends "skeleton.html" %}
 {% block content %}
 <h2>Ledger: {{ ledger.name }}</h2>
+<p>Native currency: {{ ledger.currency }}</p>
 
 <h3>People:</h3>
 {% if people %}
@@ -63,6 +64,14 @@
 {% endif %}
 <a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
 
+<h3>Result:</h3>
+<ul>
+{% for result in resultlist %}
+<li>{{ result.payer }} owes {{ result.receiver }} {{ result.amount }} {{ ledger.currency.name }}</li>
+{% endfor %}
+</ul>
+
+<h3>Debug info:</h3>
 <pre class="pre-scrollable">
 {{ internaldata }}
 </pre>
