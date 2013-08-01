@@ -171,7 +171,7 @@ def AddExpense(request, ledgerid=0):
         else:
             form = ExpenseForm(request.POST)
     else:
-        form = ExpenseForm()
+        form = ExpenseForm(initial={'currency': ledger.currency.id})
     
     form.fields["people"].queryset = Person.objects.filter(ledger_id=ledgerid)
     return render(request, 'addexpense.html', {
