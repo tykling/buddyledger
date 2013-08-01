@@ -297,10 +297,9 @@ def EditPayment(request, paymentid=0):
         form = PaymentForm(request.POST)
         if form.is_valid(): # All validation rules pass
             person = Person.objects.get(pk = form['person'].data)
-            payment.person = person
-            currency = Currency.objects.get(pk = form['currency'].data)
-            payment.currency = currency
             payment.amount = float(form['amount'].data)
+            payment.person = person
+            payment.currency = payment.expense.currency
             payment.save
             return HttpResponseRedirect('/ledger/%s' % payment.expense.ledger.id) # return to the ledger page
         else:
