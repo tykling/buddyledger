@@ -38,6 +38,6 @@ class Command(BaseCommand):
             currency = Currency(iso4217_code='DKK',danish_ore_price=10000)
             temp = " new"
         currency.save()
-        self.stdout.write('Saved%s rate: 100 DKK costs 10000 danish ore')
+        self.stdout.write('Saved%s rate: 100 DKK costs 10000 danish ore' % temp)
 
         self.stdout.write('Done.')
