@@ -266,7 +266,7 @@ def AddPayment(request, expenseid=0):
         form = PaymentForm()
 
     return render(request, 'addpayment.html', {
-        'form': form,
+        'form': form
     })
 
 def EditPayment(request, paymentid=0):

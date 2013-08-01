@@ -19,15 +19,15 @@ class Expense(models.Model):
     name = models.CharField(max_length=100)
     amount = models.BigIntegerField()
     currency = models.ForeignKey('Currency')
-    ledger = models.ForeignKey(Ledger,editable=False)
-    people = models.ManyToManyField(Person,null=True)
+    ledger = models.ForeignKey('Ledger',editable=False)
+    people = models.ManyToManyField('Person',null=True)
 
     def __unicode__(self):
         return self.name
 
 
 class Payment(models.Model):
-    expense = models.ForeignKey('Expense')
+    expense = models.ForeignKey('Expense',editable=False)
     person = models.ForeignKey('Person')
     amount = models.BigIntegerField()
     currency = models.ForeignKey('Currency')
