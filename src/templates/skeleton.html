@@ -8,41 +8,23 @@
         <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.0/css/font-awesome.css" rel="stylesheet">
     </head>
 
-    <body>
+    <body style="margin-top: 4em;">
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
                     <a class="brand" href="/">BuddyLedger</a>
-
-                    <div class="nav-collapse collapse">
-                        {% if user.is_authenticated %}
-                    <p>authenticated</p>
-                        {% else %}
-                            <ul class="nav pull-right">
-                                <li><a href="/accounts/register/" data-toggle="modal"><i class="icon-globe icon-white"></i> Sign up</a></li>
-                                <li class="divider-vertical"></li>
-                                <li><a href="/accounts/login/" data-toggle="modal"><i class="icon-user icon-white"></i> Sign in</a></li>
-                                </li>
-                            </ul>
-                        {% endif %}
-                    </div>
                 </div>
             </div>
         </div>
-
-        {% block rawcontent %}
-        {% endblock %}
-
         <div class="container">
             <div class="row">
                 <div class="span10 offset1">
                     {% block content %}
-
                     {% endblock %}
                 </div>
             </div>
         </div>
-        <script type="text/javascript" language="javascript" src="/static/js/jquery-1.10.1.min.js"></script>
-        <script type="text/javascript" language="javascript" src="/static/js/bootstrap.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
     </body>
 </html>

@@ -1,0 +1,23 @@
+{% extends "skeleton.html" %}
+{% block content %}
+<h2>Add payment to expense: {{ expense.name }}</h2>
+<p>The total price for this expense is: {{ expense.amount }} {{ expense.currency }}</p>
+<p class="text-warning">Note: Payments are implicitly the same currency as the expense, in this case {{ expense.currency }}</p>
+
+{% if form.errors %}
+ <h3>Form errors:</h3>
+ <ol>
+     {% for error in form.errors %}
+       <li><strong>{{ error|escape }}</strong></li>
+     {% endfor %}
+ </ol>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    <table>
+    {{form}}
+    </table>
+    <input type="submit" method="POST" class="btn" value="Add payment">
+</form>
+{% endblock %}

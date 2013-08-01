@@ -1,0 +1,21 @@
+{% extends "skeleton.html" %}
+{% block content %}
+<h2>Editing ledger {{ ledgerid }}</h2>
+    {% if form.errors %}
+     <h3>Form errors:</h3>
+     <ol>
+         {% for error in form.errors %}
+           <li><strong>{{ error|escape }}</strong></li>
+         {% endfor %}
+     </ol>
+    {% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{ ledgerid }}">
+    <table>
+    {{form}}
+    </table>
+    <input type="submit" method="POST">
+</form>
+{% endblock %}

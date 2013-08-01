@@ -1,0 +1,11 @@
+{% extends "skeleton.html" %}
+{% block content %}
+<h2>Create new ledger</h2>
+<form method="POST">
+    {% csrf_token %}
+    <table>
+    {{form}}
+    </table>
+    <input type="submit" method="POST" class="btn" value="Create ledger">
+</form>
+{% endblock %}
