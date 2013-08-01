@@ -60,7 +60,7 @@ def ShowLedger(request, ledgerid=0):
         'expenses': expenses,
         'payments': payments,
         'internaldata': internaldata,
-        'resultlist': pp.MonoPayment
+        'resultlist': pp.monopayment
     })
 
 
