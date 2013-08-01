@@ -289,18 +289,17 @@ def EditPayment(request, paymentid=0):
     ### Check if the payment exists - bail out if not
     try:
         payment = Payment.objects.get(pk = paymentid)
-    except Paymet.DoesNotExist:
+    except Payment.DoesNotExist:
         response = render_to_response('paymentdoesnotexist.html')
         return response
 
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid(): # All validation rules pass
-            person = Person.objects.get(pk = form['person'].data)
+            payment.person = Person.objects.get(pk = form['person'].data)
             payment.amount = float(form['amount'].data)
-            payment.person = person
             payment.currency = payment.expense.currency
-            payment.save
+            payment.save()
             return HttpResponseRedirect('/ledger/%s' % payment.expense.ledger.id) # return to the ledger page
         else:
             form = PaymentForm(request.POST)
