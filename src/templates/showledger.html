@@ -24,6 +24,7 @@
 <tr>
     <th>Name</th>
     <th style="width: 5em; text-align: center">Amount</th>
+    <th style="width: 5em; text-align: center">Amount {{ ledger.currency.iso4217_code }}</th>
     <th>Payments</th>
     <th>In</th>
     <th>Not in</th>
@@ -33,6 +34,7 @@
 {% for expense in expenses %}
 <tr><td>{{ expense.name }}</td>
 <td>{{ expense.amount }} {{ expense.currency.iso4217_code }}</td>
+<td>{{ expense.amount_native }} {{ ledger.currency.iso4217_code }}</td>
 <td>
 {% for payment in payments %}
 {% if payment.expense_id = expense.id %}
