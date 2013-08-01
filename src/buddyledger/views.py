@@ -51,7 +51,11 @@ def ShowLedger(request, ledgerid=0):
     
     ### get calculated result
     pp = PaymentProcessor(internaldata)
-    
+    result = []
+    for resultpayment in pp.monopayments:
+        payer = Person.objects.get(pk=resultpayment.payer)
+        receiver = Person.objects.get(pk=resultpayment.receiver)
+        result.append(dict(payer=payer.name,receiver=receiver.name,amount=resultpayment.amount))
     
     ### render and return response
     return render(request, 'showledger.html', {
@@ -60,7 +64,7 @@ def ShowLedger(request, ledgerid=0):
         'expenses': expenses,
         'payments': payments,
         'internaldata': internaldata,
-        'resultlist': pp.monopayment
+        'resultlist': result
     })
 
 
