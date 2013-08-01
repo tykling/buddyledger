@@ -255,7 +255,7 @@ def AddPayment(request, expenseid=0):
         if form.is_valid(): # All validation rules pass
             expense = Expense.objects.get(pk = expenseid)
             person = Person.objects.get(pk = form['person'].data)
-            currency = Currency.objects.get(pk = form['currency'].data)
+            currency = expense.currency
             payment = Payment(expense=expense,person=person,currency=currency,amount=form['amount'].data)
             
             payment.save() # save the new payment
@@ -266,7 +266,8 @@ def AddPayment(request, expenseid=0):
         form = PaymentForm()
 
     return render(request, 'addpayment.html', {
-        'form': form
+        'form': form,
+        'expense': expense
     })
 
 def EditPayment(request, paymentid=0):

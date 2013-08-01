@@ -30,7 +30,7 @@ class Payment(models.Model):
     expense = models.ForeignKey('Expense',editable=False)
     person = models.ForeignKey('Person')
     amount = models.BigIntegerField()
-    currency = models.ForeignKey('Currency')
+    currency = models.ForeignKey('Currency',editable=False)
 
 
 class Currency(models.Model):

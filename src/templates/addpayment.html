@@ -1,6 +1,7 @@
 {% extends "skeleton.html" %}
 {% block content %}
-<h2>Add payment to expense</h2>
+<h2>Add payment to expense: {{ expense.name }}</h2>
+<p>The total price for this expense is: {{ expense.amount }} {{ expense.currency }}</p>
 
 {% if form.errors %}
  <h3>Form errors:</h3>
