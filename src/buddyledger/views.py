@@ -4,7 +4,7 @@ from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, PaymentForm
 from buddyledger.models import Ledger, Person, Expense, Payment, Currency
 
 def CreateLedger(request):
-    if request.method == 'POST': # If the form has been submitted...
+    if request.method == 'POST':
         form = LedgerForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
             ledger = form.save() # save the new ledger
@@ -31,11 +31,15 @@ def ShowLedger(request, ledgerid=0):
     ### get all expenses related to this ledger
     expenses = Expense.objects.filter(ledger_id=ledgerid)
     
+    ### get all payments related to one of the expenses
+    payments = Payment.objects.filter(expense_id__in=expenses)
+    
     ### render and return response
     return render(request, 'showledger.html', {
         'ledger': ledger,
         'people': people,
-        'expenses': expenses
+        'expenses': expenses,
+        'payments': payments
     })
 
 
@@ -47,7 +51,7 @@ def EditLedger(request, ledgerid=0):
         response = render_to_response('ledgerdoesnotexist.html')
         return response
 
-    if request.method == 'POST': # If the form has been submitted...
+    if request.method == 'POST':
         form = LedgerForm(request.POST) # A form bound to the ledger data
         if form.is_valid(): # All validation rules pass
             ledger.name = form['name'].data
@@ -72,7 +76,7 @@ def AddPerson(request,ledgerid=0):
         response = render_to_response('ledgerdoesnotexist.html')
         return response
 
-    if request.method == 'POST': # If the form has been submitted...
+    if request.method == 'POST':
         form = PersonForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
             person = Person(ledger_id=ledgerid,name=form['name'].data)
@@ -96,7 +100,7 @@ def EditPerson(request, personid=0):
         response = render_to_response('persondoesnotexist.html')
         return response
 
-    if request.method == 'POST': # If the form has been submitted...
+    if request.method == 'POST':
         form = LedgerForm(request.POST) # A form bound to the person data
         if form.is_valid(): # All validation rules pass
             person.name = form['name'].data
@@ -134,7 +138,7 @@ def AddExpense(request, ledgerid=0):
         response = render_to_response('ledgerdoesnotexist.html')
         return response
     
-    if request.method == 'POST': # If the form has been submitted...
+    if request.method == 'POST':
         form = ExpenseForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
             expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=form['amount'].data,currency_id=form['currency'].data)
@@ -161,7 +165,7 @@ def EditExpense(request, expenseid=0):
         response = render_to_response('expensedoesnotexist.html')
         return response
 
-    if request.method == 'POST': # If the form has been submitted...
+    if request.method == 'POST':
         form = ExpenseForm(request.POST) # A form bound to the expense data
         if form.is_valid(): # All validation rules pass
             expense.name = form['name'].data
@@ -236,3 +240,70 @@ def ExpenseRemovePerson(request, expenseid=0, personid=0):
     ### remove this person from this expense
     expense.people.remove(person)
     return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
+
+
+def AddPayment(request, expenseid=0):
+    ### Check if the expense exists - bail out if not
+    try:
+        expense = Expense.objects.get(pk = expenseid)
+    except Expense.DoesNotExist:
+        response = render_to_response('expensedoesnotexist.html')
+        return response
+    
+    if request.method == 'POST':
+        form = PaymentForm(request.POST) # A form bound to the POST data
+        if form.is_valid(): # All validation rules pass
+            expense = Expense.objects.get(pk = expenseid)
+            person = Person.objects.get(pk = form['person'].data)
+            currency = Currency.objects.get(pk = form['currency'].data)
+            payment = Payment(expense=expense,person=person,currency=currency,amount=form['amount'].data)
+            
+            payment.save() # save the new payment
+            return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
+        else:
+            form = ExpenseForm(request.POST)
+    else:
+        form = ExpenseForm()
+
+    return render(request, 'addpayment.html', {
+        'form': form,
+    })
+
+def EditPayment(request, paymentid=0):
+    ### Check if the payment exists - bail out if not
+    try:
+        payment = Payment.objects.get(pk = paymentid)
+    except Paymet.DoesNotExist:
+        response = render_to_response('paymentdoesnotexist.html')
+        return response
+
+    if request.method == 'POST':
+        form = PaymentForm(request.POST)
+        if form.is_valid(): # All validation rules pass
+            person = Person.objects.get(pk = form['person'].data)
+            payment.person = person
+            currency = Currency.objects.get(pk = form['currency'].data)
+            payment.currency = currency
+            payment.save
+            return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
+        else:
+            form = PaymentForm(request.POST)
+    else:
+        form = PaymentForm(instance=expense)
+
+    return render(request, 'editpayment.html', {
+        'form': form,
+        'payment': payment
+    })
+
+def RemovePayment(request, payment=0):
+    ### Check if the payment exists - bail out if not
+    try:
+        payment = Payment.objects.get(pk = paymentid)
+    except Paymet.DoesNotExist:
+        response = render_to_response('paymentdoesnotexist.html')
+        return response
+
+    ledgerid = payment.expense.ledger.id
+    payment.delete()
+    return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page

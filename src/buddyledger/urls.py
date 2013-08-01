@@ -21,6 +21,11 @@ urlpatterns = patterns('',
     url(r'^expense/(?P<expenseid>\d+)/remove/$', 'buddyledger.views.RemoveExpense'),
     url(r'^expense/(?P<expenseid>\d+)/addperson/(?P<personid>\d+)/$', 'buddyledger.views.ExpenseAddPerson'),
     url(r'^expense/(?P<expenseid>\d+)/removeperson/(?P<personid>\d+)/$', 'buddyledger.views.ExpenseRemovePerson'),
+
+    ### payments
+    url(r'^expense/(?P<expenseid>\d+)/addpayment/$', 'buddyledger.views.AddPayment'),
+    url(r'^payment/(?P<paymentid>\d+)/edit/$', 'buddyledger.views.EditPayment'),
+    url(r'^payment/(?P<paymentid>\d+)/removepayment/$', 'buddyledger.views.RemovePayment'),
     
     # Admin urls
     url(r'^admin/', include(admin.site.urls)),

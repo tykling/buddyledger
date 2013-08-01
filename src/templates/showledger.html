@@ -23,6 +23,7 @@
 <tr>
     <th>Name</th>
     <th style="width: 5em; text-align: center">Amount</th>
+    <th>Payments</th>
     <th>In</th>
     <th>Not in</th>
     <th style="width: 5em; text-align: center">Edit</th>
@@ -31,6 +32,13 @@
 {% for expense in expenses %}
 <tr><td>{{ expense.name }}</td>
 <td>{{ expense.amount }} {{ expense.currency.iso4217_code }}</td>
+<td>
+{% for payment in payments }}
+{% if payment.expense_id = expense.id %}
+{{ payment.person.name }} - {{ payment.amount }} {{ payment.currency.iso4217_code }}<br>
+{% endif %}
+{% endfor %}
+</td>
 <td>
 {% for person in expense.people.all %}
 {{ person.name }} <a href="/expense/{{ expense.id }}/removeperson/{{ person.id }}/" class="btn btn-mini btn-danger"><i class="icon-remove"></i></a><br>
