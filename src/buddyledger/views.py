@@ -302,11 +302,11 @@ def EditPayment(request, paymentid=0):
             payment.currency = currency
             payment.amount = float(form['amount'].data)
             payment.save
-            return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
+            return HttpResponseRedirect('/ledger/%s' % payment.expense.ledger.id) # return to the ledger page
         else:
             form = PaymentForm(request.POST)
     else:
-        form = PaymentForm(instance=expense)
+        form = PaymentForm(instance=payment)
 
     return render(request, 'editpayment.html', {
         'form': form,
