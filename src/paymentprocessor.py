@@ -1,6 +1,4 @@
-#!/usr/bin/python
 import random
-#from tarjan import tarjan
 
 class MonoPayment:
     def __init__(self,receiver,payer,amount):
