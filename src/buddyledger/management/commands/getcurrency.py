@@ -13,11 +13,11 @@ class Command(BaseCommand):
         tree = etree.fromstring(xml)
         for child in tree[0]:
             if child.attrib['rate'] != '-':
-                rate = float(child.attrib['rate'].replace(".", "").replace(",", "."))
+                rate = float(child.attrib['rate'].replace(".", "").replace(",", "."))/100
 
                 try:
                     currency = Currency.objects.get(iso4217_code=child.attrib['code'])
-                    currency.dkk_price=rate/100
+                    currency.dkk_price=rate
                     temp = ""
                 except Currency.DoesNotExist:
                     currency = Currency(iso4217_code=child.attrib['code'],dkk_price=rate)
