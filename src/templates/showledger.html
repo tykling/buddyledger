@@ -19,12 +19,12 @@
 
 <h3>Expenses:</h3>
 {% if expenses %}
-<table class="table table-bordered table-striped" style="width: 50%;">
+<table class="table table-bordered table-striped">
 <tr>
     <th>Name</th>
     <th style="width: 5em; text-align: center">Amount</th>
-    <th style="width: 5em; text-align: center">In</th>
-    <th style="width: 5em; text-align: center">Not in</th>
+    <th>In</th>
+    <th>Not in</th>
     <th style="width: 5em; text-align: center">Edit</th>
     <th style="width: 5em; text-align: center">Remove</th>
 </tr>
@@ -39,7 +39,7 @@
 <td>
 {% for person in people %}
     {% if person not in expense.people.all %}
-        {{ person.name }} <a href="/expense/{{ expense.id }}/addperson/{{ person.id }}/" class="btn btn-mini btn-succes"><i class="icon-plus"></i></a><br>
+        {{ person.name }} <a href="/expense/{{ expense.id }}/addperson/{{ person.id }}/" class="btn btn-mini btn-success"><i class="icon-plus"></i></a><br>
     {% endif %}
 {% endfor %}
 </td>
