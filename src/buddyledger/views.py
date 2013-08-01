@@ -197,7 +197,7 @@ def EditExpense(request, expenseid=0):
     else:
         form = ExpenseForm(instance=expense)
     
-    form.fields["people"].queryset = Person.objects.filter(ledger_id=ledgerid)
+    form.fields["people"].queryset = Person.objects.filter(ledger_id=expense.ledger.id)
     return render(request, 'editexpense.html', {
         'form': form,
         'expense': expense
