@@ -34,12 +34,25 @@ def ShowLedger(request, ledgerid=0):
     ### get all payments related to one of the expenses
     payments = Payment.objects.filter(expense_id__in=expenses)
     
+    ### put the data structure for calculation together
+    internaldata = []
+    for expense in expenses:
+        expensepayments = Payment.objects.filter(expense_id = expense.id)
+        paymentlist = []
+        for payment in expensepayments:
+            paymentlist.append(amount=payment.amount,user=payment.person.id)
+        expensepeople = []
+        for person in expense.people.all:
+            expensepeople.append(person.id)
+        internaldata.append(dict(amount=expense.amount,payments=paymentlist,users=expensepeople))
+        
     ### render and return response
     return render(request, 'showledger.html', {
         'ledger': ledger,
         'people': people,
         'expenses': expenses,
-        'payments': payments
+        'payments': payments,
+        'internaldata': internaldata
     })
 
 
