@@ -280,7 +280,7 @@ def AddPayment(request, expenseid=0):
             expense = Expense.objects.get(pk = expenseid)
             person = Person.objects.get(pk = form['person'].data)
             currency = expense.currency
-            payment = Payment(expense=expense,person=person,currency=currency,amount=float(form['amount'].data),amount_native=ConvertCurrency(float(form['amount'].data),form['currency'].data,expense.ledger.currency.id),form['currency'].data))
+            payment = Payment(expense=expense,person=person,currency=currency,amount=float(form['amount'].data),amount_native=ConvertCurrency(float(form['amount'].data),form['currency'].data,expense.ledger.currency.id),form['currency'].data)
             payment.save() # save the new payment
             return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
         else:
