@@ -2,7 +2,7 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, PaymentForm
 from buddyledger.models import Ledger, Person, Expense, Payment, Currency
-from paymentprocessor import PaymentProcessor, MonoPayment
+#from paymentprocessor import PaymentProcessor, MonoPayment
 
 def CreateLedger(request):
     if request.method == 'POST':
@@ -49,7 +49,7 @@ def ShowLedger(request, ledgerid=0):
         internaldata.append(dict(payments=paymentlist,users=expensepeople))
     
     ### get calculated result
-    pp = PaymentProcessor(internaldata)
+    #pp = PaymentProcessor(internaldata)
     
     
     ### render and return response
@@ -58,8 +58,7 @@ def ShowLedger(request, ledgerid=0):
         'people': people,
         'expenses': expenses,
         'payments': payments,
-        'internaldata': internaldata,
-        'resultlist': pp.monopayment
+        'internaldata': internaldata
     })
 
 
