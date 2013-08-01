@@ -286,7 +286,7 @@ def AddPayment(request, expenseid=0):
         else:
             form = PaymentForm(request.POST)
     else:
-        form = PaymentForm()
+        form = PaymentForm(initial={'amount': expense.amount})
 
     return render(request, 'addpayment.html', {
         'form': form,
