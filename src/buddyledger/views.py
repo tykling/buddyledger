@@ -280,7 +280,7 @@ def AddPayment(request, expenseid=0):
             expense = Expense.objects.get(pk = expenseid)
             person = Person.objects.get(pk = form['person'].data)
             currency = expense.currency
-            payment = Payment(expense=expense,person=person,currency=currency,amount=Decimal(form['amount'].data),amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,expense.ledger.currency.id))
+            payment = Payment(expense=expense,person=person,currency=currency,amount=Decimal(form['amount'].data),amount_native=ConvertCurrency(Decimal(form['amount'].data),expense.currency.id,expense.ledger.currency.id))
             payment.save() # save the new payment
             return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
         else:
@@ -306,7 +306,7 @@ def EditPayment(request, paymentid=0):
         if form.is_valid(): # All validation rules pass
             payment.person = Person.objects.get(pk = form['person'].data)
             payment.amount = Decimal(form['amount'].data)
-            payment.amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,payment.expense.ledger.currency.id)
+            payment.amount_native=ConvertCurrency(Decimal(form['amount'].data),expense.currency.id,payment.expense.ledger.currency.id)
             payment.currency = payment.expense.currency
             payment.save()
             return HttpResponseRedirect('/ledger/%s' % payment.expense.ledger.id) # return to the ledger page
