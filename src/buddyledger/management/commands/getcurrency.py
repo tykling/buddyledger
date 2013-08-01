@@ -14,30 +14,29 @@ class Command(BaseCommand):
         for child in tree[0]:
             if child.attrib['rate'] != '-':
                 rate = float(child.attrib['rate'].replace(".", "").replace(",", "."))
-                rate = int(rate * 100)
 
                 try:
                     currency = Currency.objects.get(iso4217_code=child.attrib['code'])
-                    currency.danish_ore_price=rate
+                    currency.dkk_price_for_100=rate
                     temp = ""
                 except Currency.DoesNotExist:
-                    currency = Currency(iso4217_code=child.attrib['code'],danish_ore_price=rate)
+                    currency = Currency(iso4217_code=child.attrib['code'],dkk_price_for_100=rate)
                     temp = " new"
             
                 currency.save()
-                self.stdout.write('Saved%s rate: 100 %s costs %s danish ore' % (temp, child.attrib['code'],rate))
+                self.stdout.write('Saved%s rate: 100 %s costs %s DKK' % (temp, child.attrib['code'],rate))
             else:
                 self.stdout.write('Skipping currency %s - no price found' % child.attrib['code'])
 
         ### add DKK
         try:
             currency = Currency.objects.get(iso4217_code='DKK')
-            currency.danish_ore_price=10000
+            currency.dkk_price_for_100=100
             temp = ""
         except Currency.DoesNotExist:
-            currency = Currency(iso4217_code='DKK',danish_ore_price=10000)
+            currency = Currency(iso4217_code='DKK',dkk_price_for_100=100)
             temp = " new"
         currency.save()
-        self.stdout.write('Saved%s rate: 100 DKK costs 10000 danish ore' % temp)
+        self.stdout.write('Saved%s rate: 100 DKK costs 100 DKK ... ofcourse' % temp)
 
         self.stdout.write('Done.')
