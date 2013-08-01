@@ -16,6 +16,15 @@ class ExpenseForm(ModelForm):
     class Meta:
         model = Expense
 
+    def clean_amount(self):
+        data = self.cleaned_data['amount']
+        try:
+            float(data)
+            return data
+        except ValueError:
+            raise forms.ValidationError("invalid amount")
+
+
 class PaymentForm(ModelForm):
     class Meta:
         model = Payment
