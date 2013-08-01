@@ -28,4 +28,15 @@ class Command(BaseCommand):
                 self.stdout.write('Saved%s rate: 100 %s costs %s danish ore' % (temp, child.attrib['code'],rate))
             else:
                 self.stdout.write('Skipping currency %s - no price found' % child.attrib['code'])
+
+        ### add DKK
+        try:
+            currency = Currency.objects.get(iso4217_code='DKK')
+            currency.danish_ore_price=10000
+            temp = ""
+        except Currency.DoesNotExist:
+            currency = Currency(iso4217_code='DKK',danish_ore_price=10000)
+            temp = " new"
+        self.stdout.write('Saved%s rate: 100 %s costs %s danish ore' % (temp, child.attrib['code'],rate))
+
         self.stdout.write('Done.')
