@@ -40,7 +40,7 @@ def ShowLedger(request, ledgerid=0):
         expensepayments = Payment.objects.filter(expense_id = expense.id)
         paymentlist = []
         for payment in expensepayments:
-            paymentlist.append(amount=payment.amount,user=payment.person.id)
+            paymentlist.append(dict(amount=payment.amount,user=payment.person.id))
         expensepeople = []
         for person in expense.people.all:
             expensepeople.append(person.id)
