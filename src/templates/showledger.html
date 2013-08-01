@@ -32,13 +32,13 @@
 <tr><td>{{ expense.name }}</td>
 <td>{{ expense.amount }} {{ expense.currency.iso4217_code }}</td>
 <td>
-{% for person in expense.expenseperson %}
+{% for person in expense.people %}
 {{ person.name }}<br>
 {% endfor %}
 </td>
 <td>
 {% for person in people %}
-    {% if person not in expense.expenseperson %}
+    {% if person not in expense.people %}
         {{ person.name }}<br>
     {% endif %}
 {% endfor %}

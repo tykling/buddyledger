@@ -14,19 +14,16 @@ class Person(models.Model):
     class Meta:
         ordering = ('name',)
 
+
 class Expense(models.Model):
     name = models.CharField(max_length=100)
     amount = models.BigIntegerField()
     currency = models.ForeignKey('Currency')
     ledger = models.ForeignKey(Ledger,editable=False)
-    
+    people = models.ManyToManyField(Person,null=True)
+
     def __unicode__(self):
         return self.name
-
-
-class ExpensePerson(models.Model):
-    expense = models.ForeignKey('Expense')
-    person = models.ForeignKey('Person')
 
 
 class Payment(models.Model):

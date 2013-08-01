@@ -206,8 +206,7 @@ def ExpenseAddPerson(request, expenseid=0, personid=0):
         return response
 
     ### add this person to this expense
-    ep = ExpensePerson(expense_id=expenseid,person_id=personid)
-    ep.save()
+    expense.people.add(person)
     return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
 
 def ExpenseRemovePerson(request, expenseid=0, personid=0):
@@ -226,11 +225,5 @@ def ExpenseRemovePerson(request, expenseid=0, personid=0):
         return response
 
     ### remove this person from this expense
-    try:
-        ep = ExpensePerson.objects.filter(expense_id=expenseid,person_id=personid)
-    except ExpensePerson.DoesNotExist:
-        response = render_to_response('expensepersondoesnotexist.html')
-        return response
-
-    ep.delete()
+    expense.people.remove(person)
     return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
