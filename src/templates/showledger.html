@@ -1,7 +1,7 @@
 {% extends "skeleton.html" %}
 {% block content %}
 <h2>Ledger: {{ ledger.name }}</h2>
-<p>Native currency: {{ ledger.currency }}</p>
+<p class="info">Native currency: {{ ledger.currency }}</p>
 
 <h3>People:</h3>
 {% if people %}
@@ -20,7 +20,7 @@
 
 <h3>Expenses:</h3>
 {% if expenses %}
-<table class="table table-bordered table-striped">
+<table class="table table-bordered">
 <tr>
     <th>Name</th>
     <th style="width: 5em; text-align: center">Amount</th>
