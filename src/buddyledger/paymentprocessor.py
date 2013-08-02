@@ -1,4 +1,5 @@
 import random
+from tarjan import tarjan
 
 class MonoPayment:
     def __init__(self,receiver,payer,amount):
@@ -7,19 +8,30 @@ class MonoPayment:
         self.amount   = amount
 
 class PaymentProcessor:
-
     def create_monopayments(self,paymentdictlist): 
         ### create (mono)payments list from payments list
         self.monopayments = []
         for payment in paymentdictlist:
-            for receiver in payment['receiver']:
-                for payer in payment['payer']:
-                    self.monopayments.append(MonoPayment(receiver,payer,payment['amount']/(len(payment['receiver'])+len(payment['payer']))))    
+            totalamount = float(0)
+            payerweight = []
+            for payer in payment['payments']:
+                totalamount += float(payer['amount'])
+            for payer in payment['payments']:
+                payerweight.append(float(payer['amount'])/totalamount)
+            self.graphpayment = {}
+            for user in payment['users']:
+                for (n,payer) in list(enumerate(payment['payments'])):
+                    self.graphpayment[user] = [] 
+                    self.graphpayment[payer['user']] = []
+                    if user != payer['user']:
+                        amount      = totalamount * (1/float(len(payment['users']))) * payerweight[n] 
+                        monopayment = MonoPayment(user,payer['user'],amount)
+                        self.monopayments.append(monopayment)
 
     def abs2neg_payments(self):
         #standardize payments
         for (n,payment) in list(enumerate(self.monopayments)):
-            if payment.receiver < payment.payer:#NO IDEA WHAT THE ORDERING IS ATM
+            if payment.receiver < payment.payer:
                 self.monopayments[n] = MonoPayment(receiver=payment.payer,payer=payment.receiver, amount = -1 * payment.amount)
 
     def sum_eq_payments(self,static=0):
@@ -31,11 +43,9 @@ class PaymentProcessor:
                 if otherpayment.receiver == payment.receiver and otherpayment.payer == payment.payer:
                     self.monopayments[static].amount += otherpayment.amount
                     self.monopayments[n] = False
-                    print 'lol'
                 elif otherpayment.receiver == payment.payer and otherpayment.payer == payment.receiver:
                     self.monopayments[static].amount -= otherpayment.amount
                     self.monopayments[n] = False
-                    print 'lol2'
         for (n,paym) in reversed(list(enumerate(self.monopayments))):
             if not paym:
                 self.monopayments.remove(paym)
@@ -44,16 +54,13 @@ class PaymentProcessor:
         for (n,payment) in list(enumerate(self.monopayments)):
             if payment.amount < 0:
                 self.monopayments[n] = MonoPayment(receiver=payment.payer,payer=payment.receiver, amount = -1 * payment.amount)
-    ## THIS WILL BE REMOVED
+    ## THIS CRAP WILL BE REMOVED
     def reduce_monopayments(self,pay1idx=0):
-        payment1 = self.monopayments[pay1idx] #B owes A
+        payment1 = self.monopayments[pay1idx]
         done = False
-        for (n,payment2) in list(enumerate(self.monopayments)): #payment = B
+        for (n,payment2) in list(enumerate(self.monopayments)): 
             if payment1.receiver == payment2.payer:
-                # payment2 = A ows C is found
                 for (k,payment3) in list(enumerate(self.monopayments)):
-                    # payment3 B owes C
-                    #n is 2, k is 3
                     if k != n and payment2.payer == payment1.payer:
                         self.monopayments[k].amount += self.monopayments[n].amount
                         self.monopayments[n] = False
@@ -76,6 +83,49 @@ class PaymentProcessor:
             if not keepgoing:
                 break
 
+    def monopayments2graph(self):
+        for payment in self.monopayments:
+            self.graphpayment[payment.payer].append(payment.receiver)
+
+    def findmonopayment(self,payer,receiver):
+        for (n,payment) in list(enumerate(self.monopayments)):
+            if payment.receiver == receiver and payment.payer == payer:
+                return n
+        return False
+
+    def cycle2monopaymentlist(self,cycle):
+        listidx = []
+        for n in range(len(cycle)-1):
+           listidx.append(findmonopayment(cycle[n],cycle[n+1],True))
+        return listidx
+    
+    ### This returns false every time since tarjans algorithm does not detect these since they are not strongly connected
+    def verify_one2two(self,payidxs):
+        for n in range(len(payidxs)):
+            if (self.monopayments[n].receiver == self.monopayments[(n+1)%3].receiver) or (self.monopayments[n].payer == self.monopayments[(n+1)%3].payer):
+                return False
+        return False
+
+   
+    def removedigraphcycles(self):
+        print self.graphpayment
+        cycles = tarjan(self.graphpayment)
+        print cycles
+        for cycle in cycles:
+            if len(cycle)>1:
+                if len(cycle) == 2:
+                    Aidx = self.findmonopayment(cycle[0],cycle[1])
+                    Bidx = self.findmonopayment(cycle[1],cycle[0])
+                    self.monopayments[Bidx].amount -= self.monopayments[Aidx].amount
+                    self.monopayments.pop(self.monopayments[Aidx])
+                elif len(cycle) > 2:
+                    paymentidxs = cycle2monopaymentlistidx(cycle)
+                    for n in range(1,len(paymentidxs)):
+                        self.monopayments[paymentidxs[n]].amount -= self.monopayments[paymentidxs[0]]
+                    self.monopayments.pop[paymentidxs[0]]
+                else:
+                    print 'THIS SHOULD NOT HAPPEN'
+            
     def __init__(self,paymentdictlist,method='b2'):
         ## Creates self.monopayments which is the output to use
         self.method = method 
@@ -83,6 +133,9 @@ class PaymentProcessor:
             self.create_monopayments(paymentdictlist)
             self.abs2neg_payments()
             self.walkthrough_idxs('sum_eq_payments')
+            self.monopayments2graph()
+            self.removedigraphcycles()
+            self.walkthrough_idxs('sum_eq_payments')
             self.neg2abs_payments()
-            #self.walkthrough_idxs('reduce_monopayments')
-
+            #self.walkthrough_idxs('reduce_monopayments')# will be fixed soon
+            #self.walkthrough_idxs('sum_eq_payments')
