@@ -108,9 +108,7 @@ class PaymentProcessor:
 
    
     def removedigraphcycles(self):
-        print self.graphpayment
         cycles = tarjan(self.graphpayment)
-        print cycles
         for cycle in cycles:
             if len(cycle)>1:
                 if len(cycle) == 2:
