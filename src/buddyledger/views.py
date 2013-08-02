@@ -44,6 +44,7 @@ def ShowLedger(request, ledgerid=0):
         ### no calculation if there are no payments
         if expensepayments != []:
             paymentlist = []
+            totalamount = 0
             for payment in expensepayments:
                 paymentlist.append(dict(amount=payment.amount_native,user=payment.person.id))
                 totalamount += payment.amount_native
