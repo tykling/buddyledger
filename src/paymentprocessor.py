@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import random
-#from tarjan import tarjan
+from tarjan import tarjan
 
 class MonoPayment:
     def __init__(self,receiver,payer,amount):
@@ -87,37 +87,45 @@ class PaymentProcessor:
     def monopayments2graph(self):
         for payment in self.monopayments:
             self.graphpayment[payment.payer].append(payment.receiver)
-    
-    def findmonopayment(self,payer,receiver,returnidx=False):
+
+    def findmonopayment(self,payer,receiver):
         for (n,payment) in list(enumerate(self.monopayments)):
             if payment.receiver == receiver and payment.payer == payer:
-                if returnidx:
-                    return n
-                else:
-                    return payment
+                return n
         return False
 
-    def removegraphcycles(self):
+    def cycle2monopaymentlist(self,cycle):
+        listidx = []
+        for n in range(len(cycle)-1):
+           listidx.append(findmonopayment(cycle[n],cycle[n+1],True))
+        return listidx
+    
+    ### This returns false every time since tarjans algorithm does not detect these since they are not strongly connected
+    def verify_one2two(self,payidxs):
+        for n in range(len(payidxs)):
+            if (self.monopayments[n].receiver == self.monopayments[(n+1)%3].receiver) or (self.monopayments[n].payer == self.monopayments[(n+1)%3].payer):
+                return False
+        return False
+
+   
+    def removedigraphcycles(self):
+        print self.graphpayment
         cycles = tarjan(self.graphpayment)
         print cycles
         for cycle in cycles:
             if len(cycle)>1:
                 if len(cycle) == 2:
-                    A = findmonopayment(cycle[0],cycle[1])
-                    Aidx = findmonopayment(cycle[0],cycle[1],returnidx=True)
-                    B = findmonopayment(cycle[1],cycle[0])
-                    B.amount -= A.amount
-                    self.monopayments.pop(Aidx)
-                elif len(cycle) == 3:
-                    if one2two:
-                        print 'stuff to be done'
-                    else:
-                        print 'stuff to be done'
-                elif len(cycle) > 3:
-                        print 'stuff to be done'
+                    Aidx = self.findmonopayment(cycle[0],cycle[1])
+                    Bidx = self.findmonopayment(cycle[1],cycle[0])
+                    self.monopayments[Bidx].amount -= self.monopayments[Aidx].amount
+                    self.monopayments.pop(self.monopayments[Aidx])
+                elif len(cycle) > 2:
+                    paymentidxs = cycle2monopaymentlistidx(cycle)
+                    for n in range(1,len(paymentidxs)):
+                        self.monopayments[paymentidxs[n]].amount -= self.monopayments[paymentidxs[0]]
+                    self.monopayments.pop[paymentidxs[0]]
                 else:
                     print 'THIS SHOULD NOT HAPPEN'
-                #for receiver in cycle[1:]:
             
     def __init__(self,paymentdictlist,method='b2'):
         ## Creates self.monopayments which is the output to use
@@ -125,8 +133,10 @@ class PaymentProcessor:
         if method == 'b2':
             self.create_monopayments(paymentdictlist)
             self.abs2neg_payments()
-            #self.monopayments2graph()
-            #self.removegraphcycles()
+            self.walkthrough_idxs('sum_eq_payments')
+            self.monopayments2graph()
+            self.removedigraphcycles()
             self.walkthrough_idxs('sum_eq_payments')
             self.neg2abs_payments()
-            #self.walkthrough_idxs('reduce_monopayments') will be fixed soon
+            #self.walkthrough_idxs('reduce_monopayments')# will be fixed soon
+            #self.walkthrough_idxs('sum_eq_payments')
