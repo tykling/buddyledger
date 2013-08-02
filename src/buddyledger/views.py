@@ -41,13 +41,18 @@ def ShowLedger(request, ledgerid=0):
     internaldata = []
     for expense in expenses:
         expensepayments = Payment.objects.filter(expense_id = expense.id)
-        paymentlist = []
-        for payment in expensepayments:
-            paymentlist.append(dict(amount=payment.amount_native,user=payment.person.id))
-        expensepeople = []
-        for person in expense.people.all():
-            expensepeople.append(person.id)
-        internaldata.append(dict(payments=paymentlist,users=expensepeople))
+        ### no calculation if there are no payments
+        if expensepayments != []:
+            paymentlist = []
+            for payment in expensepayments:
+                paymentlist.append(dict(amount=payment.amount_native,user=payment.person.id))
+                totalamount += payment.amount_native
+            ### no calculation if the payments dont add up to the total expense
+            if totalamount == expense.amount_native:
+                expensepeople = []
+                for person in expense.people.all():
+                    expensepeople.append(person.id)
+                internaldata.append(dict(payments=paymentlist,users=expensepeople))
     
     ### get calculated result
     pp = PaymentProcessor(internaldata)
