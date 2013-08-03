@@ -85,7 +85,10 @@ class PaymentProcessor:
 
     def monopayments2graph(self):
         for payment in self.monopayments:
-            self.graphpayment[payment.payer].append(payment.receiver)
+            if payment.payer in self.graphpayment:
+                self.graphpayment[payment.payer].append(payment.receiver)
+            else:
+                self.graphpayment[payment.payer] = [payment.receiver]
 
     def findmonopayment(self,payer,receiver):
         for (n,payment) in list(enumerate(self.monopayments)):
