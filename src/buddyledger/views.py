@@ -70,10 +70,10 @@ def ShowLedger(request, ledgerid=0):
         receivelist = []
         paylist = []
         for payment in result:
-            if payment.receiver == person:
+            if payment['receiver'] == person:
                 ### this payment is to this person
                 receivelist.append(payment)
-            if payment.payer == person:
+            if payment['payer'] == person:
                 paylist.append(payment)
         fancyresult.append(dict(name=person.name,receivelist=receivelist,paylist=paylist))
     
