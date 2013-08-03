@@ -35,6 +35,7 @@
 <td>{{ expense.amount }} {{ expense.currency.iso4217_code }}</td>
 <td>{{ expense.amount_native }} {{ ledger.currency.iso4217_code }}</td>
 <td>
+{% if payments %}
 {% for payment in payments %}
 {% if payment.expense_id = expense.id %}
 {{ payment.person.name }}: {{ payment.amount }} {{ payment.currency.iso4217_code }}&nbsp;&nbsp;
@@ -42,6 +43,9 @@
 <a href="/payment/{{ payment.id }}/edit/" class="btn btn-info btn-mini pull-right"><i class="icon-edit"></i></a><br>
 {% endif %}
 {% endfor %}
+{% else %}
+<p class="warning">No payments registered for this expense! Who paid for this ?</p>
+{% endif %}
 <a href="/expense/{{expense.id}}/addpayment" class="btn btn-mini btn-success"><i class="icon-plus"></i> Add new payment</a><br>
 </td>
 <td>
