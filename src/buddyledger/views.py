@@ -64,6 +64,19 @@ def ShowLedger(request, ledgerid=0):
         receiver = Person.objects.get(pk=resultpayment.receiver)
         result.append(dict(payer=payer.name,receiver=receiver.name,amount=round(resultpayment.amount,2)))
 
+    ### fix dict with result per user
+    fancyresult = []
+    for person in people:
+        receivelist = []
+        paylist = []
+        for result in resultlist:
+            if result.receiver == person:
+                ### this payment is to this person
+                receivelist.append(result)
+            if result.payer == person:
+                paylist.append(result)
+        fancyresult.append(dict(name=person.name,receivelist=receivelist,paylist=paylist))
+    
     ### render and return response
     return render(request, 'showledger.html', {
         'ledger': ledger,
@@ -71,7 +84,8 @@ def ShowLedger(request, ledgerid=0):
         'expenses': expenses,
         'payments': payments,
         'internaldata': internaldata,
-        'resultlist': result
+        'resultlist': result,
+        'fancyresult': fancyresult
     })
 
 

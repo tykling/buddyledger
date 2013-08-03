@@ -75,6 +75,28 @@
 {% endfor %}
 </ul>
 
+<h3>Fancy result:</h3>
+<ul class="thumbnails">
+    {% for result in fancyresult %}
+    <li>
+        <div class="thumbnail">
+        <h3>{{ result.name }} pay</h3>
+        {% for payment in result.paylist %}
+            <p>Pay {{ result.amount }} to {{ result.receiver }}</p>
+        {% endfor %}
+        </div>
+    </li>
+    <li>
+        <div class="thumbnail">
+        <h3>{{ result.name }} receive</h3>
+        {% for payment in result.receivelist %}
+            <p>Receive {{ result.amount }} from {{ result.payer }}</p>
+        {% endfor %}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
 <h3>Debug info:</h3>
 <pre class="pre-scrollable">
 {{ internaldata }}
