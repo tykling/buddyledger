@@ -79,6 +79,15 @@ def ShowLedger(request, ledgerid=0):
                 paylist.append(payment)
         fancyresult.append(dict(name=person.name,receivelist=receivelist,paylist=paylist))
     
+    ### build the matrix
+    #matrixdict = dict()
+    #for person in people:
+    #    matrixdict
+    #matrixlist = ['empty']
+    #for person in people:
+    #    matrixlist.append(person.name)
+        
+        
     ### render and return response
     return render(request, 'showledger.html', {
         'ledger': ledger,
@@ -220,7 +229,7 @@ def EditExpense(request, expenseid=0):
         if form.is_valid(): # All validation rules pass
             expense.name = form['name'].data
             expense.amount = Decimal(form['amount'].data)
-            expense.amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,ledger.currency.id)
+            expense.amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,expense.ledger.currency.id)
             currency = Currency.objects.get(pk = form['currency'].data)
             expense.currency = currency
             expense.save()
