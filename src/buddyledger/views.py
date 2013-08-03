@@ -60,8 +60,10 @@ def ShowLedger(request, ledgerid=0):
     
     result = []
     for resultpayment in pp.monopayments:
-        payer = Person.objects.get(pk=resultpayment.payer)
-        receiver = Person.objects.get(pk=resultpayment.receiver)
+        ### XXX switched because payer and receiver are reversed in pp.monopayments,
+        ### unhack this when "upstream" is fixed
+        receiver = Person.objects.get(pk=resultpayment.payer)
+        payer = Person.objects.get(pk=resultpayment.receiver)
         result.append(dict(payer=payer.name,receiver=receiver.name,amount=round(resultpayment.amount,2)))
 
     ### fix dict with result per user
