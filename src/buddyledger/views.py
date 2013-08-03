@@ -69,7 +69,7 @@ def ShowLedger(request, ledgerid=0):
     for person in people:
         receivelist = []
         paylist = []
-        for payment in resultlist:
+        for payment in result:
             if payment.receiver == person:
                 ### this payment is to this person
                 receivelist.append(payment)
