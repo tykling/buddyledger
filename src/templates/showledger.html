@@ -82,7 +82,7 @@
         <div class="thumbnail">
         <h3>{{ result.name }} pay</h3>
         {% for payment in result.paylist %}
-            <p>Pay {{ result.amount }} to {{ result.receiver }}</p>
+            <p>Pay {{ payment.amount }} to {{ payment.receiver }}</p>
         {% endfor %}
         </div>
     </li>
@@ -90,7 +90,7 @@
         <div class="thumbnail">
         <h3>{{ result.name }} receive</h3>
         {% for payment in result.receivelist %}
-            <p>Receive {{ result.amount }} from {{ result.payer }}</p>
+            <p>Receive {{ payment.amount }} from {{ payment.payer }}</p>
         {% endfor %}
         </div>
     </li>
