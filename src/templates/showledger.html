@@ -87,16 +87,18 @@
         <div class="thumbnail">
         <h3>{{ result.name }} pay</h3>
         {% for payment in result.paylist %}
-            <p>Pay {{ payment.amount }} to {{ payment.receiver }}</p>
+            <p>Pay {{ payment.amount }} {{ ledger.currency.iso4217_code }} to {{ payment.receiver }}</p>
         {% endfor %}
+        <b>Total {{ result.paytotal }}</b>
         </div>
     </li>
     <li>
         <div class="thumbnail">
         <h3>{{ result.name }} receive</h3>
         {% for payment in result.receivelist %}
-            <p>Receive {{ payment.amount }} from {{ payment.payer }}</p>
+            <p>Receive {{ payment.amount }} {{ ledger.currency.iso4217_code }} from {{ payment.payer }}</p>
         {% endfor %}
+        <b>Total {{ result.receivetotal }}</b>
         </div>
     </li>
     {% endfor %}

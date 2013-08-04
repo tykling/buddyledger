@@ -69,15 +69,23 @@ def ShowLedger(request, ledgerid=0):
     ### fix dict with result per user
     fancyresult = []
     for person in people:
+        paymenttotal = 0
+        for payment in payments:
+            if payment.person == person:
+                paymenttotal += payment.amount
         receivelist = []
         paylist = []
+        paytotal = 0
+        receivetotal = 0
         for payment in result:
             if payment['receiver'] == person.name:
                 ### this payment is to this person
                 receivelist.append(payment)
+                receivetotal += payment.amount
             if payment['payer'] == person.name:
                 paylist.append(payment)
-        fancyresult.append(dict(name=person.name,receivelist=receivelist,paylist=paylist))
+                paytotal += payment.amount
+        fancyresult.append(dict(name=person.name,receivelist=receivelist,paylist=paylist,receivetotal=receivetotal,paytotal=paytotal,paymenttotal=paymenttotal))
     
     ### build the matrix
     #matrixdict = dict()
