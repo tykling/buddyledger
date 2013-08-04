@@ -81,10 +81,10 @@ def ShowLedger(request, ledgerid=0):
             if payment['receiver'] == person.name:
                 ### this payment is to this person
                 receivelist.append(payment)
-                receivetotal += payment.amount
+                receivetotal += payment['amount']
             if payment['payer'] == person.name:
                 paylist.append(payment)
-                paytotal += payment.amount
+                paytotal += payment['amount']
         fancyresult.append(dict(name=person.name,receivelist=receivelist,paylist=paylist,receivetotal=receivetotal,paytotal=paytotal,paymenttotal=paymenttotal))
     
     ### build the matrix
