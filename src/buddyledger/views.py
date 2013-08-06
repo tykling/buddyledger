@@ -351,7 +351,8 @@ def EditPayment(request, paymentid=0):
         if form.is_valid(): # All validation rules pass
             payment.person = Person.objects.get(pk = form['person'].data)
             payment.amount = Decimal(form['amount'].data)
-            payment.amount_native=ConvertCurrency(Decimal(form['amount'].data),expense.currency.id,payment.expense.ledger.currency.id)
+            ### convert to native currency for this ledger
+            payment.amount_native=ConvertCurrency(Decimal(form['amount'].data),payment.expense.currency.id,payment.expense.ledger.currency.id)
             payment.currency = payment.expense.currency
             payment.save()
             return HttpResponseRedirect('/ledger/%s' % payment.expense.ledger.id) # return to the ledger page
