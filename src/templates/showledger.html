@@ -80,13 +80,13 @@
 <tr>
 <th>tyk was here</th>
 {% for uid,table in resultdict.items %}
-    <th>{{ data.userdict|keyvalue:uid }}</th>
+    <th>{{ data.userdict|keyvalue:uid }} pay</th>
 {% endfor %}
 </tr>
 
 {% for uid,tablerow in resultdict.items %}
     <tr>
-    <td><b>{{ data.userdict|keyvalue:uid }}</b></td>
+    <td><b>{{ data.userdict|keyvalue:uid }} receive</b></td>
     {% for tempuid,value in tablerow.items %}
         <td>
         {{ value }}
