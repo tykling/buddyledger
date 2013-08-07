@@ -74,38 +74,24 @@
 <a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
 
 <h3>Result:</h3>
-<ul>
-{% for result in resultlist %}
-<li>{{ result.payer }} owes {{ result.receiver }} {{ result.amount }} {{ ledger.currency.iso4217_code }}</li>
+
+<table>
+<tr>
+<th>tyk was here</th>
+{% for uid,table in resultdict %}
+<th>{{ uid }}</th>
+</tr>
 {% endfor %}
-</ul>
 
-<h3>Fancy result:</h3>
-<ul class="thumbnails">
-    {% for result in fancyresult %}
-    <li>
-        <div class="thumbnail">
-        <h3>{{ result.name }} pay</h3>
-        {% for payment in result.paylist %}
-            <p>Pay {{ payment.amount }} {{ ledger.currency.iso4217_code }} to {{ payment.receiver }}</p>
-        {% endfor %}
-        <b>Total {{ result.paytotal }}</b>
-        </div>
-    </li>
-    <li>
-        <div class="thumbnail">
-        <h3>{{ result.name }} receive</h3>
-        {% for payment in result.receivelist %}
-            <p>Receive {{ payment.amount }} {{ ledger.currency.iso4217_code }} from {{ payment.payer }}</p>
-        {% endfor %}
-        <b>Total {{ result.receivetotal }}</b>
-        </div>
-    </li>
-    {% endfor %}
-</ul>
+{% for uid,table in resultdict %}
+<tr>
+<td><b>{{ uid }}</b></td>
+{{ for temp in table }}
+<td>
+{{ temp }}
+</td>
+</tr>
+{% endfor %}
+</table>
 
-<h3>Debug info:</h3>
-<pre class="pre-scrollable">
-{{ internaldata }}
-</pre>
 {% endblock %}

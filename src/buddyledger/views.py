@@ -5,6 +5,33 @@ from buddyledger.models import Ledger, Person, Expense, Payment, Currency
 from decimal import *
 from paymentprocessor import PaymentProcessor, MonoPayment
 
+def tykcalc(data):
+    ### build empty matrix
+    resultdict = dict()
+    for user in data['userlist']:
+        temp = dict()
+        for tempuser in ['userlist']:
+            if user == tempuser:
+                temp[tempuser] = 'n/a'
+            else:
+                temp[tempuser] = Decimal(0)
+        resultdict[user] = temp
+
+    ### loop through expenses
+    for expense in expenselist:
+        ### loop through each payment in this expense
+        for payment in expense['payments']:
+            ### loop through the users splitting this expense
+            for splituser in expense['users']:
+                ### substract the users part of the payment (unless this splituser is the payer of this payment)
+                if resultdict[payment['user']][splituser] != "n/a":
+                    resultdict[payment['user']][splituser] = Decimal(resultdict[payment['user']][splituser]) - (payment['amount']/len(expense['users']))
+                    ### round to two decimals
+                    resultdict[payment['user']][splituser] = resultdict[payment['user']][splituser].quantize(Decimal('.01'))
+    
+    ### return the result
+    return resultdict
+
 def CreateLedger(request):
     if request.method == 'POST':
         form = LedgerForm(request.POST) # A form bound to the POST data
@@ -54,57 +81,22 @@ def ShowLedger(request, ledgerid=0):
                 for person in expense.people.all():
                     expensepeople.append(person.id)
                 internaldata.append(dict(payments=paymentlist,users=expensepeople))
-    
-    ### get calculated result
-    pp = PaymentProcessor(internaldata)
-    
-    result = []
-    for resultpayment in pp.monopayments:
-        ### XXX switched because payer and receiver are reversed in pp.monopayments,
-        ### unhack this when "upstream" is fixed
-        receiver = Person.objects.get(pk=resultpayment.payer)
-        payer = Person.objects.get(pk=resultpayment.receiver)
-        result.append(dict(payer=payer.name,receiver=receiver.name,amount=round(resultpayment.amount,2)))
 
-    ### fix dict with result per user
-    fancyresult = []
+    personlist = []
     for person in people:
-        paymenttotal = 0
-        for payment in payments:
-            if payment.person == person:
-                paymenttotal += payment.amount
-        receivelist = []
-        paylist = []
-        paytotal = 0
-        receivetotal = 0
-        for payment in result:
-            if payment['receiver'] == person.name:
-                ### this payment is to this person
-                receivelist.append(payment)
-                receivetotal += payment['amount']
-            if payment['payer'] == person.name:
-                paylist.append(payment)
-                paytotal += payment['amount']
-        fancyresult.append(dict(name=person.name,receivelist=receivelist,paylist=paylist,receivetotal=receivetotal,paytotal=paytotal,paymenttotal=paymenttotal))
+        personlist.append(person.id)
     
-    ### build the matrix
-    #matrixdict = dict()
-    #for person in people:
-    #    matrixdict
-    #matrixlist = ['empty']
-    #for person in people:
-    #    matrixlist.append(person.name)
-        
-        
+    data = dict(expenselist = internaldata, userlist = personlist)
+    resultdict = tykcalc(data)
+    
     ### render and return response
     return render(request, 'showledger.html', {
         'ledger': ledger,
         'people': people,
         'expenses': expenses,
         'payments': payments,
-        'internaldata': internaldata,
-        'resultlist': result,
-        'fancyresult': fancyresult
+        'internaldata': data,
+        'resultdict': resultdict
     })
 
 
