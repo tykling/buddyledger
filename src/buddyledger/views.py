@@ -74,6 +74,7 @@ def tyktotals(resultdict):
         resultdict[receiverid]['total'] = total
         
     ### calculate totals for each payer
+    payerdict = dict()
     for payerid in resultdict:
         total = 0
         for receiverid in resultdict:
