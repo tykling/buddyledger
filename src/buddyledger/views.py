@@ -67,6 +67,7 @@ def tykoptimize(resultdict):
 def tyktotals(resultdict):
     ### calculate totals for each receiver
     for receiverid in resultdict:
+        total = 0
         for payerid in resultdict[receiverid]:
             if resultdict[receiverid][payerid] != "n/a":
                 total += resultdict[receiverid][payerid]
