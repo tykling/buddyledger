@@ -25,7 +25,7 @@ def tykcalc(data):
             for splituser in expense['users']:
                 ### substract the users part of the payment (unless this splituser is the payer of this payment)
                 if resultdict[payment['user']][splituser] != "n/a":
-                    resultdict[payment['user']][splituser] = Decimal(resultdict[payment['user']][splituser]) - (payment['amount']/len(expense['users']))
+                    resultdict[payment['user']][splituser] = Decimal(resultdict[payment['user']][splituser]) + (payment['amount']/len(expense['users']))
                     ### round to two decimals
                     resultdict[payment['user']][splituser] = resultdict[payment['user']][splituser].quantize(Decimal('.01'))
     
