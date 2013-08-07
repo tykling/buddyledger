@@ -7,14 +7,19 @@
 
 <h3>People:</h3>
 {% if people %}
-<table class="table table-bordered table-striped" style="width: 50%;">
-<tr><th>Name</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
-{% for person in people %}
-<tr><td>{{ person.name }}</td>  
-<td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
-<td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td></tr>
-{% endfor %}
-</table>
+<p>{{ people|join:", " }}</p>
+<button type="button" class="btn btn-danger" data-toggle="collapse" data-target="#peopledetails">Details</button>
+<div id="peopledetails" class="collapse in">
+    <table class="table table-bordered table-striped" style="width: 50%;">
+        <tr><th>Name</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
+        {% for person in people %}
+        <tr><td>{{ person.name }}</td>  
+            <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
+            <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
 {% else %}
 <p class="text-warning">No people found!</p>
 {% endif %}
