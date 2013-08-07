@@ -86,7 +86,7 @@
 {% for uid,table in resultdict %}
 <tr>
 <td><b>{{ uid }}</b></td>
-{{ for temp in table }}
+{% for temp in table %}
 <td>
 {{ temp }}
 </td>
