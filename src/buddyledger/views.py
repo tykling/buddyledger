@@ -50,18 +50,26 @@ def tykoptimize(resultdict):
 
             ### check if receiver is to receive more than he is paying to this payer
             if resultdict[receiverid][payerid] > resultdict[payerid][receiverid]:
-                print "%s > %s - optimizing %s away..." % (resultdict[receiverid][payerid],resultdict[payerid][receiverid],resultdict[payerid][receiverid])
+                #print "%s > %s - optimizing %s away..." % (resultdict[receiverid][payerid],resultdict[payerid][receiverid],resultdict[payerid][receiverid])
                 resultdict[receiverid][payerid] = resultdict[receiverid][payerid] - resultdict[payerid][receiverid]
                 resultdict[payerid][receiverid] = 0
             elif resultdict[receiverid][payerid] < resultdict[payerid][receiverid]:
-                print "%s < %s - optimizing %s away..." % (resultdict[receiverid][payerid],resultdict[payerid][receiverid],resultdict[receiverid][payerid])
+                #print "%s < %s - optimizing %s away..." % (resultdict[receiverid][payerid],resultdict[payerid][receiverid],resultdict[receiverid][payerid])
                 resultdict[payerid][receiverid] = resultdict[payerid][receiverid] - resultdict[receiverid][payerid]
                 resultdict[receiverid][payerid] = 0
             else:
-                print "%s == %s - optimizing both away" % (resultdict[receiverid][payerid],resultdict[payerid][receiverid])
+                #print "%s == %s - optimizing both away" % (resultdict[receiverid][payerid],resultdict[payerid][receiverid])
                 if resultdict[payerid][receiverid] != 0:
                     resultdict[payerid][receiverid] = 0
                     resultdict[receiverid][payerid] = 0
+    return resultdict
+
+def tyktotals(resultdict):
+    for receiverid in resultdict:
+        for payerid in resultdict[receiverid]:
+            if resultdict[receiverid][payerid] != "n/a":
+                total += resultdict[receiverid][payerid]
+        resultdict['receiverid']['total'] = total
     return resultdict
 
 def CreateLedger(request):
@@ -121,7 +129,7 @@ def ShowLedger(request, ledgerid=0):
         userdict[person.id] = person.name
     
     data = dict(expenselist = internaldata, userlist = userlist, userdict = userdict)
-    resultdict = tykoptimize(tykcalc(data))
+    resultdict = tyktotals(tykoptimize(tykcalc(data)))
     
     ### render and return response
     return render(request, 'showledger.html', {
