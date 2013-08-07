@@ -89,7 +89,11 @@
 <tr>
 <th style="color: black; background-color: black">&nbsp;</th>
 {% for uid,table in resultdict.items %}
+    {% if uid == "total" %}
+    <th>Total pay</th>
+    {% else %}
     <th>{{ data.userdict|keyvalue:uid }} pay</th>
+    {% endif %}
 {% endfor %}
 </tr>
 
