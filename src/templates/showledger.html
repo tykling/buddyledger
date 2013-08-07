@@ -78,21 +78,25 @@
 
 <tr>
 <th>tyk was here</th>
-{% for uid,table in resultdict %}
+{% for uid,table in resultdict.items %}
     <th>{{ uid }}</th>
 {% endfor %}
 </tr>
 
-{% for uid,table in resultdict %}
+{% for uid,tablerow in resultdict.items %}
     <tr>
     <td><b>{{ uid }}</b></td>
-    {% for temp in table %}
+    {% for tempuid,value in tablerow.items %}
         <td>
-        {{ temp }}
+        {{ value }}
         </td>
     {% endfor %}
     </tr>
 {% endfor %}
 </table>
 
+<h3>Debug info</h3>
+<p>
+<pre>{{ data }}</pre>
+</p>
 {% endblock %}

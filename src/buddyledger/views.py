@@ -95,7 +95,7 @@ def ShowLedger(request, ledgerid=0):
         'people': people,
         'expenses': expenses,
         'payments': payments,
-        'internaldata': data,
+        'data': data,
         'resultdict': resultdict
     })
 
