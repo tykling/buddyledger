@@ -78,7 +78,7 @@
 <h3>Result:</h3>
 <table class="table table-bordered table-striped">
 <tr>
-<th>tyk was here</th>
+<th style="color: black; background-color: black">&nbsp;</th>
 {% for uid,table in resultdict.items %}
     <th>{{ data.userdict|keyvalue:uid }} pay</th>
 {% endfor %}
@@ -88,8 +88,12 @@
     <tr>
     <td><b>{{ data.userdict|keyvalue:uid }} receive</b></td>
     {% for tempuid,value in tablerow.items %}
+        {% if value == "n/a" %}
+        <td style="color: black; background-color: black">
+        {% else %}
         <td>
-        {{ value|templateabs }}
+        {% endif %}
+        {{ value|templateabs }} {{ ledger.currency.iso4217_code }}
         </td>
     {% endfor %}
     </tr>
