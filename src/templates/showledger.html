@@ -99,7 +99,12 @@
 
 {% for uid,tablerow in resultdict.items %}
     <tr>
-    <td><b>{{ data.userdict|keyvalue:uid }} receive</b></td>
+    {% if uid == "total" %}
+    <th><b>Total pay</b></th>
+    {% else %}
+    <th>{{ data.userdict|keyvalue:uid }} pay</th>
+    {% endif %}
+
     {% for tempuid,value in tablerow.items %}
         {% if value == "n/a" %}
         <td style="color: black; background-color: black">&nbsp;</td>
