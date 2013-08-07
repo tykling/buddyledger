@@ -85,7 +85,7 @@ def ShowLedger(request, ledgerid=0):
     userlist = []
     userdict = dict()
     for person in people:
-        userlist.append = person.id
+        userlist.append(person.id)
         userdict[person.id] = person.name
     
     data = dict(expenselist = internaldata, userlist = userlist, userdict = userdict)
