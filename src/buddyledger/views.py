@@ -324,7 +324,8 @@ def AddPayment(request, expenseid=0):
             form = PaymentForm(request.POST)
     else:
         form = PaymentForm(initial={'amount': expense.amount})
-
+    
+    form.fields["people"].queryset = Person.objects.filter(ledger_id=expense.ledger.id)
     return render(request, 'addpayment.html', {
         'form': form,
         'expense': expense
