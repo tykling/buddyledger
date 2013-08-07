@@ -102,7 +102,7 @@
     {% if uid == "total" %}
     <td><b>Total receive</b></td>
     {% else %}
-    <td>{{ data.userdict|keyvalue:uid }} receive</td>
+    <td><b>{{ data.userdict|keyvalue:uid }} receive</b></td>
     {% endif %}
 
     {% for tempuid,value in tablerow.items %}
@@ -113,9 +113,16 @@
         {% elif tempuid == "total" %}
         <td><b>{{ value }} {{ ledger.currency.iso4217_code }}</b></td>
         {% else %}
+        {% if uid == "total" %}
+        <td><b>{{ value }} {{ ledger.currency.iso4217_code }}</b></td>
+        {% else %}
         <td>{{ value }} {{ ledger.currency.iso4217_code }}</td>
         {% endif %}
+        {% endif %}
     {% endfor %}
+    {% if uid == "total" %}
+    <td style="color: black; background-color: black">&nbsp;</td>
+    {% endif %}
     </tr>
 {% endfor %}
 </table>
