@@ -82,11 +82,13 @@ def ShowLedger(request, ledgerid=0):
                     expensepeople.append(person.id)
                 internaldata.append(dict(payments=paymentlist,users=expensepeople))
 
-    personlist = []
+    userlist = []
+    userdict = dict()
     for person in people:
-        personlist.append(person.id)
+        userlist.append = person.id
+        userdict[person.id] = person.name
     
-    data = dict(expenselist = internaldata, userlist = personlist)
+    data = dict(expenselist = internaldata, userlist = userlist, userdict = userdict)
     resultdict = tykcalc(data)
     
     ### render and return response

@@ -1,4 +1,6 @@
 {% extends "skeleton.html" %}
+{% load custom_filters %}
+
 {% block content %}
 <h2>Ledger: {{ ledger.name }}</h2>
 <p class="info">Native currency: {{ ledger.currency }}</p>
@@ -78,7 +80,7 @@
 <tr>
 <th>tyk was here</th>
 {% for uid,table in resultdict.items %}
-    <th>{{ uid }}</th>
+    <th>{{ data.userdict|keyvalue:uid }}</th>
 {% endfor %}
 </tr>
 
