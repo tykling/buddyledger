@@ -18,7 +18,7 @@ def tykcalc(data):
         resultdict[user] = temp
 
     ### loop through expenses
-    for expense in data.expenselist:
+    for expense in data['expenselist']:
         ### loop through each payment in this expense
         for payment in expense['payments']:
             ### loop through the users splitting this expense
