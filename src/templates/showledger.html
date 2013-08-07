@@ -127,8 +127,10 @@
 {% endfor %}
 </table>
 
-<h3>Debug info</h3>
+<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#debuginfo"><i class="icon-info-sign"></i> Debug info</button>
+<div id="peopledetails" class="collapse">
 <p>
 <pre>{{ data }}</pre>
 </p>
+</div>
 {% endblock %}
