@@ -86,7 +86,7 @@
 
 {% for uid,tablerow in resultdict.items %}
     <tr>
-    <td><b>{{ uid }}</b></td>
+    <td><b>{{ data.userdict|keyvalue:uid }}</b></td>
     {% for tempuid,value in tablerow.items %}
         <td>
         {{ value }}
