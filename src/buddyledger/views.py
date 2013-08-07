@@ -10,7 +10,7 @@ def tykcalc(data):
     resultdict = dict()
     for user in data['userlist']:
         temp = dict()
-        for tempuser in ['userlist']:
+        for tempuser in data['userlist']:
             if user == tempuser:
                 temp[tempuser] = 'n/a'
             else:
