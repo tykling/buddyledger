@@ -10,7 +10,7 @@
 <p>{{ people|join:", " }}</p>
 <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#peopledetails"><i class="icon-list"></i> Details</button>
 <a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary"><i class="icon-plus"></i> Add person</a>
-<div id="peopledetails" class="collapse in">
+<div id="peopledetails" class="collapse">
     <table class="table table-bordered table-striped" style="width: 50%;">
         <tr><th>Name</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
         {% for person in people %}
@@ -27,6 +27,9 @@
 
 <h3>Expenses:</h3>
 {% if expenses %}
+<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#expensedetails"><i class="icon-list"></i> Details</button>
+<a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
+<div id="expensedetails" class="collapse">
 <table class="table table-bordered">
 <tr>
     <th>Name</th>
@@ -75,13 +78,14 @@
 </tr>
 {% endfor %}
 </table>
+</div>
 {% else %}
 <p class="text-warning">No expenses found!</p>
 {% endif %}
-<a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
+
 
 <h3>Result:</h3>
-<table class="table table-bordered table-striped">
+<table class="table table-bordered">
 <tr>
 <th style="color: black; background-color: black">&nbsp;</th>
 {% for uid,table in resultdict.items %}
@@ -94,12 +98,12 @@
     <td><b>{{ data.userdict|keyvalue:uid }} receive</b></td>
     {% for tempuid,value in tablerow.items %}
         {% if value == "n/a" %}
-        <td style="color: black; background-color: black">
+        <td style="color: black; background-color: black">&nbsp;</td>
+        {% elif %}
+        <td style="color: darkgrey; background-color: darkgrey"><i>n/a</i></td>
         {% else %}
-        <td>
+        <td>{{ value|templateabs }} {{ ledger.currency.iso4217_code }}</td>
         {% endif %}
-        {{ value|templateabs }} {{ ledger.currency.iso4217_code }}
-        </td>
     {% endfor %}
     </tr>
 {% endfor %}
