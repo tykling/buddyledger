@@ -77,7 +77,8 @@ def tyktotals(resultdict):
     for payerid in resultdict:
         total = 0
         for receiverid in resultdict:
-            total += Decimal(resultdict[receiverid][payerid])
+            if resultdict[receiverid][payerid] != "n/a":
+                total += Decimal(resultdict[receiverid][payerid])
         payerdict[payerid] = total
     resultdict['total'] = payerdict
     return resultdict
