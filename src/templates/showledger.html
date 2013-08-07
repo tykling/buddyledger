@@ -74,23 +74,24 @@
 <a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
 
 <h3>Result:</h3>
-
 <table>
+
 <tr>
 <th>tyk was here</th>
 {% for uid,table in resultdict %}
-<th>{{ uid }}</th>
-</tr>
+    <th>{{ uid }}</th>
 {% endfor %}
+</tr>
 
 {% for uid,table in resultdict %}
-<tr>
-<td><b>{{ uid }}</b></td>
-{% for temp in table %}
-<td>
-{{ temp }}
-</td>
-</tr>
+    <tr>
+    <td><b>{{ uid }}</b></td>
+    {% for temp in table %}
+        <td>
+        {{ temp }}
+        </td>
+    {% endfor %}
+    </tr>
 {% endfor %}
 </table>
 
