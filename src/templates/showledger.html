@@ -89,7 +89,7 @@
     <td><b>{{ data.userdict|keyvalue:uid }} receive</b></td>
     {% for tempuid,value in tablerow.items %}
         <td>
-        {{ value }}
+        {{ value|abs }}
         </td>
     {% endfor %}
     </tr>

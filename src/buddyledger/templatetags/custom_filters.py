@@ -7,3 +7,7 @@ register = template.Library()
 @register.filter
 def keyvalue(dict, key):    
     return dict[key]
+    
+@register.filter
+def abs(value):    
+    return abs(value)
