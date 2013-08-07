@@ -9,5 +9,5 @@ def keyvalue(dict, key):
     return dict[key]
     
 @register.filter
-def abs(value):    
+def templateabs(value):
     return abs(value)
