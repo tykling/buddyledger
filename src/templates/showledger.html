@@ -99,7 +99,7 @@
     {% for tempuid,value in tablerow.items %}
         {% if value == "n/a" %}
         <td style="color: black; background-color: black">&nbsp;</td>
-        {% elif %}
+        {% elif value == 0 %}
         <td style="color: darkgrey; background-color: darkgrey"><i>n/a</i></td>
         {% else %}
         <td>{{ value }} {{ ledger.currency.iso4217_code }}</td>
