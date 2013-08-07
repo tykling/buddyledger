@@ -90,7 +90,7 @@
 <th style="color: black; background-color: black">&nbsp;</th>
 {% for uid,table in resultdict.items %}
     {% if uid == "total" %}
-    <th>Total pay</th>
+    <th>Total receive</th>
     {% else %}
     <th>{{ data.userdict|keyvalue:uid }} pay</th>
     {% endif %}
@@ -100,7 +100,7 @@
 {% for uid,tablerow in resultdict.items %}
     <tr>
     {% if uid == "total" %}
-    <td><b>Total receive</b></td>
+    <td><b>Total pay</b></td>
     {% else %}
     <td><b>{{ data.userdict|keyvalue:uid }} receive</b></td>
     {% endif %}
