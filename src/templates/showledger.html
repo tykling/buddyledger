@@ -102,7 +102,7 @@
         {% elif %}
         <td style="color: darkgrey; background-color: darkgrey"><i>n/a</i></td>
         {% else %}
-        <td>{{ value|templateabs }} {{ ledger.currency.iso4217_code }}</td>
+        <td>{{ value }} {{ ledger.currency.iso4217_code }}</td>
         {% endif %}
     {% endfor %}
     </tr>

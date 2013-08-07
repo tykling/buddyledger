@@ -32,6 +32,38 @@ def tykcalc(data):
     ### return the result
     return resultdict
 
+def tykoptimize(resultdict):
+    ### optimize resultdict, loop through users,
+    ### check if they are to pay to and receive from the same user,
+    ### optimize one payment away if so
+    for receiverid in resultdict:
+        #print "receiverid: %s" % receiverid
+        #print "tablerow: %s" % resultdict[receiverid]
+        for payerid in resultdict[receiverid]:
+            ### if receiver and payer is the same person, skip this row
+            if receiverid==payerid:
+                continue
+
+            ### if either one is 0 skip it
+            if resultdict[receiverid][payerid] == 0 or resultdict[payerid][receiverid] == 0:
+                continue
+
+            ### check if receiver is to receive more than he is paying to this payer
+            if resultdict[receiverid][payerid] > resultdict[payerid][receiverid]:
+                print "%s > %s - optimizing %s away..." % (resultdict[receiverid][payerid],resultdict[payerid][receiverid],resultdict[payerid][receiverid])
+                resultdict[receiverid][payerid] = resultdict[receiverid][payerid] - resultdict[payerid][receiverid]
+                resultdict[payerid][receiverid] = 0
+            elif resultdict[receiverid][payerid] < resultdict[payerid][receiverid]:
+                print "%s < %s - optimizing %s away..." % (resultdict[receiverid][payerid],resultdict[payerid][receiverid],resultdict[receiverid][payerid])
+                resultdict[payerid][receiverid] = resultdict[payerid][receiverid] - resultdict[receiverid][payerid]
+                resultdict[receiverid][payerid] = 0
+            else:
+                print "%s == %s - optimizing both away" % (resultdict[receiverid][payerid],resultdict[payerid][receiverid])
+                if resultdict[payerid][receiverid] != 0:
+                    resultdict[payerid][receiverid] = 0
+                    resultdict[receiverid][payerid] = 0
+    return resultdict
+
 def CreateLedger(request):
     if request.method == 'POST':
         form = LedgerForm(request.POST) # A form bound to the POST data
@@ -89,7 +121,7 @@ def ShowLedger(request, ledgerid=0):
         userdict[person.id] = person.name
     
     data = dict(expenselist = internaldata, userlist = userlist, userdict = userdict)
-    resultdict = tykcalc(data)
+    resultdict = tykoptimize(tykcalc(data))
     
     ### render and return response
     return render(request, 'showledger.html', {
