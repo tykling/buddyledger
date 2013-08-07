@@ -101,6 +101,8 @@
         <td style="color: black; background-color: black">&nbsp;</td>
         {% elif value == 0 %}
         <td style="color: darkgrey; background-color: darkgrey"><i>n/a</i></td>
+        {% elif tempuid == "total" %}
+        <td><b>{{ value }}</b></td>
         {% else %}
         <td>{{ value }} {{ ledger.currency.iso4217_code }}</td>
         {% endif %}

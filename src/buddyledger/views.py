@@ -65,11 +65,20 @@ def tykoptimize(resultdict):
     return resultdict
 
 def tyktotals(resultdict):
+    ### calculate totals for each receiver
     for receiverid in resultdict:
         for payerid in resultdict[receiverid]:
             if resultdict[receiverid][payerid] != "n/a":
                 total += resultdict[receiverid][payerid]
         resultdict['receiverid']['total'] = total
+        
+    ### calculate totals for each payer
+    for payerid in resultdict:
+        total = 0
+        for receiverid in resultdict:
+            total += resultdict[receiverid][payerid]
+        payerdict[payerid] = total
+    resultdict['total'] = payerdict
     return resultdict
 
 def CreateLedger(request):
