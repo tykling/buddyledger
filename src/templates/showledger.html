@@ -159,14 +159,50 @@
         </table>
     </div>
     <div id="list" class="tab-pane">
-        {% for uid,tablerow in resultdict.items %}
-            <pre>
-            {{ tablerow }}
-            </pre>
-        {% endfor %}
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Pay</th>
+                    <th>Receive</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for uid,tablerow in resultdict.items %}
+                    <tr>
+                        <td>{{ data.userdict|keyvalue:uid }}</td>
+                        <td>
+                        <ul>
+                            {% comment %}<!-- Loop through the people that owe this user money -->{% endcomment %}
+                            {% for tempuid,value in tablerow.items %}
+                                {% if tempuid != uid %}
+                                    {% if value > 0 %}
+                                        <li>Collect {{ value }} {{ ledger.currency.iso4217_code }} from {{ data.userdict|keyvalue:tempuid }}</li>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% comment %}<!-- Loop through the people that this user owes money to -->{% endcomment %}
+                            {% for tempuid,temprow in resultdict.items %}
+                                {% if tempuid != uid %}
+                                    {% for uid2,value in temprow.items %}
+                                        {% if uid2 == uid %}
+                                            {% if value > 0 %}
+                                                <li>Pay {{ value }} {{ ledger.currency.iso4217_code }} to {{ data.userdict|keyvalue:tempuid }}</li>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
     <div id="detail" class="tab-pane">
-      <h4>Pane 3 Content</h4>
+      <h4>Details..</h4>
     </div>
   </div><!-- /.tab-content -->
 </div><!-- /.tabbable -->
