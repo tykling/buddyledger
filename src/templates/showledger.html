@@ -106,7 +106,7 @@
         {% comment %}<!-- Upper left corner black cell -->{% endcomment %}
         <th style="color: black; background-color: black">&nbsp;</th>
         {% comment %}<!-- Create TH row -->{% endcomment %}
-        {% for uid,table in resultdict.items %}
+        {% for uid,tablerow in resultdict.items %}
             {% if uid == "total" %}
             {% comment %}<!-- This is the top rightmost cell -->{% endcomment %}
             <th>Total receive</th>
@@ -159,8 +159,11 @@
         </table>
     </div>
     <div id="list" class="tab-pane">
-    <h4>Pane 2 Content</h4>
-      <p> and so on ...</p>
+        {% for uid,tablerow in resultdict.items %}
+            <pre>
+            {{ tablerow }}
+            </pre>
+        {% endfor %}
     </div>
     <div id="detail" class="tab-pane">
       <h4>Pane 3 Content</h4>
