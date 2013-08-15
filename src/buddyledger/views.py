@@ -414,7 +414,7 @@ def EditPayment(request, paymentid=0):
     })
 
 
-def RemovePayment(request, payment=0):
+def RemovePayment(request, paymentid=0):
     ### Check if the payment exists - bail out if not
     try:
         payment = Payment.objects.get(pk = paymentid)
