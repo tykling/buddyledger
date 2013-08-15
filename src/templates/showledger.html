@@ -4,7 +4,12 @@
 {% block content %}
 <h2>Ledger: {{ ledger.name }}</h2>
 <div class="alert alert-info"><b>Native currency: {{ ledger.currency }}</b></div>
-
+<p>This is a ledger to keep track of expenses between groups of people. 
+First add the people involved in this ledger. Then add the expenses for this ledger, 
+and add payments for each expense. There needs to be at least one payment for each expense, 
+so the system knows who paid for what. If more than one person paid for a given expense, 
+just add more than one payment for that expense. Remember to also add all the people who 
+should be charged for a given expense to that expense.</p>
 
 {% comment %}<!-- List of people -->{% endcomment %}
 <h3>People:</h3>
@@ -24,7 +29,8 @@
     </table>
 </div>
 {% else %}
-<p class="text-warning">No people found!</p>
+<p class="text-warning">No people found connected to this ledger. You need to add all the people involved in this ledger by pressing the button below!</p>
+<a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary"><i class="icon-plus"></i> Add person</a>
 {% endif %}
 
 <hr>
@@ -85,132 +91,137 @@
 </table>
 </div>
 {% else %}
-<p class="text-warning">No expenses found!</p>
+<p class="text-warning">No expenses found. You need to add the expenses for this ledger one by one, by pressing the button below. 
+You should also choose the people who should be charged for the expense when creating it. 
+After adding an expense you need to add one or more payments for the expense, depending on how many people actually paid for the expense.</p>
+<a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
 {% endif %}
 
 <hr>
 
 <h3>Result:</h3>
-<div class="tabbable">
-  <ul class="nav nav-tabs">
-    <li class="active"><a href="#table" data-toggle="tab">Table</a></li>
-    <li><a href="#list" data-toggle="tab">List</a></li>
-  </ul>
-  <div class="tab-content">
-    <div id="table" class="tab-pane active">
-        {% comment %}<!-- Result table -->{% endcomment %}
-        <table class="table table-bordered">
-        {% comment %}<!-- First create the top row -->{% endcomment %}
-        <tr>
-        {% comment %}<!-- Upper left corner black cell -->{% endcomment %}
-        <th style="color: black; background-color: black">&nbsp;</th>
-        {% comment %}<!-- Create TH row -->{% endcomment %}
-        {% for uid,tablerow in resultdict.items %}
-            {% if uid == "total" %}
-            {% comment %}<!-- This is the top rightmost cell -->{% endcomment %}
-            <th>Total receive</th>
-            {% else %}
-            {% comment %}<!-- This is a regular toprow cell -->{% endcomment %}
-            <th>{{ data.userdict|keyvalue:uid }} pay</th>
-            {% endif %}
-        {% endfor %}
-        </tr>
-
-        {% comment %}<!-- Loop through the receiver rows -->{% endcomment %}
-        {% for uid,tablerow in resultdict.items %}
-            {% comment %}<!-- Create header row -->{% endcomment %}
+{% if resultdict %}
+    <div class="tabbable">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#table" data-toggle="tab">Table</a></li>
+        <li><a href="#list" data-toggle="tab">List</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="table" class="tab-pane active">
+            {% comment %}<!-- Result table -->{% endcomment %}
+            <table class="table table-bordered">
+            {% comment %}<!-- First create the top row -->{% endcomment %}
             <tr>
-            {% if uid == "total" %}
-            {% comment %}<!-- This is the bottom leftmost cell -->{% endcomment %}
-            <td><b>Total pay</b></td>
-            {% else %}
-            {% comment %}<!-- This is a regular leftmost column cell -->{% endcomment %}
-            <td><b>{{ data.userdict|keyvalue:uid }} receive</b></td>
-            {% endif %}
-
-            {% comment %}<!-- Loop through the cells of this row -->{% endcomment %}
-            {% for tempuid,value in tablerow.items %}
-                {% comment %}<!-- if value is "n/a" paint the cell black (for payment from/to the same user) -->{% endcomment %}
-                {% if value == "n/a" %}
-                <td style="color: black; background-color: black">&nbsp;</td>
-                {% comment %}<!-- if value is 0 make the cell dark grey -->{% endcomment %}
-                {% elif value == 0 %}
-                <td style="color: darkgrey; background-color: darkgrey"><i>n/a</i></td>
-                {% comment %}<!-- check if this is the rightmost totals row, make bold if so -->{% endcomment %}
-                {% elif tempuid == "total" %}
-                <td><b>{{ value }} {{ ledger.currency.iso4217_code }}</b></td>
-                {% else %}
-                {% comment %}<!-- Check if this is the bottom totals row, make bold if so -->{% endcomment %}
+            {% comment %}<!-- Upper left corner black cell -->{% endcomment %}
+            <th style="color: black; background-color: black">&nbsp;</th>
+            {% comment %}<!-- Create TH row -->{% endcomment %}
+            {% for uid,tablerow in resultdict.items %}
                 {% if uid == "total" %}
-                <td><b>{{ value }} {{ ledger.currency.iso4217_code }}</b></td>
+                {% comment %}<!-- This is the top rightmost cell -->{% endcomment %}
+                <th>Total receive</th>
                 {% else %}
-                <td>{{ value }} {{ ledger.currency.iso4217_code }}</td>
-                {% endif %}
+                {% comment %}<!-- This is a regular toprow cell -->{% endcomment %}
+                <th>{{ data.userdict|keyvalue:uid }} pay</th>
                 {% endif %}
             {% endfor %}
-            {% comment %}<!-- If this is the bottom (totals) row, it is missing the rightmost (totals) column, so add an extra black cell here -->{% endcomment %}
-            {% if uid == "total" %}
-            {% comment %}<!-- This is the bottom row, add the missing cell -->{% endcomment %}
-            <td style="color: black; background-color: black">&nbsp;</td>
-            {% endif %}
             </tr>
-        {% endfor %}
-        </table>
-    </div>
-    <div id="list" class="tab-pane">
-        <table class="table table-hover table-bordered">
-            <thead>
+
+            {% comment %}<!-- Loop through the receiver rows -->{% endcomment %}
+            {% for uid,tablerow in resultdict.items %}
+                {% comment %}<!-- Create header row -->{% endcomment %}
                 <tr>
-                    <th>Name</th>
-                    <th>Receive</th>
-                    <th>Pay</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for uid,tablerow in resultdict.items %}
-                    {% if uid != "total"%}
-                        <tr>
-                            <td>{{ data.userdict|keyvalue:uid }}</td>
-                            <td>
-                                <ul>
-                                    {% comment %}<!-- Loop through the people that owe this user money -->{% endcomment %}
-                                    {% for tempuid,value in tablerow.items %}
-                                        {% if tempuid != uid and tempuid != "total"%}
-                                            {% if value > 0 %}
-                                                <li>Collect {{ value }} {{ ledger.currency.iso4217_code }} from {{ data.userdict|keyvalue:tempuid }}</li>
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endfor %}
-                                </ul>
-                            </td>
-                            <td>
-                                <ul>
-                                    {% comment %}<!-- Loop through the people that this user owes money to -->{% endcomment %}
-                                    {% for tempuid,temprow in resultdict.items %}
-                                        {% if tempuid != uid and tempuid != "total" %}
-                                            {% for uid2,value in temprow.items %}
-                                                {% if uid2 == uid and uid2 != "total" %}
-                                                    {% if value > 0 %}
-                                                        <li>Pay {{ value }} {{ ledger.currency.iso4217_code }} to {{ data.userdict|keyvalue:tempuid }}</li>
-                                                    {% endif %}
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% endif %}
-                                    {% endfor %}
-                                </ul>
-                            </td>
-                        </tr>
+                {% if uid == "total" %}
+                {% comment %}<!-- This is the bottom leftmost cell -->{% endcomment %}
+                <td><b>Total pay</b></td>
+                {% else %}
+                {% comment %}<!-- This is a regular leftmost column cell -->{% endcomment %}
+                <td><b>{{ data.userdict|keyvalue:uid }} receive</b></td>
+                {% endif %}
+
+                {% comment %}<!-- Loop through the cells of this row -->{% endcomment %}
+                {% for tempuid,value in tablerow.items %}
+                    {% comment %}<!-- if value is "n/a" paint the cell black (for payment from/to the same user) -->{% endcomment %}
+                    {% if value == "n/a" %}
+                    <td style="color: black; background-color: black">&nbsp;</td>
+                    {% comment %}<!-- if value is 0 make the cell dark grey -->{% endcomment %}
+                    {% elif value == 0 %}
+                    <td style="color: darkgrey; background-color: darkgrey"><i>n/a</i></td>
+                    {% comment %}<!-- check if this is the rightmost totals row, make bold if so -->{% endcomment %}
+                    {% elif tempuid == "total" %}
+                    <td><b>{{ value }} {{ ledger.currency.iso4217_code }}</b></td>
+                    {% else %}
+                    {% comment %}<!-- Check if this is the bottom totals row, make bold if so -->{% endcomment %}
+                    {% if uid == "total" %}
+                    <td><b>{{ value }} {{ ledger.currency.iso4217_code }}</b></td>
+                    {% else %}
+                    <td>{{ value }} {{ ledger.currency.iso4217_code }}</td>
+                    {% endif %}
                     {% endif %}
                 {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div id="detail" class="tab-pane">
-      <h4>Details..</h4>
-    </div>
-  </div><!-- /.tab-content -->
-</div><!-- /.tabbable -->
-
+                {% comment %}<!-- If this is the bottom (totals) row, it is missing the rightmost (totals) column, so add an extra black cell here -->{% endcomment %}
+                {% if uid == "total" %}
+                {% comment %}<!-- This is the bottom row, add the missing cell -->{% endcomment %}
+                <td style="color: black; background-color: black">&nbsp;</td>
+                {% endif %}
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+        <div id="list" class="tab-pane">
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Receive</th>
+                        <th>Pay</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for uid,tablerow in resultdict.items %}
+                        {% if uid != "total"%}
+                            <tr>
+                                <td>{{ data.userdict|keyvalue:uid }}</td>
+                                <td>
+                                    <ul>
+                                        {% comment %}<!-- Loop through the people that owe this user money -->{% endcomment %}
+                                        {% for tempuid,value in tablerow.items %}
+                                            {% if tempuid != uid and tempuid != "total"%}
+                                                {% if value > 0 %}
+                                                    <li>Collect {{ value }} {{ ledger.currency.iso4217_code }} from {{ data.userdict|keyvalue:tempuid }}</li>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul>
+                                        {% comment %}<!-- Loop through the people that this user owes money to -->{% endcomment %}
+                                        {% for tempuid,temprow in resultdict.items %}
+                                            {% if tempuid != uid and tempuid != "total" %}
+                                                {% for uid2,value in temprow.items %}
+                                                    {% if uid2 == uid and uid2 != "total" %}
+                                                        {% if value > 0 %}
+                                                            <li>Pay {{ value }} {{ ledger.currency.iso4217_code }} to {{ data.userdict|keyvalue:tempuid }}</li>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id="detail" class="tab-pane">
+          <h4>Details..</h4>
+        </div>
+      </div><!-- /.tab-content -->
+    </div><!-- /.tabbable -->
+{% else %}
+<p>No results yet!</p>
 <hr>
 
 {% comment %}<!-- Debug info -->{% endcomment %}

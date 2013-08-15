@@ -258,7 +258,7 @@ def AddExpense(request, ledgerid=0):
             for personid in form['people'].data:
                 person = Person.objects.get(pk = personid)
                 expense.people.add(person)
-            return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page
+            return HttpResponseRedirect('/expense/%s/addpayment/' % expense.id) # go straight to add expense page
         else:
             form = ExpenseForm(request.POST)
     else:
