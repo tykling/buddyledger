@@ -129,6 +129,7 @@ def ShowLedger(request, ledgerid=0):
                 totalamount += payment.amount_native
             ### no calculation if the payments dont add up to the total expense
             if totalamount == expense.amount_native:
+                showresult = True
                 expensepeople = []
                 for person in expense.people.all():
                     expensepeople.append(person.id)
@@ -141,7 +142,11 @@ def ShowLedger(request, ledgerid=0):
         userdict[person.id] = person.name
     
     data = dict(expenselist = internaldata, userlist = userlist, userdict = userdict)
-    resultdict = tyktotals(tykoptimize(tykcalc(data)))
+    if showresult:
+        ### at least one expense has payment(s) equal to the total expense
+        resultdict = tyktotals(tykoptimize(tykcalc(data)))
+    else:
+        resultdict = dict()
     
     ### render and return response
     return render(request, 'showledger.html', {
