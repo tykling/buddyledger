@@ -10,23 +10,25 @@ Given a list of people and expenses this system will calculate the final breakdo
 {% comment %}<!-- List of people -->{% endcomment %}
 <h3>People:</h3>
 {% if people %}
-<p>{{ people|join:", " }}</p>
-<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#peopledetails"><i class="icon-list"></i> Details</button>
-<a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary"><i class="icon-plus"></i> Add person</a>
-<div id="peopledetails" class="collapse">
-    <table class="table table-bordered table-striped" style="width: 50%;">
-        <tr><th>Name</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
-        {% for person in people %}
-        <tr><td>{{ person.name }}</td>  
-            <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
-            <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+    <p>{{ people|join:", " }}</p>
+    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#peopledetails"><i class="icon-list"></i> Details</button>
+    <a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary"><i class="icon-plus"></i> Add person</a>
+    <div id="peopledetails" class="collapse">
+        <table class="table table-bordered table-striped" style="width: 50%;">
+            <tr><th>Name</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
+            {% for person in people %}
+            <tr><td>{{ person.name }}</td>  
+                <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
+                <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% else %}
-<p class="text-warning">No people found connected to this ledger. You need to add all the people involved in this ledger by pressing the button below!</p>
-<a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary"><i class="icon-plus"></i> Add person</a>
+    <p class="text-warning">No people found connected to this ledger. First you need to add all the people 
+    involved in this ledger by pressing the button below! This includes both the people who put up money for the expenses, 
+    and the people who owes money to them.</p>
+    <a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary"><i class="icon-plus"></i> Add person</a>
 {% endif %}
 
 <hr>
@@ -34,69 +36,72 @@ Given a list of people and expenses this system will calculate the final breakdo
 {% comment %}<!-- List of expenses -->{% endcomment %}
 <h3>Expenses:</h3>
 {% if expenses %}
-<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#expensedetails"><i class="icon-list"></i> Details</button>
-<a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
-<div id="expensedetails" class="collapse">
-<table class="table table-bordered">
-<tr>
-    <th>Name</th>
-    <th style="width: 3em; text-align: center">Amount</th>
-    <th style="width: 3em; text-align: center">Amount {{ ledger.currency.iso4217_code }}</th>
-    <th>Payments</th>
-    <th>In</th>
-    <th>Not in</th>
-    <th style="width: 4em; text-align: center">Action</th>
-</tr>
-{% for expense in expenses %}
-<tr><td>{{ expense.name }}</td>
-<td>{{ expense.amount }} {{ expense.currency.iso4217_code }}</td>
-<td>{{ expense.amount_native }} {{ ledger.currency.iso4217_code }}</td>
-<td>
-{% if payments|length_is:"0" %}
-<p class="warning">No payments registered for this expense! Who paid for this ?</p>
-{% else %}
-{% for payment in payments %}
-{% if payment.expense_id = expense.id %}
-{{ payment.person.name }}: {{ payment.amount }} {{ payment.currency.iso4217_code }}&nbsp;&nbsp;
-<a href="/payment/{{ payment.id }}/remove/" class="btn btn-danger btn-mini pull-right"><i class="icon-remove"></i></a> 
-<a href="/payment/{{ payment.id }}/edit/" class="btn btn-info btn-mini pull-right"><i class="icon-edit"></i></a><br>
-{% endif %}
-{% endfor %}
-{% endif %}
-<a href="/expense/{{expense.id}}/addpayment" class="btn btn-mini btn-success"><i class="icon-plus"></i> Add new payment</a><br>
-</td>
+    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#expensedetails"><i class="icon-list"></i> Details</button>
+    <a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
+    <div id="expensedetails" class="collapse">
+    <table class="table table-bordered">
+    <tr>
+        <th>Name</th>
+        <th style="width: 3em; text-align: center">Amount</th>
+        <th style="width: 3em; text-align: center">Amount {{ ledger.currency.iso4217_code }}</th>
+        <th>Payments</th>
+        <th>In</th>
+        <th>Not in</th>
+        <th style="width: 4em; text-align: center">Action</th>
+    </tr>
+    {% for expense in expenses %}
+        <tr><td>{{ expense.name }}</td>
+        <td>{{ expense.amount }} {{ expense.currency.iso4217_code }}</td>
+        <td>{{ expense.amount_native }} {{ ledger.currency.iso4217_code }}</td>
+        <td>
+        {% if payments|length_is:"0" %}
+            <p class="warning">No payments registered for this expense! Who paid for this ?</p>
+        {% else %}
+            {% for payment in payments %}
+                {% if payment.expense_id = expense.id %}
+                    {{ payment.person.name }}: {{ payment.amount }} {{ payment.currency.iso4217_code }}&nbsp;&nbsp;
+                    <a href="/payment/{{ payment.id }}/remove/" class="btn btn-danger btn-mini pull-right"><i class="icon-remove"></i></a> 
+                    <a href="/payment/{{ payment.id }}/edit/" class="btn btn-info btn-mini pull-right"><i class="icon-edit"></i></a><br>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <a href="/expense/{{expense.id}}/addpayment" class="btn btn-mini btn-success"><i class="icon-plus"></i> Add new payment</a><br>
+        </td>
 
-<td>
-{% for person in expense.people.all %}
-<p>{{ person.name }} <a href="/expense/{{ expense.id }}/removeperson/{{ person.id }}/" class="btn btn-mini btn-danger pull-right"><i class="icon-remove"></i></a></p>
-{% endfor %}
-</td>
-<td>
-{% for person in people %}
-    {% if person not in expense.people.all %}
-        <p>{{ person.name }} <a href="/expense/{{ expense.id }}/addperson/{{ person.id }}/" class="btn btn-mini btn-success pull-right"><i class="icon-plus"></i></a></p>
+        <td>
+        {% for person in expense.people.all %}
+            <p>{{ person.name }} <a href="/expense/{{ expense.id }}/removeperson/{{ person.id }}/" class="btn btn-mini btn-danger pull-right"><i class="icon-remove"></i></a></p>
+        {% endfor %}
+        </td>
+        <td>
+        {% for person in people %}
+            {% if person not in expense.people.all %}
+                <p>{{ person.name }} <a href="/expense/{{ expense.id }}/addperson/{{ person.id }}/" class="btn btn-mini btn-success pull-right"><i class="icon-plus"></i></a></p>
+            {% endif %}
+        {% endfor %}
+        </td>
+        <td style="width: 3em; text-align: center">
+        <a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>
+        <a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a>
+        </td>
+        </tr>
+    {% endfor %}
+    </table>
+    </div>
+{% else %}
+    <p class="text-warning">No expenses found. After adding people above, you need to add the expenses for this ledger by pressing the button below. 
+    You should also choose the people who should be charged for the expense when creating it. 
+    After adding an expense you need to add one or more payments for the expense, depending on how many people actually paid for the expense.</p>
+    {% if people %}
+        <a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
+    {% else %}
+        <button class="btn btn-primary btn-disabled" disabled>Add expense</button>
     {% endif %}
-{% endfor %}
-</td>
-<td style="width: 3em; text-align: center">
-<a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>
-<a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a>
-</td>
-</tr>
-{% endfor %}
-</table>
-</div>
-{% else %}
-<p class="text-warning">No expenses found. After adding people above, you need to add the expenses for this ledger by pressing the button below. 
-You should also choose the people who should be charged for the expense when creating it. 
-After adding an expense you need to add one or more payments for the expense, depending on how many people actually paid for the expense.</p>
-<a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary btn-disabled" disabled>Add expense</a>
 {% endif %}
-
 <hr>
 
 <h3>Result:</h3>
-{% if resultdict.total %}
+{% if expenses and resultdict.total %}
     <div class="tabbable">
       <ul class="nav nav-tabs">
         <li class="active"><a href="#table" data-toggle="tab">Table</a></li>
