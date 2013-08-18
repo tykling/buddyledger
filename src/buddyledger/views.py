@@ -418,7 +418,7 @@ def RemovePayment(request, paymentid=0):
     ### Check if the payment exists - bail out if not
     try:
         payment = Payment.objects.get(pk = paymentid)
-    except Paymet.DoesNotExist:
+    except Payment.DoesNotExist:
         response = render_to_response('paymentdoesnotexist.html')
         return response
 
