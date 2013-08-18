@@ -118,6 +118,7 @@ def ShowLedger(request, ledgerid=0):
     
     ### put the data structure for calculation together
     internaldata = []
+    showresult = False
     for expense in expenses:
         expensepayments = Payment.objects.filter(expense_id = expense.id)
         ### no calculation if there are no payments
