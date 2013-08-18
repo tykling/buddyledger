@@ -4,12 +4,8 @@
 {% block content %}
 <h2>Ledger: {{ ledger.name }}</h2>
 <div class="alert alert-info"><b>Native currency: {{ ledger.currency }}</b></div>
-<p>This is a ledger to keep track of expenses between groups of people. 
-First add the people involved in this ledger. Then add the expenses for this ledger, 
-and add payments for each expense. There needs to be at least one payment for each expense, 
-so the system knows who paid for what. If more than one person paid for a given expense, 
-just add more than one payment for that expense. Remember to also add all the people who 
-should be charged for a given expense to that expense.</p>
+<p>This is a <b>BuddyLedger</b>, a system to keep track of expenses between groups of people. 
+Given a list of people and expenses this system will calculate the final breakdown so you can see who owes what to whom.</p>
 
 {% comment %}<!-- List of people -->{% endcomment %}
 <h3>People:</h3>
