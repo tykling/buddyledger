@@ -87,16 +87,16 @@ Given a list of people and expenses this system will calculate the final breakdo
 </table>
 </div>
 {% else %}
-<p class="text-warning">No expenses found. You need to add the expenses for this ledger one by one, by pressing the button below. 
+<p class="text-warning">No expenses found. After adding people above, you need to add the expenses for this ledger by pressing the button below. 
 You should also choose the people who should be charged for the expense when creating it. 
 After adding an expense you need to add one or more payments for the expense, depending on how many people actually paid for the expense.</p>
-<a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
+<a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary btn-disabled" disabled>Add expense</a>
 {% endif %}
 
 <hr>
 
 <h3>Result:</h3>
-{% if resultdict %}
+{% if resultdict.total %}
     <div class="tabbable">
       <ul class="nav nav-tabs">
         <li class="active"><a href="#table" data-toggle="tab">Table</a></li>
