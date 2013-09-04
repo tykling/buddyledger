@@ -1,8 +1,10 @@
 from django.db import models
 
+
 class Ledger(models.Model):
     name = models.CharField(max_length=100)
     currency = models.ForeignKey('Currency')
+    closed = models.BooleanField(default=False)
     def __unicode__(self):
         return self.name
 
@@ -23,10 +25,8 @@ class Expense(models.Model):
     amount_native = models.DecimalField(max_digits=20, decimal_places=2, editable=False)
     ledger = models.ForeignKey('Ledger',editable=False)
     people = models.ManyToManyField('Person',null=True)
-
     def __unicode__(self):
         return self.name
-
     class Meta:
         ordering = ('id',)
 
@@ -39,10 +39,19 @@ class Payment(models.Model):
     currency = models.ForeignKey('Currency',editable=False)
 
 
+class Backpayment(models.Model):
+    ledger = models.ForeignKey('Ledger',editable=False)
+    payer = models.ForeignKey('Person')
+    receiver = models.ForeignKey('Person')
+    amount = models.DecimalField(max_digits=20, decimal_places=2)
+    amount_native = models.DecimalField(max_digits=20, decimal_places=2, editable=False)
+    currency = models.ForeignKey('Currency',editable=False)
+    btctxid = models.CharField(max_length=64,blank=True,null=True)
+
+
 class Currency(models.Model):
     iso4217_code = models.CharField(max_length=3)
     dkk_price = models.DecimalField(max_digits=20, decimal_places=2)
-
     def __unicode__(self):
         return self.iso4217_code
     class Meta:

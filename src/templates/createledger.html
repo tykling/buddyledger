@@ -1,6 +1,18 @@
 {% extends "skeleton.html" %}
 {% block content %}
 <h2>Create new ledger</h2>
+<div class="alert alert-info">
+    <p>To create a new ledger you need to come up with a name and choose a <b>native currency</b> for the ledger.</p>
+    
+    <b>What is native currency ?</b>
+    <ul>
+        <li>All amounts throughout the system will always be displayed in the original currency and the ledgers native currency.</li>
+        <li>Expenses can be in any currency, but will always default to the ledgers native currency.</li>
+        <li>Payments for a given expense will always be in the currency of the expense.</li>
+        <li>Backpayments can be in any currency but will also default to the native currency for the ledger.</li>
+    </ul>
+</div>
+
 <form method="POST">
     {% csrf_token %}
     <table>

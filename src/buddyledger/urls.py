@@ -6,7 +6,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     ### ledger
-    url(r'^$', 'buddyledger.views.CreateLedger'),
+    url(r'^$', 'buddyledger.views.Frontpage'),
+    url(r'^ledger/create/$', 'buddyledger.views.CreateLedger'),
     url(r'^ledger/(?P<ledgerid>\d+)/$', 'buddyledger.views.ShowLedger'),
     url(r'^ledger/(?P<ledgerid>\d+)/edit/$', 'buddyledger.views.EditLedger'),
 

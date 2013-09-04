@@ -5,6 +5,11 @@ from buddyledger.models import Ledger, Person, Expense, Payment, Currency
 from decimal import *
 from paymentprocessor import PaymentProcessor, MonoPayment
 
+def Frontpage(request):
+    response = render_to_response('frontpage.html')
+    return response
+
+
 def tykcalc(data):
     ### build empty matrix
     resultdict = dict()
