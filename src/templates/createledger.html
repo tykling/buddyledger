@@ -3,21 +3,62 @@
 <h2>Create new ledger</h2>
 <div class="alert alert-info">
     <p>To create a new ledger you need to come up with a name and choose a <b>native currency</b> for the ledger.</p>
-    
-    <b>What is native currency ?</b>
-    <ul>
-        <li>All amounts throughout the system will always be displayed in the original currency and the ledgers native currency.</li>
-        <li>Expenses can be in any currency, but will always default to the ledgers native currency.</li>
-        <li>Payments for a given expense will always be in the currency of the expense.</li>
-        <li>Backpayments can be in any currency but will also default to the native currency for the ledger.</li>
-    </ul>
-</div>
+    </div>
 
 <form method="POST">
     {% csrf_token %}
     <table>
-    {{form}}
+        {% for field in form %}
+            {% if field.label == "Name" %}
+                    <tr>
+                        <td><label for="id_name">Ledger Name</label></td>
+                        <td>{{ field }}</td>
+                        <td><a href="#namehelp" role="button" class="btn" data-toggle="modal"><i class="icon-info"></i></a></td>
+                    </tr>
+            {% elif field.label == "Currency" %}
+                    <tr>
+                        <td><label for="id_currency">Native Currency</label></td>
+                        <td>{{ field }}</td>
+                        <td><a href="#currencyhelp" role="button" class="btn" data-toggle="modal"><i class="icon-info"></i></a></td>
+                    </tr>
+            {% endif %}
+        {% endfor %}
     </table>
     <input type="submit" method="POST" class="btn" value="Create ledger">
 </form>
+
+<div id="namehelp" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="nameLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="nameLabel">Ledger Name</h3>
+    </div>
+    <div class="modal-body">
+        <p>You should choose a descriptive name for the ledger, for example "Vacation to Greece" or "Dinner friday evening".</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
+<div id="currencyhelp" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="currencyLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="currencyLabel">Native Currency</h3>
+    </div>
+    <div class="modal-body">
+        <p>You should pick the currency you are most confortable with - likely the currency of your home country. 
+        Even though most of the expenses might be in a foreign currency (which is often the case when going abroad), 
+        you should still choose "your own" currency as native currency for the ledger.<p>
+        <ul>
+            <li>All amounts throughout the system will always be displayed in the ledgers native currency as well as the original currency.</li>
+            <li>Expenses can be entered in any currency, but the default is the ledgers native currency.</li>
+            <li>Payments for a given expense will always be in the same currency as the expense.</li>
+            <li>Backpayments can be in any currency, but like expenses they will default to the native currency of the ledger.</li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
 {% endblock %}
