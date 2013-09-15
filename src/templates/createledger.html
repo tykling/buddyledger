@@ -12,14 +12,12 @@
             {% if field.label == "Name" %}
                     <tr>
                         <td><label for="id_name">Ledger Name</label></td>
-                        <td>{{ field }}</td>
-                        <td><a href="#namehelp" role="button" class="btn" data-toggle="modal"><i class="icon-info"></i></a></td>
+                        <td>{{ field }} <a href="#namehelp" role="button" class="btn btn-info" data-toggle="modal"><i class="icon-info"></i></a></td>
                     </tr>
             {% elif field.label == "Currency" %}
                     <tr>
                         <td><label for="id_currency">Native Currency</label></td>
-                        <td>{{ field }}</td>
-                        <td><a href="#currencyhelp" role="button" class="btn" data-toggle="modal"><i class="icon-info"></i></a></td>
+                        <td>{{ field }} <a href="#currencyhelp" role="button" class="btn btn-info" data-toggle="modal"><i class="icon-info"></i></a></td>
                     </tr>
             {% endif %}
         {% endfor %}
