@@ -1,9 +1,7 @@
 {% extends "skeleton.html" %}
 {% block content %}
 <h2>Create new ledger</h2>
-<div class="alert alert-info">
-    <p>To create a new ledger you need to come up with a name and choose a <b>native currency</b> for the ledger.</p>
-</div>
+<p class="lead">To create a new ledger you need to come up with a <i>name</i> and choose a <i>native currency</i> for the ledger.</p>
 
 <form method="POST">
     {% csrf_token %}
