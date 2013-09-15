@@ -5,8 +5,11 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    ### ledger
+    ### frontpage and other pages
     url(r'^$', 'buddyledger.views.Frontpage'),
+    url(r'^usage/$', 'buddyledger.views.ShowUsage'),
+    
+    ### ledger
     url(r'^ledger/create/$', 'buddyledger.views.CreateLedger'),
     url(r'^ledger/(?P<ledgerid>\d+)/$', 'buddyledger.views.ShowLedger'),
     url(r'^ledger/(?P<ledgerid>\d+)/edit/$', 'buddyledger.views.EditLedger'),

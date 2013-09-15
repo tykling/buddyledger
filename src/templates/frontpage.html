@@ -9,44 +9,6 @@
 
     <p>Buddyledger can also be used as a more of a "permanent ledger" system to keep track of long-running group expenses, where the ledger is never closed, and expenses are added as time goes. This way you can simply check Buddyledger before going out for dinner, and use the current debt balance between two (or more) people to decide whose turn it is to pay this time around.</p>
     
-    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#moreinfo"><i class="icon-list"></i> More info</button> or <a href="/ledger/create/" class="btn" />Create ledger</a>.
-</div>
-
-<div id="moreinfo" class="alert alert-info collapse">
-    <h3>Using Buddyledger - an example</h3>
-    <p>This example consists of a hypothetical three person trip to a concert and back. The ledger could be called "concert wednesday evening" or whatever. The three people are called Tom, Dick and Harry. The native currency for the ledger is EUR, as that is the actual currency of the country Tom, Dick and Harry live in. The expenses for the concert are numbered so I can refer to them in the explanation below.</p>
-    
-    <ul>
-        <li>1. Tom pays the taxi fare to the concert, 15€</li>
-        <li>2. Dick and Tom pays for the entrance for all three people, 60€ total - Dick pays 50€, Tom pays the last 10€</li>
-        <li>3. Tom pays for two rounds of beer for all three, a total of 30€</li>
-        <li>4. Tom also pays for a hotdog for him and Harry, but not for Dick, a total of 8€</li>
-        <li>5. Harry pays for the taxi fare back home, also 15€</li>
-    </ul>
-    
-    <p>Each expense must now be added in Buddyledger using the "Add expense" button on the ledger page. When creating an expense, you enter the amount and choose the people who should pay for this expense. In this case all three people needs to be selected for the expenses 1-3 and 5, and only Tom and Harry need to be selected for expense 4 (the hotdogs). If needed, you can also choose how much of a given expense each person should pay, if the shares are not equal for some reason.</p>
-    
-    <p>After adding each expense you will need to add one or more payments. In this case the expenses 1 and 3-5 all have one payment - one person paid the entire amount. Expense 2 has two payments, because two people paid for it - a payment of 50€ from Dick, and a payment of 10€ from Tom.</p>
-    
-    <p>After adding payments the ledger is ready to be closed. The ledger in this example can be seen <a href="https://buddyledger.baconsvin.org/ledger/15/">here.</a></p>
-    
-    <h3>Terminology used in Buddyledger</h3>
-    <dl class="dl-horizontal">>
-        <dt>Ledger</dt>
-        <dd>A ledger is a collection of expenses, payments, and backpayments - a ledger ties it all together (a ledger name could be "trip to Amsterdam", for example). When enough data is present (at least one expense and payment), the ledger will display a breakdown of debts between the involved people. A ledger has a native currency - all amounts will always be displayed in their own currency as well as the ledgers native currency.</dd>
-        
-        <dt>Person</dt>
-        <dd>A person is - well - a person. Everyone involved in a ledger, whether they paid for any expenses or not, needs to be added to the ledger.</dd>
-
-        <dt>Expense</dt>
-        <dd>An expense is a single post on the ledger (for example, "taxi fare to airport"). An expense can have one or more payments, depending on how many people paid for the expense. An expense can be in any currency, but defaults to the ledgers native currency.</dd>
-        
-        <dt>Payment</dt>
-        <dd>Payments keep track of who paid for a given expense. Imagine for example a taxi fare of 60€ where one passenger pays 50€ and another pays 10€. This would be an expense of 60€ with two payments, one 50€ peyment and one 10€ payment.</dd>
-        
-        <dt>Backpayment</dt>
-        <dd>Backpayments are used to register when a debt has been settled. When a debt has been paid, a backpayment is created to register it. When the ledger is closed the backpayments will be included in the calculated breakdown, which should read all 0 when everything has been paid up.</dd>
-    </dl>
-    </p>
+    <a href="/ledger/create/" class="btn btn-primary">Create ledger</a> or <a href="/usage/" class="btn btn-primary"><i class="icon-info"></i> Read more</a>
 </div>
 {% endblock %}

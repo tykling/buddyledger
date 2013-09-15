@@ -10,6 +10,11 @@ def Frontpage(request):
     return response
 
 
+def ShowUsage(request):
+    response = render_to_response('usage.html')
+    return response
+
+
 def tykcalc(data):
     ### build empty matrix
     resultdict = dict()

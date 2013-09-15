@@ -4,7 +4,7 @@ from django.db import models
 class Ledger(models.Model):
     name = models.CharField(max_length=100)
     currency = models.ForeignKey('Currency')
-    closed = models.BooleanField(default=False)
+    closed = models.BooleanField(default=False,editable=False)
     def __unicode__(self):
         return self.name
 

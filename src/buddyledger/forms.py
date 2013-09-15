@@ -9,7 +9,6 @@ class LedgerForm(ModelForm):
     class Meta:
         model = Ledger
 
-
 class PersonForm(ModelForm):
     class Meta:
         model = Person
