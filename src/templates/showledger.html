@@ -2,113 +2,120 @@
 {% load custom_filters %}
 
 {% block content %}
-<h2>Ledger: {{ ledger.name }}</h2>
-<div class="alert alert-info"><b>Native currency: {{ ledger.currency }}</b></div>
-<p>This is a <b>BuddyLedger</b>, a system to keep track of expenses between groups of people. 
-Given a list of people and expenses this system will calculate the final breakdown so you can see who owes what to whom.</p>
 
-{% comment %}<!-- List of people -->{% endcomment %}
-<h3>People:</h3>
-{% if people %}
-    <p>{{ people|join:", " }}</p>
-    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#peopledetails"><i class="icon-list"></i> Details</button>
-    <a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary"><i class="icon-plus"></i> Add person</a>
-    <div id="peopledetails" class="collapse">
-        <table class="table table-bordered table-striped" style="width: 50%;">
-            <tr><th>Name</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
-            {% for person in people %}
-            <tr><td>{{ person.name }}</td>  
-                <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
-                <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-{% else %}
-    <p class="text-warning">No people found connected to this ledger. First you need to add all the people 
-    involved in this ledger by pressing the button below! This includes both the people who put up money for the expenses, 
-    and the people who owes money to them.</p>
-    <a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary"><i class="icon-plus"></i> Add person</a>
-{% endif %}
-
-<hr>
-
-{% comment %}<!-- List of expenses -->{% endcomment %}
-<h3>Expenses:</h3>
-{% if expenses %}
-    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#expensedetails"><i class="icon-list"></i> Details</button>
-    <a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
-    <div id="expensedetails" class="collapse">
-    <table class="table table-bordered">
-    <tr>
-        <th>Name</th>
-        <th style="width: 3em; text-align: center">Amount</th>
-        <th style="width: 3em; text-align: center">Amount {{ ledger.currency.iso4217_code }}</th>
-        <th>Payments</th>
-        <th>In</th>
-        <th>Not in</th>
-        <th style="width: 4em; text-align: center">Action</th>
-    </tr>
-    {% for expense in expenses %}
-        <tr><td>{{ expense.name }}</td>
-        <td>{{ expense.amount }} {{ expense.currency.iso4217_code }}</td>
-        <td>{{ expense.amount_native }} {{ ledger.currency.iso4217_code }}</td>
-        <td>
-        {% if payments|length_is:"0" %}
-            <p class="warning">No payments registered for this expense! Who paid for this ?</p>
-        {% else %}
-            {% for payment in payments %}
-                {% if payment.expense_id = expense.id %}
-                    {{ payment.person.name }}: {{ payment.amount }} {{ payment.currency.iso4217_code }}&nbsp;&nbsp;
-                    <a href="/payment/{{ payment.id }}/remove/" class="btn btn-danger btn-mini pull-right"><i class="icon-remove"></i></a> 
-                    <a href="/payment/{{ payment.id }}/edit/" class="btn btn-info btn-mini pull-right"><i class="icon-edit"></i></a><br>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-        <a href="/expense/{{expense.id}}/addpayment" class="btn btn-mini btn-success"><i class="icon-plus"></i> Add new payment</a><br>
-        </td>
-
-        <td>
-        {% for person in expense.people.all %}
-            <p>{{ person.name }} <a href="/expense/{{ expense.id }}/removeperson/{{ person.id }}/" class="btn btn-mini btn-danger pull-right"><i class="icon-remove"></i></a></p>
-        {% endfor %}
-        </td>
-        <td>
-        {% for person in people %}
-            {% if person not in expense.people.all %}
-                <p>{{ person.name }} <a href="/expense/{{ expense.id }}/addperson/{{ person.id }}/" class="btn btn-mini btn-success pull-right"><i class="icon-plus"></i></a></p>
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#main" data-toggle="tab">Main</a></li>
+        <li><a href="#people" data-toggle="tab">People</a></li>
+        <li><a href="#expenses" data-toggle="tab">Expenses</a></li>
+            {% if expenses and resultdict.total %}
+                <li><a href="#resulttable" data-toggle="tab">Result (table)</a></li>
+                <li><a href="#resultlist" data-toggle="tab">Result (list)</a></li>
             {% endif %}
-        {% endfor %}
-        </td>
-        <td style="width: 3em; text-align: center">
-        <a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>
-        <a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a>
-        </td>
-        </tr>
-    {% endfor %}
-    </table>
-    </div>
-{% else %}
-    <p class="text-warning">No expenses found. After adding people above, you need to add the expenses for this ledger by pressing the button below. 
-    You should also choose the people who should be charged for the expense when creating it. 
-    After adding an expense you need to add one or more payments for the expense, depending on how many people actually paid for the expense.</p>
-    {% if people %}
-        <a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
-    {% else %}
-        <button class="btn btn-primary btn-disabled" disabled>Add expense</button>
-    {% endif %}
-{% endif %}
-<hr>
+        <li><a href="#debug" data-toggle="tab">Debug info</a></li>
+    </ul>
 
-<h3>Result:</h3>
-{% if expenses and resultdict.total %}
-    <div class="tabbable">
-      <ul class="nav nav-tabs">
-        <li class="active"><a href="#table" data-toggle="tab">Table</a></li>
-        <li><a href="#list" data-toggle="tab">List</a></li>
-      </ul>
-      <div class="tab-content">
-        <div id="table" class="tab-pane active">
+    <div class="tab-content">
+        <div id="main" class="tab-pane active">
+            <h2>Ledger: {{ ledger.name }}</h2>
+            <div class="alert alert-info"><b>Native currency: {{ ledger.currency }}</b></div>
+            <p>This is a <b>BuddyLedger</b>, a system to keep track of expenses between groups of people. 
+            Given a list of people and expenses this system will calculate the final breakdown so you can see who owes what to whom.</p>        
+        </div>
+        
+        <div id="people" class="tab-pane">
+            {% comment %}<!-- List of people -->{% endcomment %}
+            <h3>People:</h3>
+            {% if people %}
+                <p>{{ people|join:", " }}</p>
+                <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#peopledetails"><i class="icon-list"></i> Details</button>
+                <a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary"><i class="icon-plus"></i> Add person</a>
+                <div id="peopledetails" class="collapse">
+                    <table class="table table-bordered table-striped" style="width: 50%;">
+                        <tr><th>Name</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
+                        {% for person in people %}
+                        <tr><td>{{ person.name }}</td>  
+                            <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
+                            <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-warning">No people found connected to this ledger. First you need to add all the people 
+                involved in this ledger by pressing the button below! This includes both the people who put up money for the expenses, 
+                and the people who owes money to them.</p>
+                <a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary"><i class="icon-plus"></i> Add person</a>
+            {% endif %}        
+        </div>
+
+        <div id="expenses" class="tab-pane">
+            {% if expenses %}
+                <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#expensedetails"><i class="icon-list"></i> Details</button>
+                <a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
+                <div id="expensedetails" class="collapse">
+                <table class="table table-bordered">
+                <tr>
+                    <th>Name</th>
+                    <th style="width: 3em; text-align: center">Amount</th>
+                    <th style="width: 3em; text-align: center">Amount {{ ledger.currency.iso4217_code }}</th>
+                    <th>Payments</th>
+                    <th>In</th>
+                    <th>Not in</th>
+                    <th style="width: 4em; text-align: center">Action</th>
+                </tr>
+                {% for expense in expenses %}
+                    <tr><td>{{ expense.name }}</td>
+                    <td>{{ expense.amount }} {{ expense.currency.iso4217_code }}</td>
+                    <td>{{ expense.amount_native }} {{ ledger.currency.iso4217_code }}</td>
+                    <td>
+                    {% if payments|length_is:"0" %}
+                        <p class="warning">No payments registered for this expense! Who paid for this ?</p>
+                    {% else %}
+                        {% for payment in payments %}
+                            {% if payment.expense_id = expense.id %}
+                                {{ payment.person.name }}: {{ payment.amount }} {{ payment.currency.iso4217_code }}&nbsp;&nbsp;
+                                <a href="/payment/{{ payment.id }}/remove/" class="btn btn-danger btn-mini pull-right"><i class="icon-remove"></i></a> 
+                                <a href="/payment/{{ payment.id }}/edit/" class="btn btn-info btn-mini pull-right"><i class="icon-edit"></i></a><br>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <a href="/expense/{{expense.id}}/addpayment" class="btn btn-mini btn-success"><i class="icon-plus"></i> Add new payment</a><br>
+                    </td>
+
+                    <td>
+                    {% for person in expense.people.all %}
+                        <p>{{ person.name }} <a href="/expense/{{ expense.id }}/removeperson/{{ person.id }}/" class="btn btn-mini btn-danger pull-right"><i class="icon-remove"></i></a></p>
+                    {% endfor %}
+                    </td>
+                    <td>
+                    {% for person in people %}
+                        {% if person not in expense.people.all %}
+                            <p>{{ person.name }} <a href="/expense/{{ expense.id }}/addperson/{{ person.id }}/" class="btn btn-mini btn-success pull-right"><i class="icon-plus"></i></a></p>
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                    <td style="width: 3em; text-align: center">
+                    <a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>
+                    <a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a>
+                    </td>
+                    </tr>
+                {% endfor %}
+                </table>
+                </div>
+            {% else %}
+                <p class="text-warning">No expenses found. After adding people above, you need to add the expenses for this ledger by pressing the button below. 
+                You should also choose the people who should be charged for the expense when creating it. 
+                After adding an expense you need to add one or more payments for the expense, depending on how many people actually paid for the expense.</p>
+                {% if people %}
+                    <a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
+                {% else %}
+                    <button class="btn btn-primary btn-disabled" disabled>Add expense</button>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div id="resulttable" class="tab-pane">
             {% comment %}<!-- Result table -->{% endcomment %}
             <table class="table table-bordered">
             {% comment %}<!-- First create the top row -->{% endcomment %}
@@ -168,7 +175,8 @@ Given a list of people and expenses this system will calculate the final breakdo
             {% endfor %}
             </table>
         </div>
-        <div id="list" class="tab-pane">
+
+        <div id="resultlist" class="tab-pane">
             <table class="table table-hover table-bordered">
                 <thead>
                     <tr>
@@ -216,21 +224,12 @@ Given a list of people and expenses this system will calculate the final breakdo
                 </tbody>
             </table>
         </div>
-        <div id="detail" class="tab-pane">
-          <h4>Details..</h4>
-        </div>
-      </div><!-- /.tab-content -->
-    </div><!-- /.tabbable -->
-{% else %}
-    <p>No results yet!</p>
-{% endif %}
-<hr>
 
-{% comment %}<!-- Debug info -->{% endcomment %}
-<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#debuginfo"><i class="icon-info-sign"></i> Debug info</button>
-<div id="debuginfo" class="collapse">
-<p>
-<pre>{{ data }}</pre>
-</p>
-</div>
+        <div id="debug" class="tab-pane">
+          <h4>Debug</h4>
+          <p><pre>{{ data }}</pre></p>
+        </div>
+    </div><!-- /.tab-content -->
+</div><!-- /.tabbable -->
+<hr>
 {% endblock %}
