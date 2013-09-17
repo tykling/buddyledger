@@ -27,20 +27,16 @@
             {% comment %}<!-- List of people -->{% endcomment %}
             <h3>People:</h3>
             {% if people %}
-                <p>{{ people|join:", " }}</p>
-                <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#peopledetails"><i class="icon-list"></i> Details</button>
                 <a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary"><i class="icon-plus"></i> Add person</a>
-                <div id="peopledetails" class="collapse">
-                    <table class="table table-bordered table-striped" style="width: 50%;">
-                        <tr><th>Name</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
-                        {% for person in people %}
-                        <tr><td>{{ person.name }}</td>  
-                            <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
-                            <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
+                <table class="table table-bordered table-striped" style="width: 50%;">
+                    <tr><th>Name</th><th style="width: 5em; text-align: center">Edit</th><th style="width: 5em; text-align: center">Remove</th></tr>
+                    {% for person in people %}
+                    <tr><td>{{ person.name }}</td>  
+                        <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a></td>
+                        <td style="width: 5em; text-align: center"><a href="/person/{{ person.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
             {% else %}
                 <p class="text-warning">No people found connected to this ledger. First you need to add all the people 
                 involved in this ledger by pressing the button below! This includes both the people who put up money for the expenses, 
@@ -51,19 +47,17 @@
 
         <div id="expenses" class="tab-pane">
             {% if expenses %}
-                <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#expensedetails"><i class="icon-list"></i> Details</button>
                 <a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
-                <div id="expensedetails" class="collapse">
                 <table class="table table-bordered">
-                <tr>
-                    <th>Name</th>
-                    <th style="width: 3em; text-align: center">Amount</th>
-                    <th style="width: 3em; text-align: center">Amount {{ ledger.currency.iso4217_code }}</th>
-                    <th>Payments</th>
-                    <th>In</th>
-                    <th>Not in</th>
-                    <th style="width: 4em; text-align: center">Action</th>
-                </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th style="width: 3em; text-align: center">Amount</th>
+                        <th style="width: 3em; text-align: center">Amount {{ ledger.currency.iso4217_code }}</th>
+                        <th>Payments</th>
+                        <th>In</th>
+                        <th>Not in</th>
+                        <th style="width: 4em; text-align: center">Action</th>
+                    </tr>
                 {% for expense in expenses %}
                     <tr><td>{{ expense.name }}</td>
                     <td>{{ expense.amount }} {{ expense.currency.iso4217_code }}</td>
@@ -102,7 +96,7 @@
                     </tr>
                 {% endfor %}
                 </table>
-                </div>
+                <a href="/ledger/{{ ledger.id }}/addexpense/" class="btn btn-primary">Add expense</a>
             {% else %}
                 <p class="text-warning">No expenses found. After adding people above, you need to add the expenses for this ledger by pressing the button below. 
                 You should also choose the people who should be charged for the expense when creating it. 
@@ -231,5 +225,4 @@
         </div>
     </div><!-- /.tab-content -->
 </div><!-- /.tabbable -->
-<hr>
 {% endblock %}
