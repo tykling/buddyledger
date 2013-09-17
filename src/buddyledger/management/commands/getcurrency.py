@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from buddyledger.models import Currency
-from Decimal import *
+from decimal import *
 import urllib, json
 import xml.etree.ElementTree as etree
 
@@ -28,7 +28,7 @@ class Command(BaseCommand):
             
                 currency.save()
                 self.stdout.write('Saved%s rate: 1 %s costs %s DKK' % (temp, child.attrib['code'],rate))
-                if child.attrib['code'] = "USD":
+                if child.attrib['code'] == "USD":
                     ### save usd rate for later
                     usdprice = Decimal(rate)
             else:
@@ -57,7 +57,10 @@ class Command(BaseCommand):
                 jsonobj = json.loads(bitstampjson)
                 f.close()
             except Exception as e:
-                self.stdout.write('Unable to get BTC price from https://www.bitstamp.net/api/ticker/')
+                self.stderr.write('Unable to get BTC price from https://www.bitstamp.net/api/ticker/')
+                self.stderr.write(bitstampjson)
+                self.stderr.write("This concludes the dump of Bitstamp data that couldn't be parsed. Exiting without BTC data saved...")
+                return
             
             ### calculate DKK price from USD price
             btcusdprice = Decimal(jsonobj['last'])
