@@ -18,7 +18,9 @@ Installation
 ------------
 First, make sure you have Django and NetworkX installed.
 
-Create `buddyledger/settings.py` (example content):
+Change directory to `<repository_root>/buddyledger/src` (the one containing `manage.py`).
+
+Create `buddyledger/settings.py` relative to current directory (example content):
 ```
 ROOT_URLCONF="buddyledger.urls"
 INSTALLED_APPS=(
@@ -42,7 +44,7 @@ DATABASES = {
 }
 ```
 
-Now execute:
+Now execute (example for Windows):
 
     c:\Python33\python manage.py syncdb
     c:\Python33\python manage.py getcurrency
