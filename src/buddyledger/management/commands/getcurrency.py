@@ -3,12 +3,16 @@ from buddyledger.models import Currency
 from decimal import *
 import urllib, json
 import xml.etree.ElementTree as etree
+try:
+	from urllib.request import urlopen
+except ImportError:
+	from urllib import urlopen
 
 class Command(BaseCommand):
     help = 'Gets currency exchange rates from http://nationalbanken.dk/dndk/valuta.nsf/valuta.xml and BTC rates from Bitstamp'
 
     def handle(self, *args, **options):
-        f = urllib.urlopen('http://nationalbanken.dk/dndk/valuta.nsf/valuta.xml')
+        f = urlopen('http://nationalbanken.dk/dndk/valuta.nsf/valuta.xml')
         xml = f.read()
         f.close()
         tree = etree.fromstring(xml)
@@ -52,13 +56,13 @@ class Command(BaseCommand):
         if usdprice != 0:
         ### if we have a USD/BTC rate, add BTC price based on bitstamp USD ticker
             try:
-                f = urllib.urlopen('https://www.bitstamp.net/api/ticker/')
+                f = urlopen('https://www.bitstamp.net/api/ticker/')
                 bitstampjson = f.read()
                 jsonobj = json.loads(bitstampjson)
                 f.close()
             except Exception as e:
                 self.stderr.write('Unable to get BTC price from https://www.bitstamp.net/api/ticker/')
-                self.stderr.write(bitstampjson)
+                self.stderr.write(str(e))
                 self.stderr.write("This concludes the dump of Bitstamp data that couldn't be parsed. Exiting without BTC data saved...")
                 return
             

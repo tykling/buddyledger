@@ -3,9 +3,9 @@ from django.http import HttpResponseRedirect
 from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, PaymentForm
 from buddyledger.models import Ledger, Person, Expense, Payment, Currency
 from decimal import *
-from paymentprocessor import PaymentProcessor, MonoPayment
-from graphbuilder import solve_mincost_problem_for_expenses
-from convert_buddy import problem_from_buddy_format_to_foreign, result_from_foreign_format_to_buddy
+#from buddyledger.paymentprocessor import PaymentProcessor, MonoPayment
+from buddyledger.graphbuilder import solve_mincost_problem_for_expenses
+from buddyledger.convert_buddy import problem_from_buddy_format_to_foreign, result_from_foreign_format_to_buddy
 
 def Frontpage(request):
     response = render_to_response('frontpage.html')
