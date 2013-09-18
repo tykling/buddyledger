@@ -20,9 +20,9 @@ def ShowUsage(request):
 def tykcalc(data):
     ### build empty matrix
     resultdict = dict()
-    for user in data['userlist']:
+    for user in data['userdict'].keys():
         temp = dict()
-        for tempuser in data['userlist']:
+        for tempuser in data['userdict'].keys():
             if user == tempuser:
                 temp[tempuser] = 'n/a'
             else:
@@ -154,18 +154,16 @@ def ShowLedger(request, ledgerid=0):
                     expensepeople.append(person.id)
                 internaldata.append(dict(payments=paymentlist,users=expensepeople))
 
-    userlist = []
     userdict = dict()
     for person in people:
-        userlist.append(person.id)
         userdict[person.id] = person.name
     
-    data = dict(expenselist = internaldata, userlist = userlist, userdict = userdict)
+    data = dict(expenselist = internaldata, userdict = userdict)
     if showresult:
         ### at least one expense has payment(s) equal to the total expense
         #resultdict = tyktotals(tykoptimize(tykcalc(data)))
         foreign_format = problem_from_buddy_format_to_foreign(data)
-        resultdict = tyktotals(result_from_foreign_format_to_buddy(solve_mincost_problem_for_expenses(foreign_format["expenses"],len(foreign_format["people"])), data["userlist"]))
+        resultdict = tyktotals(result_from_foreign_format_to_buddy(solve_mincost_problem_for_expenses(foreign_format["expenses"],len(foreign_format["people"])), data["userdict"].keys()))
     else:
         resultdict = dict()
     

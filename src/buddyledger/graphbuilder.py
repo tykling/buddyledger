@@ -43,9 +43,7 @@ def solve_mincost_problem_for_expenses(expenses, numPeople):
     return flowDict
 
 if __name__ == "__main__":
-    people = ["janus", "tyk", "mads", "alex"]
-    expenses = [{"whopaid": [{"personId": 0, "amount": 50},
-        {"personId": 1, "amount": 30}
+    expenses = [{"whopaid": [{"personId": 0, "amount": Fraction(1,2)},
+        {"personId": 1, "amount": Fraction(1,2)}
         ], "whoshouldpay": [0,1,2]}]
-    job = {"expenses":expenses, "people": people}
-    print(solve_mincost_problem_for_expenses(job["expenses"], len(people)))
+    print(solve_mincost_problem_for_expenses(expenses, 6))
