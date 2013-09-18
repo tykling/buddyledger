@@ -4,6 +4,8 @@ from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, PaymentForm
 from buddyledger.models import Ledger, Person, Expense, Payment, Currency
 from decimal import *
 from paymentprocessor import PaymentProcessor, MonoPayment
+from graphbuilder import solve_mincost_problem_for_expenses
+from convert_buddy import problem_from_buddy_format_to_foreign, result_from_foreign_format_to_buddy
 
 def Frontpage(request):
     response = render_to_response('frontpage.html')
@@ -79,8 +81,11 @@ def tyktotals(resultdict):
     for receiverid in resultdict:
         total = 0
         for payerid in resultdict[receiverid]:
-            if resultdict[receiverid][payerid] != "n/a":
-                total += Decimal(resultdict[receiverid][payerid])
+            try:
+                if resultdict[receiverid][payerid] != "n/a":
+                    total += Decimal(resultdict[receiverid][payerid])
+            except KeyError:
+                pass
         resultdict[receiverid]['total'] = total
         
     ### calculate totals for each payer
@@ -88,8 +93,11 @@ def tyktotals(resultdict):
     for payerid in resultdict:
         total = 0
         for receiverid in resultdict:
-            if resultdict[receiverid][payerid] != "n/a":
-                total += Decimal(resultdict[receiverid][payerid])
+            try:
+                if resultdict[receiverid][payerid] != "n/a":
+                    total += Decimal(resultdict[receiverid][payerid])
+            except KeyError:
+                pass
         payerdict[payerid] = total
     resultdict['total'] = payerdict
     return resultdict
@@ -155,7 +163,9 @@ def ShowLedger(request, ledgerid=0):
     data = dict(expenselist = internaldata, userlist = userlist, userdict = userdict)
     if showresult:
         ### at least one expense has payment(s) equal to the total expense
-        resultdict = tyktotals(tykoptimize(tykcalc(data)))
+        #resultdict = tyktotals(tykoptimize(tykcalc(data)))
+        foreign_format = problem_from_buddy_format_to_foreign(data)
+        resultdict = tyktotals(result_from_foreign_format_to_buddy(solve_mincost_problem_for_expenses(foreign_format["expenses"],len(foreign_format["people"])), data["userlist"]))
     else:
         resultdict = dict()
     
