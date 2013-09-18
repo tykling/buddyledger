@@ -40,8 +40,9 @@ def result_from_foreign_format_to_buddy(result, olduserlist):
     for i in olduserlist:
         if i not in res.keys():
             res[i] = {}
-        if i not in res[i].keys():
-            res[i][i] = "n/a"
+        for j in olduserlist:
+            if j not in res[i].keys():
+                res[i][j] = decimal.Decimal("0") if i != j else "n/a"
     return res
 
 if __name__ == "__main__":
