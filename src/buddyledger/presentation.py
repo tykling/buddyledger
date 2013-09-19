@@ -63,7 +63,7 @@ def ResultToMatrix(result,userdict,personcounterdict):
 
     ### create the new bottom row for the "total pay" amounts
     temp = OrderedDict()
-    temp[0] = "Total Paý"
+    temp[0] = "Total Pay"
     for number,amount in payertotal.iteritems():
         temp[number+1] = amount
 
