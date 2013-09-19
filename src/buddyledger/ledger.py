@@ -59,7 +59,7 @@ def ShowLedger(request, ledgerid=0):
                 calcdata.append(dict(whopaid=paymentlist, whoshouldpay=whoshouldpay))
             elif totalamount < expense.amount_native:
                 errorlist.append("The expense %s was not included in the calculation because the sum of the payments (%s) do not add up to the total expense (%s)" % (expense.name,totalamount,expense.amount_native))
-            else
+            else:
                 errorlist.append("The expense %s was not included in the calculation because the sum of the payments (%s) is larger than the total expense (%s)" % (expense.name,totalamount,expense.amount_native))
                 
     ### create dict with uid <> username mappings
