@@ -32,20 +32,20 @@ def ResultToMatrix(result,userdict,personcounterdict):
         ### add this row to the table
         resultdict[rowcounter] = temp
 
-        ### now loop through the result and insert the debts into the matrix,
-        ### and calculate totals while we are here
-        payertotal = OrderedDict()
-        receivertotal = OrderedDict()
-        for payerid, receiverdict in result.iteritems():
-            ### find the counter number of this payerid
-            payernumber = personcounterdict[payerid]
-            for receiverid, amount in receiverdictiteritems():
-                ### add to totals for this payer
-                payertotal[payernumber]+=amount
-                receivernumber = personcounterdict[receiverid]
-                ### add to totals for this receiver
-                receivertotal[receivernumber]+=amount
-                resultdict[receivernumber][payernumber] = amount
+    ### now loop through the result and insert the debts into the matrix,
+    ### and calculate totals while we are here
+    payertotal = OrderedDict()
+    receivertotal = OrderedDict()
+    for payerid, receiverdict in result.iteritems():
+        ### find the counter number of this payerid
+        payernumber = personcounterdict[payerid]
+        for receiverid, amount in receiverdictiteritems():
+            ### add to totals for this payer
+            payertotal[payernumber]+=amount
+            receivernumber = personcounterdict[receiverid]
+            ### add to totals for this receiver
+            receivertotal[receivernumber]+=amount
+            resultdict[receivernumber][payernumber] = amount
                     
     ### add totals columns and row to the matrix (bottom row and rightmost column)
     counter=0
