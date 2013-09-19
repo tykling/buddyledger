@@ -7,14 +7,14 @@ def ResultToMatrix(result,userdict,personcounterdict):
     temp[0] = "n/a" # the 0,0 field is the upper left position
     counter=0
     for user in userdict:
-        counter++
+        counter += 1
         temp[counter] = "%s pay" % user
     resultdict[0] = temp
     
     ### now create a row per user
     rowcounter=0
     for user in userdict:
-        rowcounter++
+        rowcounter += 1
         ### create new empty table row
         temp = OrderedDict()
         ### the leftmost column with the name
@@ -23,7 +23,7 @@ def ResultToMatrix(result,userdict,personcounterdict):
         ### loop through users, add Decimal(0) or "n/a"
         colcounter=0
         for tempuser in userdict:
-            colcounter++
+            colcounter += 1
             if user == tempuser:
                 temp[colcounter] = "n/a"
             else:
@@ -59,7 +59,7 @@ def ResultToMatrix(result,userdict,personcounterdict):
         else:
             ### add the rightmost "total receive" column for this row
             row[pos] = receivertotal[counter-1]
-        counter++
+        counter += 1
 
     ### create the new bottom row for the "total pay" amounts
     temp = OrderedDict()

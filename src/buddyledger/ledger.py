@@ -29,7 +29,7 @@ def ShowLedger(request, ledgerid=0):
     counter=0
     for person in people:
         personcounterdict[person.id] = counter
-        counter++
+        counter += 1
 
     ### get all expenses related to this ledger
     expenses = Expense.objects.filter(ledger_id=ledgerid)
