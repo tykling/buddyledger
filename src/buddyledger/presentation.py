@@ -34,8 +34,8 @@ def ResultToMatrix(result,userdict,personcounterdict):
 
         ### now loop through the result and insert the debts into the matrix,
         ### and calculate totals while we are here
-        payertotal = dict()
-        receivertotal = dict()
+        payertotal = OrderedDict()
+        receivertotal = OrderedDict()
         for payerid, receiverdict in result.iteritems():
             ### find the counter number of this payerid
             payernumber = personcounterdict[payerid]
@@ -71,4 +71,4 @@ def ResultToMatrix(result,userdict,personcounterdict):
 
 def ResultToTable(result,userdict,personcounterdict):
     # not implemented yet
-    return dict()
+    return OrderedDict()
