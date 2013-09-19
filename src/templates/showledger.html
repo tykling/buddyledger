@@ -17,10 +17,22 @@
 
     <div class="tab-content">
         <div id="main" class="tab-pane active">
-            <h2>Ledger: {{ ledger.name }}</h2>
-            <div class="alert alert-info"><b>Native currency: {{ ledger.currency }}</b></div>
-            <p>This is a <b>BuddyLedger</b>, a system to keep track of expenses between groups of people. 
-            Given a list of people and expenses this system will calculate the final breakdown so you can see who owes what to whom.</p>        
+            <h2>{{ ledger.name }}</h2>
+            <span class="label label-success">Native currency: {{ ledger.currency }}</span>
+            <p>This is <b>BuddyLedger</b>, a system to keep track of expenses between groups of people. 
+            Given a list of people and expenses this system will calculate the final breakdown so you can see who owes what to whom.</p>
+            
+            <h2>Statistics</h2>
+            <p>This ledger has <b>{{ people|length }}</b> people and <b>{{ expenses|length }}</b> with a total of <b>{{ payments|length }}</b> payments.</p>
+            
+            <h2>Advanced Settings</h2>
+            <p>You can change the algorithm used to calculate the final result. The default should be fine for most uses.</p>
+            <a href="/ledger/{{ ledger.id }}/changemethod/" class="btn btn-inverse"><i class="icon-wrench"></i> Change method</a>
+
+            
+            <h2>Close Ledger</h2>
+            <p>When all expenses and payments has been added to the ledger it should be closed before any backpayments can be registered.</p>
+            <a href="/ledger/{{ ledger.id }}/close/" class="btn btn-danger"><i class="icon-check"></i> Close Ledger</a>
         </div>
         
         <div id="people" class="tab-pane">
@@ -114,57 +126,57 @@
             <table class="table table-bordered">
             {% comment %}<!-- First create the top row -->{% endcomment %}
             <tr>
-            {% comment %}<!-- Upper left corner black cell -->{% endcomment %}
-            <th style="color: black; background-color: black">&nbsp;</th>
-            {% comment %}<!-- Create TH row -->{% endcomment %}
-            {% for uid,tablerow in resultdict.items %}
-                {% if uid == "total" %}
-                {% comment %}<!-- This is the top rightmost cell -->{% endcomment %}
-                <th>Total receive</th>
-                {% else %}
-                {% comment %}<!-- This is a regular toprow cell -->{% endcomment %}
-                <th>{{ data.userdict|keyvalue:uid }} pay</th>
-                {% endif %}
-            {% endfor %}
+                {% comment %}<!-- Upper left corner black cell -->{% endcomment %}
+                <th style="color: black; background-color: black">&nbsp;</th>
+                {% comment %}<!-- Create TH row -->{% endcomment %}
+                {% for uid,tablerow in resultdict.items %}
+                    {% if uid == "total" %}
+                        {% comment %}<!-- This is the top rightmost cell -->{% endcomment %}
+                        <th>Total receive</th>
+                    {% else %}
+                        {% comment %}<!-- This is a regular toprow cell -->{% endcomment %}
+                        <th>{{ data.userdict|keyvalue:uid }} pay</th>
+                    {% endif %}
+                {% endfor %}
             </tr>
 
             {% comment %}<!-- Loop through the receiver rows -->{% endcomment %}
             {% for uid,tablerow in resultdict.items %}
                 {% comment %}<!-- Create header row -->{% endcomment %}
                 <tr>
-                {% if uid == "total" %}
-                {% comment %}<!-- This is the bottom leftmost cell -->{% endcomment %}
-                <td><b>Total pay</b></td>
-                {% else %}
-                {% comment %}<!-- This is a regular leftmost column cell -->{% endcomment %}
-                <td><b>{{ data.userdict|keyvalue:uid }} receive</b></td>
-                {% endif %}
-
-                {% comment %}<!-- Loop through the cells of this row -->{% endcomment %}
-                {% for tempuid,value in tablerow.items %}
-                    {% comment %}<!-- if value is "n/a" paint the cell black (for payment from/to the same user) -->{% endcomment %}
-                    {% if value == "n/a" %}
-                    <td style="color: black; background-color: black">&nbsp;</td>
-                    {% comment %}<!-- if value is 0 make the cell dark grey -->{% endcomment %}
-                    {% elif value == 0 %}
-                    <td style="color: darkgrey; background-color: darkgrey"><i>n/a</i></td>
-                    {% comment %}<!-- check if this is the rightmost totals row, make bold if so -->{% endcomment %}
-                    {% elif tempuid == "total" %}
-                    <td><b>{{ value }} {{ ledger.currency.iso4217_code }}</b></td>
-                    {% else %}
-                    {% comment %}<!-- Check if this is the bottom totals row, make bold if so -->{% endcomment %}
                     {% if uid == "total" %}
-                    <td><b>{{ value }} {{ ledger.currency.iso4217_code }}</b></td>
+                        {% comment %}<!-- This is the bottom leftmost cell -->{% endcomment %}
+                        <td><b>Total pay</b></td>
                     {% else %}
-                    <td>{{ value }} {{ ledger.currency.iso4217_code }}</td>
+                        {% comment %}<!-- This is a regular leftmost column cell -->{% endcomment %}
+                        <td><b>{{ data.userdict|keyvalue:uid }} receive</b></td>
                     {% endif %}
+
+                    {% comment %}<!-- Loop through the cells of this row -->{% endcomment %}
+                    {% for tempuid,value in tablerow.items %}
+                        {% comment %}<!-- if value is "n/a" paint the cell black (for payment from/to the same user) -->{% endcomment %}
+                        {% if value == "n/a" %}
+                            <td style="color: black; background-color: black">&nbsp;</td>
+                            {% comment %}<!-- if value is 0 make the cell dark grey -->{% endcomment %}
+                        {% elif value == 0 %}
+                            <td style="color: darkgrey; background-color: darkgrey"><i>n/a</i></td>
+                            {% comment %}<!-- check if this is the rightmost totals row, make bold if so -->{% endcomment %}
+                        {% elif tempuid == "total" %}
+                            <td><b>{{ value }} {{ ledger.currency.iso4217_code }}</b></td>
+                        {% else %}
+                            {% comment %}<!-- Check if this is the bottom totals row, make bold if so -->{% endcomment %}
+                            {% if uid == "total" %}
+                                <td><b>{{ value }} {{ ledger.currency.iso4217_code }}</b></td>
+                            {% else %}
+                                <td>{{ value }} {{ ledger.currency.iso4217_code }}</td>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% comment %}<!-- If this is the bottom (totals) row, it is missing the rightmost (totals) column, so add an extra black cell here -->{% endcomment %}
+                    {% if uid == "total" %}
+                        {% comment %}<!-- This is the bottom row, add the missing cell -->{% endcomment %}
+                        <td style="color: black; background-color: black">&nbsp;</td>
                     {% endif %}
-                {% endfor %}
-                {% comment %}<!-- If this is the bottom (totals) row, it is missing the rightmost (totals) column, so add an extra black cell here -->{% endcomment %}
-                {% if uid == "total" %}
-                {% comment %}<!-- This is the bottom row, add the missing cell -->{% endcomment %}
-                <td style="color: black; background-color: black">&nbsp;</td>
-                {% endif %}
                 </tr>
             {% endfor %}
             </table>

@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^ledger/create/$', 'buddyledger.views.CreateLedger'),
     url(r'^ledger/(?P<ledgerid>\d+)/$', 'buddyledger.views.ShowLedger'),
     url(r'^ledger/(?P<ledgerid>\d+)/edit/$', 'buddyledger.views.EditLedger'),
+    url(r'^ledger/(?P<ledgerid>\d+)/close/$', 'buddyledger.views.CloseLedger'),
 
     ### person
     url(r'^ledger/(?P<ledgerid>\d+)/addperson/$', 'buddyledger.views.AddPerson'),

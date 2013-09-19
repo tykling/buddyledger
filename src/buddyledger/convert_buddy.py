@@ -21,15 +21,6 @@ def problem_from_buddy_format_to_foreign(pstruk):
     fin["expenses"] = e
     return fin
 
-def conv_frac_to_decimal(f, precision):
-    if f == 0: return decimal.Decimal("0")
-    s = str(int(f)) + "."
-    f -= int(f)
-    with decimal.localcontext() as ctx:
-        ctx.prec = precision
-        s += str(decimal.Decimal(f.numerator) / f.denominator).partition(".")[2]
-    return decimal.Decimal(s)
-
 def result_from_foreign_format_to_buddy(result, olduserlist):
     #res = {olduserlist[k]: {olduserlist[i]: conv_frac_to_decimal(j, 2) for i,j in v.items() if j != 0} for k,v in result.items()}
     l = defaultdict(list)
