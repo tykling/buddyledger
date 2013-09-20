@@ -70,7 +70,7 @@ def ShowLedger(request, ledgerid=0):
     ### do the calculation ? (true if at least one expense has payment(s) equal to the total expense)
     if showresult:
         if ledger.calcmethod == "optimized":
-            fracresult = solve_mincost_problem_for_expenses(calcdata,len(people))
+            fracresult = solve_mincost_problem_for_expenses(calcdata, [person.id for person in people])
         elif ledger.calcmethod == "basic":
             fracresult = BasicCalc(calcdata,len(people))
         else:
