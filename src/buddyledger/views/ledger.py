@@ -10,7 +10,7 @@ from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, PaymentForm
 from buddyledger.views.misc import ConvertCurrency, resultdict_to_decimal
 from buddyledger.views.graphbuilder import solve_mincost_problem_for_expenses
 from buddyledger.views.presentation import ResultToMatrix
-
+from buddyledger.views.basiccalc import BasicCalc
 
 def CreateLedger(request):
     if request.method == 'POST':
@@ -38,13 +38,6 @@ def ShowLedger(request, ledgerid=0):
     ### get all people related to this ledger
     people = Person.objects.filter(ledger_id=ledgerid)
 
-    ### create a dict to map userid to counter number (each person must be numbered from 0-n for the calculation to work)
-    personcounterdict = dict()
-    counter=0
-    for person in people:
-        personcounterdict[person.id] = counter
-        counter += 1
-
     ### get all expenses related to this ledger
     expenses = Expense.objects.filter(ledger_id=ledgerid)
     
@@ -62,14 +55,14 @@ def ShowLedger(request, ledgerid=0):
             paymentlist = []
             totalamount = 0
             for payment in expensepayments:
-                paymentlist.append(dict(personId=personcounterdict[payment.person.id],amount=Fraction(payment.amount_native)))
+                paymentlist.append(dict(personId=payment.person.id,amount=Fraction(payment.amount_native)))
                 totalamount += payment.amount_native
             ### no calculation if the payments dont add up to the total expense
             if totalamount == expense.amount_native:
                 showresult = True
                 whoshouldpay = []
                 for person in expense.people.all():
-                    whoshouldpay.append(personcounterdict[person.id])
+                    whoshouldpay.append(person.id)
                 calcdata.append(dict(whopaid=paymentlist, whoshouldpay=whoshouldpay))
             elif totalamount < expense.amount_native:
                 errorlist.append("The expense %s was not included in the calculation because the sum of the payments (%s) do not add up to the total expense (%s)" % (expense.name,totalamount,expense.amount_native))
@@ -86,7 +79,7 @@ def ShowLedger(request, ledgerid=0):
         if ledger.calcmethod == "optimized":
             fracresult = solve_mincost_problem_for_expenses(calcdata, [person.id for person in people])
         elif ledger.calcmethod == "basic":
-            fracresult = BasicCalc(calcdata,len(people))
+            fracresult = BasicCalc(calcdata,[person.id for person in people])
         else:
             errorlist.append("Unknown calculation method selected for this ledger: <b>%s</b>. No result will be calculated.")
             showresult = False
@@ -96,8 +89,8 @@ def ShowLedger(request, ledgerid=0):
         result = resultdict_to_decimal(fracresult)
     
         ### arrange the data for result output
-        matrixdict = ResultToMatrix(result,userdict,personcounterdict)
-        #tabledict = ResultToTable(result,userdict,personcounterdict)
+        matrixdict = ResultToMatrix(result,userdict)
+        #tabledict = ResultToTable(result,userdict)
         tabledict = dict() #not implemented yet
 
         ### render and return response

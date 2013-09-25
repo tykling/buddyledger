@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from decimal import *
 
-def ResultToMatrix(result,userdict,personcounterdict):
+def ResultToMatrix(result,userdict):
     ### build all zero matrix table (dict of dicts)
     table = OrderedDict()
     resultdict = OrderedDict()
@@ -42,21 +42,19 @@ def ResultToMatrix(result,userdict,personcounterdict):
     payertotal = OrderedDict()
     receivertotal = OrderedDict()
     for payerid, receiverdict in result.iteritems():
-        ### find the counter number of this payerid
-        payernumber = personcounterdict[payerid]
         for receiverid, amount in receiverdict.iteritems():
             ### add to totals for this payer
-            if payernumber in payertotal:
-                payertotal[payernumber] += amount
+            if payerid in payertotal:
+                payertotal[payerid] += amount
             else:
-                payertotal[payernumber] = amount
-            receivernumber = personcounterdict[receiverid]
+                payertotal[payerid] = amount
+
             ### add to totals for this receiver
-            if receivernumber in receivertotal:
-                receivertotal[receivernumber]+=amount
+            if receiverid in receivertotal:
+                receivertotal[receiverid]+=amount
             else:
-                receivertotal[receivernumber]=amount
-            resultdict[receivernumber][payernumber] = amount
+                receivertotal[receiverid]=amount
+            resultdict[receiverid][payerid] = amount
                     
     ### add totals columns and row to the matrix (bottom row and rightmost column)
     counter=0
@@ -80,6 +78,6 @@ def ResultToMatrix(result,userdict,personcounterdict):
 
     return resultdict
 
-def ResultToTable(result,userdict,personcounterdict):
+def ResultToTable(result,userdict):
     # not implemented yet
     return OrderedDict()

@@ -14,7 +14,7 @@ def conv_frac_to_decimal(f, precision):
     if f == 0: return Decimal("0")
     s = str(int(f)) + "."
     f -= int(f)
-    with decimal.localcontext() as ctx:
+    with localcontext() as ctx:
         ctx.prec = precision
         s += str(Decimal(f.numerator) / f.denominator).partition(".")[2]
     return Decimal(s)
