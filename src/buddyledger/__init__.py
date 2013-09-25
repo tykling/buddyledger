@@ -1,1 +1,0 @@
-from buddyledger.views import *
