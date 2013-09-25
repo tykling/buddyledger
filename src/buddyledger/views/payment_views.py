@@ -1,8 +1,12 @@
+from decimal import *
+
 from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, PaymentForm
 from buddyledger.models import Ledger, Person, Expense, Payment, Currency
 
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
+
+from buddyledger.views.misc import ConvertCurrency
 
 def AddPayment(request, expenseid=0):
     ### Check if the expense exists - bail out if not

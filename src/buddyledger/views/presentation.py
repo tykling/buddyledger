@@ -1,13 +1,16 @@
 from collections import OrderedDict
+from decimal import *
 
 def ResultToMatrix(result,userdict,personcounterdict):
     ### build all zero matrix table (dict of dicts)
     table = OrderedDict()
-    
+    resultdict = OrderedDict()
+	
     ### first create the top <th> row with all the names
     temp = OrderedDict()
     temp[0] = "n/a" # the 0,0 field is the upper left position
     counter=0
+	
     for user in userdict:
         counter += 1
         temp[counter] = "%s pay" % user
@@ -41,12 +44,18 @@ def ResultToMatrix(result,userdict,personcounterdict):
     for payerid, receiverdict in result.iteritems():
         ### find the counter number of this payerid
         payernumber = personcounterdict[payerid]
-        for receiverid, amount in receiverdictiteritems():
+        for receiverid, amount in receiverdict.iteritems():
             ### add to totals for this payer
-            payertotal[payernumber]+=amount
+			if payernumber in payertotal:
+                payertotal[payernumber] += amount
+            else:
+                payertotal[payernumber] = amount
             receivernumber = personcounterdict[receiverid]
             ### add to totals for this receiver
-            receivertotal[receivernumber]+=amount
+            if receivernumber in receivertotal:
+				receivertotal[receivernumber]+=amount
+			else:
+				receivertotal[receivernumber]=amount
             resultdict[receivernumber][payernumber] = amount
                     
     ### add totals columns and row to the matrix (bottom row and rightmost column)

@@ -11,17 +11,18 @@ def ConvertCurrency(amount,fromcurrencyid,tocurrencyid):
     return returnamount
 
 def conv_frac_to_decimal(f, precision):
-    if f == 0: return decimal.Decimal("0")
+    if f == 0: return Decimal("0")
     s = str(int(f)) + "."
     f -= int(f)
     with decimal.localcontext() as ctx:
         ctx.prec = precision
-        s += str(decimal.Decimal(f.numerator) / f.denominator).partition(".")[2]
-    return decimal.Decimal(s)
+        s += str(Decimal(f.numerator) / f.denominator).partition(".")[2]
+    return Decimal(s)
     
 def resultdict_to_decimal(resultdict):
-    for payerid, receiverdict in resultdict.iteritems():
-        for receiverid, amount in receiverdict:
+    returndict = dict()
+	for payerid, receiverdict in resultdict.iteritems():
+        for receiverid, amount in receiverdict.iteritems():
             receiverdict[receiverid] = conv_frac_to_decimal(amount,2)
         returndict[payerid] = receiverdict
     return returndict
