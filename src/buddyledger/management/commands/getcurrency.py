@@ -3,10 +3,11 @@ from buddyledger.models import Currency
 from decimal import *
 import urllib, json
 import xml.etree.ElementTree as etree
+
 try:
-	from urllib.request import urlopen
+    from urllib.request import urlopen
 except ImportError:
-	from urllib import urlopen
+    from urllib import urlopen
 
 class Command(BaseCommand):
     help = 'Gets currency exchange rates from http://nationalbanken.dk/dndk/valuta.nsf/valuta.xml and BTC rates from Bitstamp'
