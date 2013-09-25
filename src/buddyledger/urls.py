@@ -1,9 +1,9 @@
 from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
-    ### frontpage and other pages
-    url(r'^$', 'buddyledger.presentation.Frontpage'),
-    url(r'^usage/$', 'buddyledger.presentation.ShowUsage'),
+    ### frontpage and other static pages
+    url(r'^$', 'buddyledger.staticpages.Frontpage'),
+    url(r'^usage/$', 'buddyledger.staticpages.ShowUsage'),
     
     ### ledger
     url(r'^ledger/create/$', 'buddyledger.ledger.CreateLedger'),
