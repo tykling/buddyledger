@@ -5,7 +5,7 @@ class Ledger(models.Model):
     name = models.CharField(max_length=100)
     currency = models.ForeignKey('Currency')
     closed = models.BooleanField(default=False,editable=False)
-    calcmethod = models.CharField(max_length=20)
+    calcmethod = models.CharField(max_length=20,editable=False,default="optimized")
     def __unicode__(self):
         return self.name
 
