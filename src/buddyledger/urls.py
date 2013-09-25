@@ -2,29 +2,29 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     ### frontpage and other static pages
-    url(r'^$', 'buddyledger.staticpages.Frontpage'),
-    url(r'^usage/$', 'buddyledger.staticpages.ShowUsage'),
+    url(r'^$', 'buddyledger.views.Frontpage'),
+    url(r'^usage/$', 'buddyledger.views.ShowUsage'),
     
     ### ledger
-    url(r'^ledger/create/$', 'buddyledger.ledger.CreateLedger'),
-    url(r'^ledger/(?P<ledgerid>\d+)/$', 'buddyledger.ledger.ShowLedger'),
-    url(r'^ledger/(?P<ledgerid>\d+)/edit/$', 'buddyledger.ledger.EditLedger'),
-    url(r'^ledger/(?P<ledgerid>\d+)/close/$', 'buddyledger.ledger.CloseLedger'),
+    url(r'^ledger/create/$', 'buddyledger.views.CreateLedger'),
+    url(r'^ledger/(?P<ledgerid>\d+)/$', 'buddyledger.views.ShowLedger'),
+    url(r'^ledger/(?P<ledgerid>\d+)/edit/$', 'buddyledger.views.EditLedger'),
+    url(r'^ledger/(?P<ledgerid>\d+)/close/$', 'buddyledger.views.CloseLedger'),
 
     ### person
-    url(r'^ledger/(?P<ledgerid>\d+)/addperson/$', 'buddyledger.person.AddPerson'),
-    url(r'^person/(?P<personid>\d+)/edit/$', 'buddyledger.person.EditPerson'),
-    url(r'^person/(?P<personid>\d+)/remove/$', 'buddyledger.person.RemovePerson'),
+    url(r'^ledger/(?P<ledgerid>\d+)/addperson/$', 'buddyledger.views.AddPerson'),
+    url(r'^person/(?P<personid>\d+)/edit/$', 'buddyledger.views.EditPerson'),
+    url(r'^person/(?P<personid>\d+)/remove/$', 'buddyledger.views.RemovePerson'),
     
     ### expense
-    url(r'^ledger/(?P<ledgerid>\d+)/addexpense/$', 'buddyledger.expense.AddExpense'),
-    url(r'^expense/(?P<expenseid>\d+)/edit/$', 'buddyledger.expense.EditExpense'),
-    url(r'^expense/(?P<expenseid>\d+)/remove/$', 'buddyledger.expense.RemoveExpense'),
-    url(r'^expense/(?P<expenseid>\d+)/addperson/(?P<personid>\d+)/$', 'buddyledger.expense.ExpenseAddPerson'),
-    url(r'^expense/(?P<expenseid>\d+)/removeperson/(?P<personid>\d+)/$', 'buddyledger.expense.ExpenseRemovePerson'),
+    url(r'^ledger/(?P<ledgerid>\d+)/addexpense/$', 'buddyledger.views.AddExpense'),
+    url(r'^expense/(?P<expenseid>\d+)/edit/$', 'buddyledger.views.EditExpense'),
+    url(r'^expense/(?P<expenseid>\d+)/remove/$', 'buddyledger.views.RemoveExpense'),
+    url(r'^expense/(?P<expenseid>\d+)/addperson/(?P<personid>\d+)/$', 'buddyledger.views.ExpenseAddPerson'),
+    url(r'^expense/(?P<expenseid>\d+)/removeperson/(?P<personid>\d+)/$', 'buddyledger.views.ExpenseRemovePerson'),
 
     ### payments
-    url(r'^expense/(?P<expenseid>\d+)/addpayment/$', 'buddyledger.payment.AddPayment'),
-    url(r'^payment/(?P<paymentid>\d+)/edit/$', 'buddyledger.payment.EditPayment'),
-    url(r'^payment/(?P<paymentid>\d+)/remove/$', 'buddyledger.payment.RemovePayment'),
+    url(r'^expense/(?P<expenseid>\d+)/addpayment/$', 'buddyledger.views.AddPayment'),
+    url(r'^payment/(?P<paymentid>\d+)/edit/$', 'buddyledger.views.EditPayment'),
+    url(r'^payment/(?P<paymentid>\d+)/remove/$', 'buddyledger.views.RemovePayment'),
 )
