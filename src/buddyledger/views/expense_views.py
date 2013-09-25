@@ -6,6 +6,8 @@ from django.shortcuts import render, render_to_response
 from buddyledger.models import Ledger, Person, Expense, Payment, Currency
 from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, PaymentForm
 
+from buddyledger.views.misc import ConvertCurrency
+
 def AddExpense(request, ledgerid=0):
     ### check if the ledger exists, bail out if not
     try:
