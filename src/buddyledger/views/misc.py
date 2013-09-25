@@ -21,7 +21,7 @@ def conv_frac_to_decimal(f, precision):
     
 def resultdict_to_decimal(resultdict):
     returndict = dict()
-	for payerid, receiverdict in resultdict.iteritems():
+    for payerid, receiverdict in resultdict.iteritems():
         for receiverid, amount in receiverdict.iteritems():
             receiverdict[receiverid] = conv_frac_to_decimal(amount,2)
         returndict[payerid] = receiverdict
