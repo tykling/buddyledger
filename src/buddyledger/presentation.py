@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 def ResultToMatrix(result,userdict,personcounterdict):
     ### build all zero matrix table (dict of dicts)
     table = OrderedDict()

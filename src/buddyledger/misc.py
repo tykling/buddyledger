@@ -1,3 +1,6 @@
+from decimal import *
+from buddyledger.models import Ledger, Person, Expense, Payment, Currency
+
 def ConvertCurrency(amount,fromcurrencyid,tocurrencyid):
     fromcurrency = Currency.objects.get(pk=fromcurrencyid)
     tocurrency = Currency.objects.get(pk=tocurrencyid)
