@@ -3,6 +3,15 @@
 <h2>Create new ledger</h2>
 <p class="lead">To create a new ledger you need to come up with a <i>name</i> and choose a <i>native currency</i> for the ledger.</p>
 
+{% if form.errors %}
+	<h3>Form errors</h3>
+	<ol>
+		{% for error in form.errors %}
+			<li><strong>{{ error|escape }}</strong></li>
+		{% endfor %}
+	</ol>
+{% endif %}
+	
 <form method="POST">
     {% csrf_token %}
     <table>
