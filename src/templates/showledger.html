@@ -17,20 +17,22 @@
 
     <div class="tab-content">
         <div id="main" class="tab-pane active">
-            <h2>{{ ledger.name }}</h2>
+            <h4>{{ ledger.name }}</h4>
             <span class="label label-success">Native currency: {{ ledger.currency }}</span>
             <p>This is <b>BuddyLedger</b>, a system to keep track of expenses between groups of people. 
             Given a list of people and expenses this system will calculate the final breakdown so you can see who owes what to whom.</p>
             
-            <h2>Statistics</h2>
+            <h4>Statistics</h4>
             <p>This ledger has <b>{{ people|length }}</b> people and <b>{{ expenses|length }}</b> with a total of <b>{{ payments|length }}</b> payments.</p>
             
-            <h2>Advanced Settings</h2>
+            <!--
+			<h2>Advanced Settings</h2>
             <p>You can change the algorithm used to calculate the final result. The default should be fine for most uses.</p>
             <a href="/ledger/{{ ledger.id }}/changemethod/" class="btn btn-inverse"><i class="icon-wrench"></i> Change method</a>
+			-->
 
             
-            <h2>Close Ledger</h2>
+            <h4>Close Ledger</h4>
             <p>When all expenses and payments has been added to the ledger it should be closed before any backpayments can be registered.</p>
             <a href="/ledger/{{ ledger.id }}/close/" class="btn btn-danger"><i class="icon-check"></i> Close Ledger</a>
         </div>
