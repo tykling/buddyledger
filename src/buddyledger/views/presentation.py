@@ -41,7 +41,7 @@ def GetEmptyMatrix(userdict):
                 temp[payerid] = Decimal(0)
         
         ### add this row to the table
-        resultdict[receivername] = temp    
+        resultdict[receiverid] = temp    
     return resultdict
 
 
