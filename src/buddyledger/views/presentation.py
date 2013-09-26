@@ -23,7 +23,7 @@ def GetEmptyMatrix(userdict):
     temp[0] = "n/a" # the 0,0 field is the upper left position
 
     for userid,username in userdict.iteritems():
-        temp[username] = "%s pay" % username
+        temp[userid] = "%s pay" % username
     resultdict[0] = temp
     
     ### now create a row per user
@@ -67,7 +67,7 @@ def PopulateMatrix(result,resultdict):
 
 
     ### add totals columns and row to the matrix (bottom row and rightmost column)
-    for receivername,row in resultdict.iteritems():
+    for receiverid,row in resultdict.iteritems():
         
         ### add the rightmost column for this row
         if receivername == 0:
@@ -75,7 +75,7 @@ def PopulateMatrix(result,resultdict):
             resultdict[0]['total'] = "Total Receive"
         else:
             ### add the rightmost "total receive" column for this row
-            resultdict[receivername]['total'] = receivertotal[receiverid]
+            resultdict[receiverid]['total'] = receivertotal[receiverid]
 
     ### create the new bottom row for the "total pay" amounts
     temp = OrderedDict()
