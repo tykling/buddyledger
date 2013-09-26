@@ -1,7 +1,19 @@
 from collections import OrderedDict
 from decimal import *
 
+
 def ResultToMatrix(result,userdict):
+    ### first get an empty matrix (dict of dicts)
+    resultdict = GetEmptyMatrix(userdict)
+
+    ### now populate the matrix with the results
+    resultdict = PopulateMatrix(result,resultdict)
+
+    ### return the finished matrix
+    return resultdict
+
+
+def GetEmptyMatrix(userdict):
     ### build all zero matrix table (dict of dicts)
     table = OrderedDict()
     resultdict = OrderedDict()
@@ -9,36 +21,33 @@ def ResultToMatrix(result,userdict):
     ### first create the top <th> row with all the names
     temp = OrderedDict()
     temp[0] = "n/a" # the 0,0 field is the upper left position
-    counter=0
 
-    for user in userdict:
-        counter += 1
-        temp[counter] = "%s pay" % user
+    for userid,username in userdict.iteritems():
+        temp[username] = "%s pay" % username
     resultdict[0] = temp
     
     ### now create a row per user
-    rowcounter=0
-    for user in userdict:
-        rowcounter += 1
+    for receiverid,receivername in userdict.iteritems():
         ### create new empty table row
         temp = OrderedDict()
-        ### the leftmost column with the name
-        temp[0] = "%s receive" % user
+        ### add the rows leftmost column with the name
+        temp[0] = "%s receive" % receivername
         
         ### loop through users, add Decimal(0) or "n/a"
-        colcounter=0
-        for tempuser in userdict:
-            colcounter += 1
-            if user == tempuser:
-                temp[colcounter] = "n/a"
+        for payerid,payername in userdict.iteritems():
+            if receivername == payername:
+                temp[payerid] = "n/a"
             else:
-                temp[colcounter] = Decimal(0)
+                temp[payerid] = Decimal(0)
         
         ### add this row to the table
-        resultdict[rowcounter] = temp
+        resultdict[receivername] = temp    
+    return resultdict
 
-    ### now loop through the result and insert the debts into the matrix,
-    ### and calculate totals while we are here
+
+def PopulateMatrix(result,resultdict):
+    ### loop through the result and insert the debts into the matrix,
+    ### and also calculate the totals while we are here
     payertotal = OrderedDict()
     receivertotal = OrderedDict()
     for payerid, receiverdict in result.iteritems():
@@ -55,28 +64,28 @@ def ResultToMatrix(result,userdict):
             else:
                 receivertotal[receiverid]=amount
             resultdict[receiverid][payerid] = amount
-                    
-    ### add totals columns and row to the matrix (bottom row and rightmost column)
-    counter=0
-    for number,row in resultdict.iteritems():
-        ### the position of the rightmost column, plus one
-        pos = len(row)+1
 
-        if counter == 0:
+
+    ### add totals columns and row to the matrix (bottom row and rightmost column)
+    for receivername,row in resultdict.iteritems():
+        
+        ### add the rightmost column for this row
+        if receivername == 0:
             ### this is the first row, just add <th> for the rightmost totals column
-            row[pos] = "Total Receive"
+            resultdict[0]['total'] = "Total Receive"
         else:
             ### add the rightmost "total receive" column for this row
-            row[pos] = receivertotal[counter-1]
-        counter += 1
+            resultdict[receivername]['total'] = receivertotal[receiverid]
 
     ### create the new bottom row for the "total pay" amounts
     temp = OrderedDict()
     temp[0] = "Total Pay"
-    for number,amount in payertotal.iteritems():
-        temp[number+1] = amount
-
+    for payerid,amount in payertotal.iteritems():
+        temp[payerid] = amount
+    
+    ### return the populated matrix
     return resultdict
+
 
 def ResultToTable(result,userdict):
     # not implemented yet
