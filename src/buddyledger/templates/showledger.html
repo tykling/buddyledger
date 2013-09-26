@@ -26,10 +26,10 @@
             <p>This ledger has <b>{{ people|length }}</b> people and <b>{{ expenses|length }}</b> with a total of <b>{{ payments|length }}</b> payments.</p>
             
             <!--
-			<h2>Advanced Settings</h2>
+            <h2>Advanced Settings</h2>
             <p>You can change the algorithm used to calculate the final result. The default should be fine for most uses.</p>
             <a href="/ledger/{{ ledger.id }}/changemethod/" class="btn btn-inverse"><i class="icon-wrench"></i> Change method</a>
-			-->
+            -->
 
             
             <h4>Close Ledger</h4>
@@ -239,4 +239,19 @@
         </div>
     </div><!-- /.tab-content -->
 </div><!-- /.tabbable -->
+
+<!-- make tabs bookmarkable and linkable -->
+<script language="javascript">
+$(document).ready(function () {
+    if (location.hash.substr(0,2) == "#!") {
+        $("a[href='#" + location.hash.substr(2) + "']").tab("show");
+    }
+    $("a[data-toggle='tab']").on("shown", function (e) {
+        var hash = $(e.target).attr("href");
+        if (hash.substr(0,1) == "#") {
+            location.replace("#!" + hash.substr(1));
+        }
+    });
+});
+</script>
 {% endblock %}
