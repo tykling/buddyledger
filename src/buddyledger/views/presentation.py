@@ -70,7 +70,7 @@ def PopulateMatrix(result,resultdict):
     for receiverid,row in resultdict.iteritems():
         
         ### add the rightmost column for this row
-        if receivername == 0:
+        if receiverid == 0:
             ### this is the first row, just add <th> for the rightmost totals column
             resultdict[0]['total'] = "Total Receive"
         else:
