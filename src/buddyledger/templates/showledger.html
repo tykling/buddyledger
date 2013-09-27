@@ -132,21 +132,21 @@
                 {% for rowkey,tablerow in matrixdict.items %}
                     <tr>
                         {% if rowkey == 0 %}
-                            {% if tablerow|keyvalue:rowkey == "n/a" %}
-                                <th style="color: black; background-color: black">&nbsp;</th>
-                            {% else %}
-                                {% for cellkey,tablecell in tablerow.items %}
+                            {% for cellkey,tablecell in tablerow.items %}
+                                {% if tablecell == "n/a" %}
+                                    <th style="color: black; background-color: black">&nbsp;</th>
+                                {% else %}
                                     <th>{{ tablecell }}</th>
-                                {% endfor %}
-                            {% endif %}
+                                {% endif %}
+                            {% endfor %}
                         {% else %}
-                            {% if tablerow|keyvalue:rowkey == "n/a" %}
-                                <td style="color: black; background-color: black">&nbsp;</td>
-                            {% else %}
-                                {% for cellkey,tablecell in tablerow.items %}
+                            {% for cellkey,tablecell in tablerow.items %}
+                                {% if tablecell == "n/a" %}
+                                    <td style="color: black; background-color: black">&nbsp;</td>
+                                {% else %}
                                     <td>{{ tablecell }}</td>
-                                {% endfor %}
-                            {% endif %}
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
                     </tr>
                 {% endfor %}

@@ -1,16 +1,24 @@
+### datatypes
 from collections import OrderedDict
 from fractions import Fraction
 
+### django functions
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 
+### django models and forms
 from buddyledger.models import Ledger, Person, Expense, Payment, Currency
 from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, PaymentForm
 
+### misc convenience functions
 from buddyledger.views.misc import ConvertCurrency, resultdict_to_decimal
+
+### calculation methods
 from buddyledger.views.graphbuilder import solve_mincost_problem_for_expenses
-from buddyledger.views.presentation import ResultToMatrix
 from buddyledger.views.basiccalc import BasicCalc
+
+### result layouts
+from buddyledger.views.resultmatrix import ResultToMatrix
 
 def CreateLedger(request):
     if request.method == 'POST':
