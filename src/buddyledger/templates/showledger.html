@@ -8,10 +8,13 @@
         <li class="active"><a href="#main" data-toggle="tab">Main</a></li>
         <li><a href="#people" data-toggle="tab">People</a></li>
         <li><a href="#expenses" data-toggle="tab">Expenses</a></li>
-            {% if expenses and resultdict.total %}
-                <li><a href="#resulttable" data-toggle="tab">Result (table)</a></li>
-                <li><a href="#resultlist" data-toggle="tab">Result (list)</a></li>
-            {% endif %}
+        {% if matrixdict %}
+            <li><a href="#resulttable" data-toggle="tab">Result (table)</a></li>
+        {% endif %}
+        
+        {% if tabledict %}
+            <li><a href="#resultlist" data-toggle="tab">Result (list)</a></li>
+        {% endif %}
         <li><a href="#debug" data-toggle="tab">Debug info</a></li>
     </ul>
 
@@ -23,7 +26,7 @@
             Given a list of people and expenses this system will calculate the final breakdown so you can see who owes what to whom.</p>
             
             <h4>Statistics</h4>
-            <p>This ledger has <b>{{ people|length }}</b> people and <b>{{ expenses|length }}</b> with a total of <b>{{ payments|length }}</b> payments.</p>
+            <p>This ledger has <b>{{ people|length }}</b> people associated, and <b>{{ expenses|length }}</b> expenses with a total of <b>{{ payments|length }}</b> payments.</p>
             
             <!--
             <h2>Advanced Settings</h2>
@@ -235,7 +238,7 @@
 
         <div id="debug" class="tab-pane">
           <h4>Debug</h4>
-          <p><pre>{{ data }}</pre></p>
+          <p><pre>{{ debugdata }}</pre></p>
         </div>
     </div><!-- /.tab-content -->
 </div><!-- /.tabbable -->
@@ -243,13 +246,13 @@
 <!-- make tabs bookmarkable and linkable -->
 <script language="javascript">
     $(document).ready(function () {
-        if (location.hash.substr(0,2) == "#!") {
+        if (location.hash.substr(0,1) == "#") {
             $("a[href='#" + location.hash.substr(2) + "']").tab("show");
         }
         $("a[data-toggle='tab']").on("shown", function (e) {
             var hash = $(e.target).attr("href");
             if (hash.substr(0,1) == "#") {
-                location.replace("#!" + hash.substr(1));
+                location.replace("#" + hash.substr(1));
             }
         });
     });

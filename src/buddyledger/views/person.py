@@ -19,7 +19,7 @@ def AddPerson(request,ledgerid=0):
         if form.is_valid(): # All validation rules pass
             person = Person(ledger_id=ledgerid,name=form['name'].data)
             person.save() # save the new person
-            return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page
+            return HttpResponseRedirect('/ledger/%s/#people' % ledgerid) # return to the ledger page
         else:
             form = PersonForm(request.POST)
     else:
@@ -43,7 +43,7 @@ def EditPerson(request, personid=0):
         if form.is_valid(): # All validation rules pass
             person.name = form['name'].data
             person.save()
-            return HttpResponseRedirect('/ledger/%s' % person.ledger.id) # return to the ledger page
+            return HttpResponseRedirect('/ledger/%s/#people' % person.ledger.id) # return to the ledger page
         else:
             form = PersonForm(request.POST)
     else:
@@ -63,6 +63,5 @@ def RemovePerson(request, personid=0):
         response = render_to_response('persondoesnotexist.html')
         return response
 
-    ledgerid = person.ledger.id
     person.delete()
-    return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page
+    return HttpResponseRedirect('/ledger/%s/#people' % person.ledger.id) # return to the ledger page
