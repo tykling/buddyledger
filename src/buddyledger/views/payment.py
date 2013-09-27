@@ -60,6 +60,7 @@ def EditPayment(request, paymentid=0):
     else:
         form = PaymentForm(instance=payment)
 
+    form.fields["person"].queryset = Person.objects.filter(ledger_id=expense.ledger.id)
     return render(request, 'editpayment.html', {
         'form': form,
         'payment': payment
