@@ -133,7 +133,7 @@
                 <tr>
                     {% if uid == "0" %}
                         {% comment %}<!-- This is the top row -->{% endcomment %}
-                        {% if tablerow|0 == "n/a" %}
+                        {% if tablerow|keyvalue:0 == "n/a" %}
                             <th style="color: black; background-color: black">&nbsp;</th>
                         {% else %}
                             {% for field in tablerow %}
@@ -141,7 +141,7 @@
                             {% endfor %}
                         {% endif %}
                     {% else %}
-                        {% if tablerow|0 == "n/a" %}
+                        {% if tablerow|keyvalue:0 == "n/a" %}
                             <td style="color: black; background-color: black">&nbsp;</td>
                         {% else %}
                             {% for field in tablerow %}
