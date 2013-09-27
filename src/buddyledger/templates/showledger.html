@@ -144,7 +144,11 @@
                                 {% if tablecell == "n/a" %}
                                     <td style="color: black; background-color: black">&nbsp;</td>
                                 {% else %}
-                                    <td>{{ tablecell }}</td>
+                                    {% if cellkey == 0 or rowkey == 'total' or cellkey == 'total' %}
+                                        <td><b>{{ tablecell }}</b></td>
+                                    {% else %}
+                                        <td>{{ tablecell }}</td>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
