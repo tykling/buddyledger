@@ -129,22 +129,22 @@
         <div id="resulttable" class="tab-pane">
             {% comment %}<!-- Result table -->{% endcomment %}
             <table class="table table-bordered">
-                {% for key,value in matrixdict.items %}
+                {% for rowkey,tablerow in matrixdict.items %}
                     <tr>
-                        {% if key == 0 %}
-                            {% if tablerow|keyvalue:key == "n/a" %}
+                        {% if rowkey == 0 %}
+                            {% if tablerow|keyvalue:rowkey == "n/a" %}
                                 <th style="color: black; background-color: black">&nbsp;</th>
                             {% else %}
-                                {% for subkey,subvalue in tablerow.items %}
-                                    <th>{{ subvalue }}</th>
+                                {% for cellkey,tablecell in tablerow.items %}
+                                    <th>{{ tablecell }}</th>
                                 {% endfor %}
                             {% endif %}
                         {% else %}
-                            {% if tablerow|keyvalue:key == "n/a" %}
+                            {% if tablerow|keyvalue:rowkey == "n/a" %}
                                 <td style="color: black; background-color: black">&nbsp;</td>
                             {% else %}
-                                {% for subkey,subvalue in tablerow.items %}
-                                    <td>{{ subvalue }}</td>
+                                {% for cellkey,tablecell in tablerow.items %}
+                                    <td>{{ tablecell }}</td>
                                 {% endfor %}
                             {% endif %}
                         {% endif %}
