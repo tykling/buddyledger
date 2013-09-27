@@ -102,6 +102,7 @@ def ShowLedger(request, ledgerid=0):
             'debugdata': calcdata,
             'matrixdict': matrixdict,
             'tabledict': tabledict,
+            'userdict': userdict,
             'errorlist': errorlist
         })
     else:
