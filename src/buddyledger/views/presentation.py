@@ -77,12 +77,14 @@ def PopulateMatrix(result,resultdict):
             ### add the rightmost "total receive" column for this row
             resultdict[receiverid]['total'] = receivertotal[receiverid]
 
-    ### create the new bottom row for the "total pay" amounts
+    ### create the new bottom row for the "total pay" amounts and add it to resultdict
     temp = OrderedDict()
     temp[0] = "Total Pay"
     for payerid,amount in payertotal.iteritems():
         temp[payerid] = amount
-    
+    temp['total'] = 'n/a'
+    resultdict['total'] = temp
+
     ### return the populated matrix
     return resultdict
 

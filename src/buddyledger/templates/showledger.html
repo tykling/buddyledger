@@ -129,28 +129,27 @@
         <div id="resulttable" class="tab-pane">
             {% comment %}<!-- Result table -->{% endcomment %}
             <table class="table table-bordered">
-            {% for uid,tablerow in matrixdict.items %}
-                <tr>
-                    {% if uid == "0" %}
-                        {% comment %}<!-- This is the top row -->{% endcomment %}
-                        {% if tablerow|keyvalue:0 == "n/a" %}
-                            <th style="color: black; background-color: black">&nbsp;</th>
+                {% for key,value in matrixdict.items %}
+                    <tr>
+                        {% if key == 0 %}
+                            {% if tablerow|keyvalue:key == "n/a" %}
+                                <th style="color: black; background-color: black">&nbsp;</th>
+                            {% else %}
+                                {% for subkey,subvalue in tablerow.items %}
+                                    <th>{{ subvalue }}</th>
+                                {% endfor %}
+                            {% endif %}
                         {% else %}
-                            {% for field in tablerow %}
-                                <th>{{ field }}</th>
-                            {% endfor %}
+                            {% if tablerow|keyvalue:key == "n/a" %}
+                                <td style="color: black; background-color: black">&nbsp;</td>
+                            {% else %}
+                                {% for subkey,subvalue in tablerow.items %}
+                                    <td>{{ subvalue }}</td>
+                                {% endfor %}
+                            {% endif %}
                         {% endif %}
-                    {% else %}
-                        {% if tablerow|keyvalue:0 == "n/a" %}
-                            <td style="color: black; background-color: black">&nbsp;</td>
-                        {% else %}
-                            {% for field in tablerow %}
-                                <td>{{ field }}</td>
-                            {% endfor %}
-                        {% endif %}
-                    {% endif %}
-                </tr>
-            {% endfor %}
+                    </tr>
+                {% endfor %}
             </table>
         </div>
 
