@@ -25,11 +25,17 @@ class Expense(models.Model):
     currency = models.ForeignKey('Currency')
     amount_native = models.DecimalField(max_digits=20, decimal_places=2, editable=False)
     ledger = models.ForeignKey('Ledger',editable=False)
-    people = models.ManyToManyField('Person',null=True)
+    people = models.ManyToManyField('Person',through='ExpensePart',null=True)
     def __unicode__(self):
         return self.name
     class Meta:
         ordering = ('id',)
+
+
+class ExpensePart(models.Model):
+    expense = models.ForeignKey(Expense)
+    person = models.ForeignKey(Person)
+    amount = models.DecimalField(max_digits=20, decimal_places=2,null=True,blank=True)
 
 
 class Payment(models.Model):

@@ -7,7 +7,7 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 
 ### django models and forms
-from buddyledger.models import Ledger, Person, Expense, Payment, Currency
+from buddyledger.models import Ledger, Person, Expense, ExpensePart, Payment, Currency
 from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, PaymentForm
 
 ### misc convenience functions
@@ -68,9 +68,10 @@ def ShowLedger(request, ledgerid=0):
             ### no calculation if the payments dont add up to the total expense
             if totalamount == expense.amount_native:
                 showresult = True
-                whoshouldpay = []
+                whoshouldpay = dict()
                 for person in expense.people.all():
-                    whoshouldpay.append(person.id)
+                    expensepart = ExpensePart.objects.get(expense=expense, person=person)
+                    whoshouldpay[person.id]=expensepart.amount
                 calcdata.append(dict(whopaid=paymentlist, whoshouldpay=whoshouldpay))
             elif totalamount < expense.amount_native:
                 errorlist.append("The expense %s was not included in the calculation because the sum of the payments (%s) do not add up to the total expense (%s)" % (expense.name,totalamount,expense.amount_native))
