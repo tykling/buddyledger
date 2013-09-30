@@ -9,7 +9,7 @@
         <li><a href="#people" data-toggle="tab">People</a></li>
         <li><a href="#expenses" data-toggle="tab">Expenses</a></li>
         {% if matrixdict %}
-            <li><a href="#resulttable" data-toggle="tab">Result (table)</a></li>
+            <li><a href="#resultmatrix" data-toggle="tab">Result (matrix)</a></li>
         {% endif %}
         
         {% if tabledict %}
@@ -126,8 +126,7 @@
             {% endif %}
         </div>
 
-        <div id="resulttable" class="tab-pane">
-            {% comment %}<!-- Result table -->{% endcomment %}
+        <div id="resultmatrix" class="tab-pane">
             <table class="table table-bordered">
                 {% for rowkey,tablerow in matrixdict.items %}
                     <tr>
@@ -144,6 +143,10 @@
                                 {% if tablecell == "n/a" %}
                                     <td style="color: black; background-color: black">&nbsp;</td>
                                 {% else %}
+                                    {% if tablecell == 0 %}
+                                        <td style="background-color: darkgrey;">
+                                    {% else %}<td>{% endif %}
+
                                     {% if cellkey == 0 or rowkey == 'total' or cellkey == 'total' %}
                                         <td><b>{{ tablecell }}</b></td>
                                     {% else %}
@@ -156,6 +159,7 @@
                 {% endfor %}
             </table>
         </div>
+
 
         <div id="resultlist" class="tab-pane">
             <table class="table table-hover table-bordered">
