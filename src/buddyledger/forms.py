@@ -1,4 +1,5 @@
 from django.forms import ModelForm, ValidationError
+from django import forms
 from buddyledger.models import Ledger
 from buddyledger.models import Person
 from buddyledger.models import Expense
@@ -25,11 +26,11 @@ class ExpenseForm(ModelForm):
 
         for person in people:
             ### does this person have a part in this expense
-            self.fields['person_expensepart_%s' % person.id] = forms.CheckboxInput(label=person.name,attrs={'id': person.id})
+            self.fields['person_expensepart_%s' % person.id] = forms.BooleanField(label=person.name,required=False, widget=CheckboxInput(attrs={'id': person.id}))
             ### is the amount to be calculated or custom
-            self.fields['person_autoamount_%s' % person.id] = forms.CheckboxInput(label="autoamount",attrs={'id': person.id})
+            self.fields['person_autoamount_%s' % person.id] = forms.BooleanField(label="autoamount",required=False, widget=CheckboxInput(attrs={'id': person.id}))
             ### field for specifying custom amount 
-            self.fields['person_customamount_%s' % person.id] = forms.TextInput(label="amount",attrs={'id': person.id})
+            self.fields['person_customamount_%s' % person.id] = forms.CharField(label="amount", widget=forms.TextInput(attrs={'id': person.id}))
 
     def get_expense_parts(self):
         for fieldname, value in self.cleaned_data.items():
