@@ -9,14 +9,10 @@ class LedgerForm(ModelForm):
     class Meta:
         model = Ledger
 
+
 class PersonForm(ModelForm):
     class Meta:
         model = Person
-
-
-class ExpenseForm(ModelForm):
-    class Meta:
-        model = Expense
 
 
 class PaymentForm(ModelForm):
