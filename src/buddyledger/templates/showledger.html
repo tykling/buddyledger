@@ -145,12 +145,14 @@
                                 {% else %}
                                     {% if tablecell == 0 %}
                                         <td style="background-color: darkgrey;">
-                                    {% else %}<td>{% endif %}
+                                    {% else %}
+                                        <td>
+                                    {% endif %}
 
                                     {% if cellkey == 0 or rowkey == 'total' or cellkey == 'total' %}
-                                        <td><b>{{ tablecell }}</b></td>
+                                        <b>{{ tablecell }}</b></td>
                                     {% else %}
-                                        <td>{{ tablecell }}</td>
+                                        {{ tablecell }}</td>
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}
@@ -212,14 +214,12 @@
         <div id="debug" class="tab-pane">
             <h4>Debug calculation input</h4>
             <p><pre>{{ debugdata }}</pre></p>
-            <h4>Debug expenses</h4>
-            <p><pre>{{ expenses }}</pre></p>
-            <h4>Debug payments</h4>
-            <p><pre>{{ payments }}</pre></p>
-            <h4>Debug matrix result</h4>
-            <p><pre>{{ matrixdict }}</pre></p>
+
             <h4>Debug userdict</h4>
             <p><pre>{{ userdict }}</pre></p>
+
+            <h4>Debug matrix result</h4>
+            <p><pre>{{ matrixdict }}</pre></p>
 
         </div>
     </div><!-- /.tab-content -->
