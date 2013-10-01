@@ -17,20 +17,25 @@ class PersonForm(ModelForm):
 
 
 class ExpenseForm(ModelForm):
-    class Meta:
-        model = Expense
+    name = forms.CharField(max_length=30)
+    amount = forms.CharField(max_length=10)
 
     def __init__(self, *args, **kwargs):
         people = kwargs.pop('people')
         super(ExpenseForm, self).__init__(*args, **kwargs)
-
+        
+        ### add currency selectbox
+        self.fields['currency'] = forms.SelectField(choices=( (x.id, x.name) for x in Currency.objects.all()))
+        
+        ### add expensepart form elements
         for person in people:
             ### does this person have a part in this expense
-            self.fields['person_expensepart_%s' % person.id] = forms.BooleanField(label=person.name,required=False, widget=CheckboxInput(attrs={'id': person.id}))
+            self.fields['person_expensepart_%s' % person.id] = forms.BooleanField(label=person.name,required=False, widget=forms.CheckboxInput(attrs={'id': person.id}))
             ### is the amount to be calculated or custom
-            self.fields['person_autoamount_%s' % person.id] = forms.BooleanField(label="autoamount",required=False, widget=CheckboxInput(attrs={'id': person.id}))
+            self.fields['person_autoamount_%s' % person.id] = forms.BooleanField(label="autoamount",required=False, widget=forms.CheckboxInput(attrs={'id': person.id}))
             ### field for specifying custom amount 
             self.fields['person_customamount_%s' % person.id] = forms.CharField(label="amount", widget=forms.TextInput(attrs={'id': person.id}))
+        
 
     def get_expense_parts(self):
         for fieldname, value in self.cleaned_data.items():
