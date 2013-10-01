@@ -21,7 +21,7 @@ class ExpenseForm(forms.Form):
         super(ExpenseForm, self).__init__(*args, **kwargs)
         
         ### add currency selectbox
-        self.fields['currency'] = forms.ChoiceField(choices=((currency.id, currency.name) for currency in Currency.objects.all()))
+        self.fields['currency'] = forms.ChoiceField(choices=((currency.id, currency.iso4217_code) for currency in Currency.objects.all()))
         
         ### add expensepart form elements
         for person in people:
