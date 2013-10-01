@@ -15,6 +15,11 @@ class PersonForm(ModelForm):
         model = Person
 
 
+class ExpenseForm(ModelForm):
+    class Meta:
+        model = Expense
+
+
 class PaymentForm(ModelForm):
     class Meta:
         model = Payment

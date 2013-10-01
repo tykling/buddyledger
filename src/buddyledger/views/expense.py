@@ -2,10 +2,10 @@ from decimal import *
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response
-from django.forms.models import modelformset_factory
+from django.forms.models import inlineformset_factory
 
 from buddyledger.models import Ledger, Person, Expense, Payment, Currency
-from buddyledger.forms import LedgerForm, PersonForm, PaymentForm
+from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, PaymentForm
 
 from buddyledger.views.misc import ConvertCurrency
 
@@ -17,25 +17,24 @@ def AddExpense(request, ledgerid=0):
         response = render_to_response('ledgerdoesnotexist.html')
         return response
     
-    ExpenseFormSet = modelformset_factory(Expense)
     if request.method == 'POST':
-        formset = ExpenseFormSet(request.POST)
-        if formset.is_valid(): # All validation rules pass
-            expense = Expense(ledger_id=ledgerid,name=formset['name'].data,amount=Decimal(formset['amount'].data),amount_native=ConvertCurrency(Decimal(formset['amount'].data),formset['currency'].data,ledger.currency.id),currency_id=formset['currency'].data)
+        form = ExpenseForm(request.POST) # A form bound to the POST data
+        if form.is_valid(): # All validation rules pass
+            expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=Decimal(form['amount'].data),amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,ledger.currency.id),currency_id=form['currency'].data)
             expense.save() # save the new expense
-            for personid in formset['people'].data:
+            for personid in form['people'].data:
                 person = Person.objects.get(pk = personid)
                 expense.people.add(person)
             return HttpResponseRedirect('/expense/%s/addpayment/' % expense.id) # go straight to add expense page
         else:
-            formset = ExpenseFormSet(request.POST)
+            form = ExpenseForm(request.POST)
     else:
-        formset = ExpenseFormSet(queryset=Person.objects.filter(ledger_id=ledgerid))
+        form = ExpenseForm(initial={'currency': ledger.currency.id})
     
+    form.fields["people"].queryset = Person.objects.filter(ledger_id=ledgerid)
     return render(request, 'addexpense.html', {
-        'form': formset,
+        'form': form,
     })
-
 
 def EditExpense(request, expenseid=0):
     ### Check if the expense exists - bail out if not
