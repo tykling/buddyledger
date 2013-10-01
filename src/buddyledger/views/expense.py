@@ -19,7 +19,7 @@ def AddExpense(request, ledgerid=0):
     
     people = Person.objects.filter(ledger_id=ledgerid)
     if request.method == 'POST':
-        form = ExpenseForm(request.POST)
+        form = ExpenseForm(request.POST,people=people)
         if form.is_valid(): # All validation rules pass
             expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=Decimal(form['amount'].data),amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,ledger.currency.id),currency_id=form['currency'].data)
             expense.save() # save the new expense
@@ -28,9 +28,9 @@ def AddExpense(request, ledgerid=0):
                 expense.people.add(person)
             return HttpResponseRedirect('/expense/%s/addpayment/' % expense.id) # go straight to add expense page
         else:
-            form = ExpenseForm(request.POST)
+            form = ExpenseForm(request.POST,,people=people)
     else:
-        form = ExpenseForm(initial={'currency': ledger.currency.id})
+        form = ExpenseForm(initial={'currency': ledger.currency.id},people=people)
     
     return render(request, 'addexpense.html', {
         'form': form
