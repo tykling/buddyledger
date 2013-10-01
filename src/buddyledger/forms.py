@@ -1,17 +1,13 @@
-from django.forms import ModelForm, ValidationError
 from django import forms
-from buddyledger.models import Ledger
-from buddyledger.models import Person
-from buddyledger.models import Expense
-from buddyledger.models import Payment
+from buddyledger.models import Ledger, Person, Expense, Payment, Currency
 
 
-class LedgerForm(ModelForm):
+class LedgerForm(forms.ModelForm):
     class Meta:
         model = Ledger
 
 
-class PersonForm(ModelForm):
+class PersonForm(forms.ModelForm):
     class Meta:
         model = Person
 
@@ -53,6 +49,6 @@ class ExpenseForm(forms.Form):
                     yield (self.fields[fieldname].id, None)
 
 
-class PaymentForm(ModelForm):
+class PaymentForm(forms.ModelForm):
     class Meta:
         model = Payment
