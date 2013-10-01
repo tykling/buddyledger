@@ -25,16 +25,27 @@ class ExpenseForm(ModelForm):
 
         for person in people:
             ### does this person have a part in this expense
-            self.fields['person_%s' % person.id] = forms.CheckboxInput(label=person.name)
+            self.fields['person_expensepart_%s' % person.id] = forms.CheckboxInput(label=person.name,id=person.id)
             ### is the amount to be calculated or custom
-            self.fields['person_%s_autoamount' % person.id] = forms.CheckboxInput(label="autoamount")
+            self.fields['person_autoamount_%s' % person.id] = forms.CheckboxInput(label="autoamount",id=person.id)
             ### field for specifying custom amount 
-            self.fields['person_%s_customamount' % person.id] = forms.TextInput(label="amount")
+            self.fields['person_customamount_%s' % person.id] = forms.TextInput(label="amount",id=person.id)
 
     def get_expense_parts(self):
-            for name, value in self.cleaned_data.items():
-                if name.startswith('person_'):
-                    yield (self.fields[name].label, value)
+        for fieldname, value in self.cleaned_data.items():
+            ### if this is a customamount textfield
+            if fieldname.startswith('person_customamount_'):
+                ### and the person is part of this expense
+                if 'person_expensepart_%s' % self.fields[fieldname].id in self.cleaned_data:
+                    ### return userid and amount
+                    yield (self.fields[fieldname].id, value)
+            ### if this is an autoamount checkbox
+            if fieldname.startswith('person_autoamount_'):
+                ### and the person is part of this expense
+                if 'person_expensepart_%s' % self.fields[fieldname].id in self.cleaned_data:
+                    ### return userid and None for amount
+                    yield (self.fields[fieldname].id, None)
+
 
 class PaymentForm(ModelForm):
     class Meta:
