@@ -16,7 +16,7 @@ class PersonForm(ModelForm):
         model = Person
 
 
-class ExpenseForm(ModelForm):
+class ExpenseForm(forms.Form):
     name = forms.CharField(max_length=30)
     amount = forms.CharField(max_length=10)
 
@@ -25,7 +25,7 @@ class ExpenseForm(ModelForm):
         super(ExpenseForm, self).__init__(*args, **kwargs)
         
         ### add currency selectbox
-        self.fields['currency'] = forms.SelectField(choices=( (x.id, x.name) for x in Currency.objects.all()))
+        self.fields['currency'] = forms.ChoiceField(choices=((currency.id, currency.name) for currency in Currency.objects.all()))
         
         ### add expensepart form elements
         for person in people:
@@ -34,7 +34,7 @@ class ExpenseForm(ModelForm):
             ### is the amount to be calculated or custom
             self.fields['person_autoamount_%s' % person.id] = forms.BooleanField(label="autoamount",required=False, widget=forms.CheckboxInput(attrs={'id': person.id}))
             ### field for specifying custom amount 
-            self.fields['person_customamount_%s' % person.id] = forms.CharField(label="amount", widget=forms.TextInput(attrs={'id': person.id}))
+            self.fields['person_customamount_%s' % person.id] = forms.CharField(label="customamount", required=False, widget=forms.TextInput(attrs={'id': person.id}))
         
 
     def get_expense_parts(self):
