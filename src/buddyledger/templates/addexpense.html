@@ -2,11 +2,11 @@
 {% block content %}
 <h2>Add expense to ledger</h2>
 
-{% if formset.errors %}
+{% if form.errors %}
 	<div class="alert alert-error">
 		<h4>Form errors</h4>
 		<ol>
-			{% for error in formset.errors %}
+			{% for error in form.errors %}
 				<li><strong>{{ error|escape }}</strong></li>
 			{% endfor %}
 		</ol>
@@ -16,7 +16,7 @@
 <form method="POST">
     {% csrf_token %}
     <table>
-        {{formset}}
+        {{form}}
     </table>
     <input type="submit" method="POST" class="btn" value="Add expense">
 </form>

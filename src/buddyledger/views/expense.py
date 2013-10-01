@@ -17,8 +17,9 @@ def AddExpense(request, ledgerid=0):
         response = render_to_response('ledgerdoesnotexist.html')
         return response
     
+    people = Person.objects.filter(ledger_id=ledgerid)
     if request.method == 'POST':
-        form = ExpenseForm(request.POST) # A form bound to the POST data
+        form = ExpenseForm(request.POST)
         if form.is_valid(): # All validation rules pass
             expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=Decimal(form['amount'].data),amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,ledger.currency.id),currency_id=form['currency'].data)
             expense.save() # save the new expense
@@ -31,10 +32,10 @@ def AddExpense(request, ledgerid=0):
     else:
         form = ExpenseForm(initial={'currency': ledger.currency.id})
     
-    form.fields["people"].queryset = Person.objects.filter(ledger_id=ledgerid)
     return render(request, 'addexpense.html', {
-        'form': form,
+        'form': form
     })
+
 
 def EditExpense(request, expenseid=0):
     ### Check if the expense exists - bail out if not
