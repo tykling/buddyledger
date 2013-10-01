@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 
 ### django models and forms
 from buddyledger.models import Ledger, Person, Expense, ExpensePart, Payment, Currency
-from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, PaymentForm
+from buddyledger.forms import LedgerForm, PersonForm, PaymentForm
 
 ### misc convenience functions
 from buddyledger.views.misc import ConvertCurrency, resultdict_to_decimal

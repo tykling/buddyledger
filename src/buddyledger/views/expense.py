@@ -17,9 +17,8 @@ def AddExpense(request, ledgerid=0):
         response = render_to_response('ledgerdoesnotexist.html')
         return response
     
+    ExpenseFormSet = modelformset_factory(Expense)
     if request.method == 'POST':
-        ExpenseFormSet = modelformset_factory(Expense)
-        
         formset = ExpenseFormSet(request.POST)
         if formset.is_valid(): # All validation rules pass
             expense = Expense(ledger_id=ledgerid,name=formset['name'].data,amount=Decimal(formset['amount'].data),amount_native=ConvertCurrency(Decimal(formset['amount'].data),formset['currency'].data,ledger.currency.id),currency_id=formset['currency'].data)
@@ -31,9 +30,8 @@ def AddExpense(request, ledgerid=0):
         else:
             formset = ExpenseFormSet(request.POST)
     else:
-        formset = ExpenseFormSet(initial={'currency': ledger.currency.id})
+        formset = ExpenseFormSet(queryset=Person.objects.filter(ledger_id=ledgerid))
     
-    formset.fields["people"].queryset = Person.objects.filter(ledger_id=ledgerid)
     return render(request, 'addexpense.html', {
         'form': formset,
     })
