@@ -35,6 +35,7 @@ def AddExpense(request, ledgerid=0):
     for person in people:
         temp = """
 <tr>
+    <td>%s</td>
     <td>
         <div id="animated-switch" class="make-switch switch-small" data-animated="false" data-on="success" data-off="danger" data-on-label="Pay" data-off-label="Not">
             <input id="expensepart_%s" name="person_expensepart_%s" type="checkbox" />
@@ -52,20 +53,20 @@ def AddExpense(request, ledgerid=0):
 <script>
     $('#expensepart_%s').on('switch-change', function (e, data) {
         if (value == true) {
-            $('autoamount_%s').disabled=''
+            $('autoamount_%s').disabled='';
         } else {
-            $('autoamount_%s').disabled='disabled'
+            $('autoamount_%s').disabled='disabled';
         }
     });
     $('#autoamount_%s').on('switch-change', function (e, data) {
         if (value == true) {
-            $('customamount_%s').disabled=''
+            $('customamount_%s').disabled='';
         } else {
-            $('customamount_%s').disabled='disabled'
+            $('customamount_%s').disabled='disabled';
         }
     });
 </script>
-""" % (person.id,person.name,person.id,person.id,person.id,person.name,person.id,person.id,person.id,person.name,person.id,person.id,person.id)
+""" % (person.name,person.id,person.d,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id)
         customexpenseform.append(temp)
     
     return render(request, 'addexpense.html', {
