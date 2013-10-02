@@ -23,7 +23,7 @@
     <table>
         <tr><th>Person</th><th>Pay or not</th><th>Auto or custom</th><th>Custom amount</th></tr>
         {% for field in customexpenseform %}
-            {{ field }}
+            {{ field|safe }}
         {% endfor %}
     </table>
     <input type="submit" method="POST" class="btn" value="Add expense">

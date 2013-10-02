@@ -36,29 +36,37 @@ def AddExpense(request, ledgerid=0):
         temp = """
 <tr>
     <td>
-        <label for="expensepart_%s">%s</label>
-    </td>
-    <td>
-        <div id="animated-switch" class="make-switch" data-animated="false" data-on="success" data-off="danger">
+        <div id="animated-switch" class="make-switch switch-small" data-animated="false" data-on="success" data-off="danger" data-on-label="Pay" data-off-label="Not">
             <input id="expensepart_%s" name="person_expensepart_%s" type="checkbox" />
         </div>
     </td>
     <td>
-        <label for="autoamount_%s">%s</label>
-    </td>
-    <td>
-        <div id="animated-switch" class="make-switch" data-animated="false" data-on="success" data-off="danger">
-            <input id="autoamount_%s" name="person_autoamount_%s" type="checkbox" />
+        <div id="animated-switch" class="make-switch switch-small" data-animated="false" data-on="default" data-off="primary" data-on-label="Auto" data-off-label="Custom">
+            <input id="autoamount_%s" name="person_autoamount_%s" type="checkbox" disabled />
         </div>
     </td>
     <td>
-        <label for="customamount_%s">%s</label>
+        <input id="customamount_%s" name="person_customamount_%s" type="text" disabled />
     </td>
-    <td>
-        <input id="customamount_%s" name="person_customamount_%s" type="text" />
-    </td>
-</tr>""" % (person.id,person.name,person.id,person.id,person.id,person.name,person.id,person.id,person.id,person.name,person.id,person.id)
-    customexpenseform.append(temp)
+</tr>
+<script>
+    $('#expensepart_%s').on('switch-change', function (e, data) {
+        if (value == true) {
+            $('autoamount_%s').disabled=''
+        } else {
+            $('autoamount_%s').disabled='disabled'
+        }
+    });
+    $('#autoamount_%s').on('switch-change', function (e, data) {
+        if (value == true) {
+            $('customamount_%s').disabled=''
+        } else {
+            $('customamount_%s').disabled='disabled'
+        }
+    });
+</script>
+""" % (person.id,person.name,person.id,person.id,person.id,person.name,person.id,person.id,person.id,person.name,person.id,person.id,person.id)
+        customexpenseform.append(temp)
     
     return render(request, 'addexpense.html', {
         'form': form,
