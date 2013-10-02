@@ -66,7 +66,7 @@ def AddExpense(request, ledgerid=0):
         }
     });
 </script>
-""" % (person.name,person.id,person.d,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id)
+""" % (person.name,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id)
         customexpenseform.append(temp)
     
     return render(request, 'addexpense.html', {
