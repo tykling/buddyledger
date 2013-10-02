@@ -25,13 +25,15 @@ class ExpenseForm(forms.Form):
         
         ### add expensepart form elements
         for person in people:
-            ### does this person have a part in this expense
+            ### does this person have a part in this expense yes/no
             self.fields['person_expensepart_%s' % person.id] = forms.BooleanField(label=person.name,required=False, widget=forms.CheckboxInput(attrs={'id': person.id}))
-            ### is the amount to be calculated or custom
+            
+            ### is the amount to be calculated or custom (relevant if yes above)
             self.fields['person_autoamount_%s' % person.id] = forms.BooleanField(label="autoamount",required=False, widget=forms.CheckboxInput(attrs={'id': person.id}))
-            ### field for specifying custom amount 
+            
+            ### field for specifying custom amount (if custom amount above)
             self.fields['person_customamount_%s' % person.id] = forms.CharField(label="customamount", required=False, widget=forms.TextInput(attrs={'id': person.id}))
-        
+
 
     def get_expense_parts(self):
         for fieldname, value in self.cleaned_data.items():

@@ -16,7 +16,12 @@
 <form method="POST">
     {% csrf_token %}
     <table>
-        {{form}}
+        <tr><td>{{form.name.label_tag}}</td><td>form.name</td></tr>
+        <tr><td>{{form.amount.label_tag}}</td><td>form.amount</td></tr>
+        <tr><td>{{form.currency.label_tag}}</td><td>form.currency</td></tr>
+        {% for field in customexpenseform %}
+            {{ field }}
+        {% endfor %}
     </table>
     <input type="submit" method="POST" class="btn" value="Add expense">
 </form>

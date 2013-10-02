@@ -31,8 +31,15 @@ def AddExpense(request, ledgerid=0):
     else:
         form = ExpenseForm(initial={'currency': ledger.currency.id},people=people)
     
+    customexpenseform = []
+    for person in people:
+        customexpenseform.append('<tr><th><label for="expensepart_%s">%s</label></th><td><input id="expensepart_%s" name="person_expensepart_%s" type="checkbox" /></td></tr>' % (person.id,person.name,person.id,person.id))
+        customexpenseform.append('<tr><th><label for="autoamount_%s">%s</label></th><td><input id="autoamount_%s" name="person_autoamount_%s" type="checkbox" /></td></tr>' % (person.id,person.name,person.id,person.id))
+        customexpenseform.append('<tr><th><label for="customamount_%s">%s</label></th><td><input id="customamount_%s" name="person_customamount_%s" type="text" /></td></tr>' % (person.id,person.name,person.id,person.id))
+    
     return render(request, 'addexpense.html', {
-        'form': form
+        'form': form,
+        'customexpenseform': customexpenseform
     })
 
 
