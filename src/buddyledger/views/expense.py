@@ -35,38 +35,54 @@ def AddExpense(request, ledgerid=0):
     for person in people:
         temp = """
 <tr>
+    <td>
+        <div class="control-group">
+            <div class="controls">
+                <div id="expensepart-switch-%s" class="make-switch switch-small" data-animated="false" data-on="success" data-off="danger" data-on-label="Yes" data-off-label="No">
+                    <input id="expensepart-%s" name="person-expensepart-%s" type="checkbox" />
+                </div>
+            </div>
+        </div>
+    </td>
+    
     <td>%s</td>
+
     <td>
-        <div id="animated-switch" class="make-switch switch-small" data-animated="false" data-on="success" data-off="danger" data-on-label="Pay" data-off-label="Not">
-            <input id="expensepart_%s" name="person_expensepart_%s" type="checkbox" />
+        <div class="control-group">
+            <div class="controls">
+                <input id="customamount-%s" name="person-customamount-%s" type="text" disabled />
+            </div>
         </div>
     </td>
+
+
     <td>
-        <div id="animated-switch" class="make-switch switch-small" data-animated="false" data-on="default" data-off="primary" data-on-label="Auto" data-off-label="Custom">
-            <input id="autoamount_%s" name="person_autoamount_%s" type="checkbox" disabled />
+        <div class="control-group">
+            <div class="controls">
+                <div id="autoamount-switch-%s" class="make-switch switch-small" data-animated="false" data-on="default" data-off="primary" data-on-label="Auto" data-off-label="Custom">
+                    <input id="autoamount-%s" name="person-autoamount-%s" type="checkbox" disabled />
+                </div>
+            </div>
         </div>
-    </td>
-    <td>
-        <input id="customamount_%s" name="person_customamount_%s" type="text" disabled />
     </td>
 </tr>
 <script>
-    $('#expensepart_%s').on('switch-change', function (e, data) {
-        if (value == true) {
-            $('autoamount_%s').disabled='';
+    $('#expensepart-switch-%s').on('switch-change', function (e, data) {
+        if (data.value == true) {
+            $('autoamount-%s').disabled='';
         } else {
-            $('autoamount_%s').disabled='disabled';
+            $('autoamount-%s').disabled='disabled';
         }
     });
-    $('#autoamount_%s').on('switch-change', function (e, data) {
-        if (value == true) {
-            $('customamount_%s').disabled='';
+    $('#autoamount-switch-%s').on('switch-change', function (e, data) {
+        if (data.value == true) {
+            $('customamount-%s').disabled='';
         } else {
-            $('customamount_%s').disabled='disabled';
+            $('customamount-%s').disabled='disabled';
         }
     });
 </script>
-""" % (person.name,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id)
+""" % (person.name,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id)
         customexpenseform.append(temp)
     
     return render(request, 'addexpense.html', {

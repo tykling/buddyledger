@@ -21,7 +21,7 @@
         <tr><td>{{form.currency.label_tag}}</td><td>{{form.currency}}</td></tr>
     </table>
     <table>
-        <tr><th>Person</th><th>Pay or not</th><th>Auto or custom</th><th>Custom amount</th></tr>
+        <tr><th>Pay</th><th>Person</th><th>Amount</th><th>Edit</th></tr>
         {% for field in customexpenseform %}
             {{ field|safe }}
         {% endfor %}
