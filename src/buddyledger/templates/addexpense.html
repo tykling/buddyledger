@@ -16,9 +16,12 @@
 <form method="POST">
     {% csrf_token %}
     <table>
-        <tr><td>{{form.name.label_tag}}</td><td>form.name</td></tr>
-        <tr><td>{{form.amount.label_tag}}</td><td>form.amount</td></tr>
-        <tr><td>{{form.currency.label_tag}}</td><td>form.currency</td></tr>
+        <tr><td>{{form.name.label_tag}}</td><td>{{form.name}}</td></tr>
+        <tr><td>{{form.amount.label_tag}}</td><td>{{form.amount}}</td></tr>
+        <tr><td>{{form.currency.label_tag}}</td><td>{{form.currency}}</td></tr>
+    </table>
+    <table>
+        <tr><th>Person</th><th>Pay or not</th><th>Auto or custom</th><th>Custom amount</th></tr>
         {% for field in customexpenseform %}
             {{ field }}
         {% endfor %}
