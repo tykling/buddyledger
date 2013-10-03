@@ -17,7 +17,9 @@ def AddExpense(request, ledgerid=0):
         response = render_to_response('ledgerdoesnotexist.html')
         return response
     
+    ### get all people associated with this ledger
     people = Person.objects.filter(ledger_id=ledgerid)
+    
     if request.method == 'POST':
         form = ExpenseForm(request.POST,people=people)
         if form.is_valid(): # All validation rules pass
@@ -27,10 +29,13 @@ def AddExpense(request, ledgerid=0):
                 ExpensePart.objects.create(person_id=uid,expense_id=expense.id,amount=amount)
             return HttpResponseRedirect('/expense/%s/addpayment/' % expense.id) # go straight to add payment page after save
         else:
+            ### form not valid
             form = ExpenseForm(request.POST,people=people)
     else:
+        ### page not POSTed
         form = ExpenseForm(initial={'currency': ledger.currency.id},people=people)
     
+    ### put the custom part of the expense form together
     customexpenseform = []
     for person in people:
         temp = """
@@ -82,7 +87,7 @@ def AddExpense(request, ledgerid=0):
         }
     });
 </script>
-""" % (person.name,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id)
+""" % (person.id,person.id,person.id,person.name,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id)
         customexpenseform.append(temp)
     
     return render(request, 'addexpense.html', {
