@@ -72,18 +72,18 @@ def AddExpense(request, ledgerid=0):
     </td>
 </tr>
 <script>
-    $('#expensepart-switch-%s').on('switch-change', function (e, data) {
+    $( '#expensepart-switch-%s' ).on('switch-change', function (e, data) {
         if (data.value == true) {
-            $('autoamount-%s').disabled='';
+            $( '#autoamount-%s' ).disabled='';
         } else {
-            $('autoamount-%s').disabled='disabled';
+            $( '#autoamount-%s' ).disabled='disabled';
         }
     });
-    $('#autoamount-switch-%s').on('switch-change', function (e, data) {
+    $( '#autoamount-switch-%s' ).on('switch-change', function (e, data) {
         if (data.value == true) {
-            $('customamount-%s').disabled='';
+            $( '#customamount-%s' ).disabled='';
         } else {
-            $('customamount-%s').disabled='disabled';
+            $( '#customamount-%s' ).disabled='disabled';
         }
     });
 </script>
