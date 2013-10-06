@@ -81,9 +81,9 @@
 
 <script>
     function showrow(userid) {
-        document.getElementById('row'+userid).show();
-        document.getElementById('expensepart-'+userid).checked = 'checked';
-        document.getElementById('buttonp-'+userid).hide();
+        $( '#row'+userid ).show();
+        $( '#expensepart-'+userid ).prop("checked", true);
+        $( '#buttonp-'+userid ).hide();
         updatecalc();
         
         // find out if all rows are hidden, hide the whole table if so
@@ -99,11 +99,14 @@
     };
 
     function hiderow(userid) {
-        document.getElementById('row'+userid).hide();
-        document.getElementById('expensepart-'+userid).checked = '';
-        document.getElementById('buttonp-'+userid).show();
+        $( '#row'+userid ).hide();
+        $( '#expensepart-'+userid ).prop("checked", false);
+        $( '#buttonp-'+userid ).show();
         updatecalc();
-        $( "#peoplelist" ).show();
+        // show the table if it is hidden
+        if( $( "#peoplelist" ).css("display") == "none") {
+            $( "#peoplelist" ).show();
+        };
     };
     
     function handlechange(id) {
