@@ -120,7 +120,7 @@
         // check if we have a valid total expense amount in the form
         if(!$.isNumeric(document.getElementById('amount').value)) {
             $( '#controlgroup-amount' ).removeClass().addClass( "control-group error" );
-            setMessage("Invalid amount specified","alert-error");
+            setMessage("Invalid expense amount specified","alert-error");
             return;
         };
         
@@ -213,14 +213,14 @@
     
     $().ready(function(){
         // enable prettyCheckable checkboxes
-        $('input.customamountcheck').prettyCheckable();
+        $( "input.customamountcheck" ).prettyCheckable();
         
         // update calculation on input 
-        $("input[name^='person-customamount-']").on('input change',function() {
+        $( "input[name^='person-customamount-']" ).on('input change',function() {
             updatecalc();
         });
         
-        $("amount").on('input change',function() {
+        $( "#amount" ).on('input change',function() {
             updatecalc();
         });
         
