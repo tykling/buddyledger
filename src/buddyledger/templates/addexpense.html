@@ -26,11 +26,13 @@
         <h4>People</h4>
         
         <div class="span2">
-            <table>
+            <div class="alert alert-info">
                 {% for person in people %}
-                    <tr><td><button class="btn btn-primary" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }}</button></td></tr>
+                    <p style="text-align: center;" id="buttonp-{{ person.id }}">
+                        <button class="btn btn-primary btn-small" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }}</button>
+                    </p>
                 {% endfor %}
-            </table>
+            </div>
         </div>
         
         <div class="span8">    
@@ -74,13 +76,15 @@
 
 <script>
     function showrow(userid) {
-        document.getElementById('row'+userid).style.display='block';
+        document.getElementById('row'+userid).style.display='table-row';
         document.getElementById('expensepart-'+userid).checked = 'checked';
+        document.getElementById('buttonp-'+userid).style.display='none';
     };
 
     function hiderow(userid) {
         document.getElementById('row'+userid).style.display='none';
         document.getElementById('expensepart-'+userid).checked = '';
+        document.getElementById('buttonp-'+userid).style.display='block';
     };
     
     function handlechange(id) {
