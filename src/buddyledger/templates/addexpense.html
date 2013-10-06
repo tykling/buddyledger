@@ -23,8 +23,8 @@
                 <tr><td>{{form.currency.label_tag}}</td><td><div class="control-group">{{form.currency}}</td></tr>
             </table>
         </div>
-        <div class="span5" id="messages">
-            <div class="alert">
+        <div class="span5">
+            <div class="alert" id="messages">
                 <p>Add an expense!</p>
             </div>
         </div>
@@ -65,7 +65,7 @@
                         <div id="controlgroup-customamount-{{person.id}}" class="control-group">
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" type="text" disabled>
+                                    <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" type="number" disabled required>
                                     <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" onchange="javascript:handlechange('autoamount-{{person.id}}');" type="checkbox" class="customamountcheck" checked>
                                 </div>
                             </div>
@@ -109,15 +109,31 @@
         updatecalc();
     };
     
+    function setMessage(message,type) {
+        $( '#messages' ).removeClass().addClass( "alert " + type );
+        $( '#messages' ).html("<p>" + message + "</p>");
+    };
+    
     function updatecalc() {
-        $( '#messages' ).html = "<p>Working...</p>";
+        setMessage("Working...","alert-info")
         
         // check if we have a valid total expense amount in the form
         if(!$.isNumeric(document.getElementById('amount').value)) {
             $( '#controlgroup-amount' ).removeClass().addClass( "control-group error" );
-            $( '#messages' ).html = "<p>Invalid amount specified</p>";
-            $( '#messages' ).removeClass().addClass( "alert alert-error" );
+            setMessage("Invalid amount specified","alert-error");
             return;
+        };
+        
+        // check each of the customamount fields
+        $( "input[name^='person-customamount-']" ).each(function( index ) {
+            userid = this.attr( "name" ).substring(20);
+            if ($(this).val().isNumeric) {
+                $( '#controlgroup-customamount-'+userid ).removeClass().addClass( "control-group" );
+            } else {
+                setMessage("Invalid amount specified","alert-error");
+                $( '#controlgroup-customamount-'+userid ).removeClass().addClass( "control-group error" );
+                return;
+            };
         };
         
         // find the userids of customamount and autoamount people in this calculation
@@ -155,6 +171,7 @@
                     document.getElementById('controlgroup-customamount-'+userid).className="control-group error";
                 };
             });
+            setMessage("Custom amounts total exceeds expense amount","alert-error");
             return;
         } else {
             // numbers are not invalid, remove any error class from the customamount controlgroups
@@ -168,13 +185,15 @@
         // divide by the number of autoamount people, and add it to their amount textboxes
         divamount = document.getElementById('amount').value/autoids.length;
         $( "input[name^='person-customamount-']" ).each(function( index ) {
-            userid = this.name.substring(20);
+            userid = this.attr( "name" ).substring(20);
             if (document.getElementById('expensepart-'+userid).checked == true) {
                 if (document.getElementById('autoamount-'+userid).checked == true) {
                     document.getElementById('autoamount-'+userid).value = divamount;
                 };
             };
         });
+        
+        setMessage("Calculation OK!","alert-success");
     };
     
     $().ready(function(){
@@ -183,6 +202,10 @@
         
         // update calculation on input 
         $("input[name^='person-customamount-']").on('input change',function() {
+            updatecalc();
+        });
+        
+        $("amount").on('input change',function() {
             updatecalc();
         });
         
