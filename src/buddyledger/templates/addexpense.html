@@ -37,7 +37,7 @@
             <div class="alert alert-info">
                 <p id="peoplemessage" style="display: none;">No more people left to add</p>
                 {% for person in people %}
-                    <p style="text-align: center;" id="buttonp-{{ person.id }}">
+                    <p class="personp" style="text-align: center;" id="buttonp-{{ person.id }}">
                         <button class="btn btn-primary btn-small personbutton" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }}</button>
                     </p>
                 {% endfor %}
@@ -89,15 +89,14 @@
         
         // find out if all rows are now hidden, shhide the whole table if so
         var temp = "allhidden";
-        $( ".personbutton" ).each(function( index ) {
-            console.log("hej");
-            console.log($( this ).css("display"));
+        $( ".personp" ).each(function( index ) {
             if( $( this ).css("display") != "none" ) {
-                temp = "oneshown";
-                return;
+                temp = "atleastoneisvisible";
             };
         });
-        if(temp == "oneshown") {
+        if(temp == "atleastoneisvisible") {
+            $( "#peoplemessage" ).hide();
+        } else {
             $( "#peoplemessage" ).show();
         };
     };
