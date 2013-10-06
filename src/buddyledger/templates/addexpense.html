@@ -154,7 +154,7 @@
         var customids = new Array();
         $( "input[name^='person-customamount-']" ).each(function( index ) {
             // find userid from element name
-            userid = this.name.substring(20);
+            userid = $(this).attr( "name" ).substring(20);
             if (document.getElementById('expensepart-'+userid).checked == true) {
                 if (document.getElementById('autoamount-'+userid).checked == true) {
                     autoids.push(userid);
@@ -186,7 +186,7 @@
                 // only mark fields with non-zero value in red
                 if(this.value != None && this.value != 0) {
                     // find userid from element name
-                    userid = this.name.substring(20);
+                    userid = $(this).attr( "name" ).substring(20);
                     // mark this field red (class goes on the controlgroup not the field)
                     document.getElementById('controlgroup-customamount-'+userid).className="control-group error";
                 };
@@ -224,6 +224,21 @@
             updatecalc();
         });
         
+        // reset form
+        $( "input[name^='person-customamount-']" ).each(function( index ) {
+            // find userid from element name
+            userid = $(this).attr( "name" ).substring(20);
+            
+            // empty textfield
+            document.getElementById('customamount-'+userid).value = '';
+            
+            // uncheck expensepart
+            document.getElementById('expensepart-'+userid).checked = false;
+            
+            // check autoamount
+            document.getElementById('autoamount-'+userid).checked == true;
+        });
+
         // initial calculation
         updatecalc();
     });
