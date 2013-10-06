@@ -236,8 +236,9 @@
             // empty textfield
             $( "#customamount-"+userid ).val('');
             
-            // add uneditable-input to textfield
+            // add uneditable-input and disabled to the customamount textfield
             $( "#customamount-"+userid ).addClass("uneditable-input");
+            $( "#expensepart-"+userid ).prop( "disabled", true );
             
             // uncheck expensepart
             $( "#expensepart-"+userid ).prop("checked", false);
