@@ -34,10 +34,10 @@
         <h4>People</h4>
         
         <div class="span2">
-            <div class="alert alert-info">
+            <div id="peoplelist" class="alert alert-info">
                 {% for person in people %}
                     <p style="text-align: center;" id="buttonp-{{ person.id }}">
-                        <button class="btn btn-primary btn-small" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }}</button>
+                        <button class="btn btn-primary btn-small personbutton" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }}</button>
                     </p>
                 {% endfor %}
             </div>
@@ -66,7 +66,7 @@
                             <div class="controls">
                                 <div class="input-append">
                                     <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" class="uneditable-input" type="number" disabled required>
-                                    <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" onchange="javascript:handlechange('autoamount-{{person.id}}');" type="checkbox" class="customamountcheck" checked>
+                                    <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" onchange="javascript:handlechange('autoamount-{{person.id}}');" type="checkbox" class="customamountcheck" data-label="Calculate" checked>
                                 </div>
                             </div>
                         </div>
@@ -81,17 +81,29 @@
 
 <script>
     function showrow(userid) {
-        document.getElementById('row'+userid).style.display='table-row';
+        document.getElementById('row'+userid).show();
         document.getElementById('expensepart-'+userid).checked = 'checked';
-        document.getElementById('buttonp-'+userid).style.display='none';
+        document.getElementById('buttonp-'+userid).hide();
         updatecalc();
+        
+        // find out if all rows are hidden, hide the whole table if so
+        var temp = "hide";
+        $( ".personbutton" ).each(function( index ) {
+            if( $( this ).css("display") !== "none" ) {
+                temp = "show";
+            };
+        });
+        if(temp == "hide") {
+            $( "#peoplelist" ).hide();
+        };
     };
 
     function hiderow(userid) {
-        document.getElementById('row'+userid).style.display='none';
+        document.getElementById('row'+userid).hide();
         document.getElementById('expensepart-'+userid).checked = '';
-        document.getElementById('buttonp-'+userid).style.display='block';
+        document.getElementById('buttonp-'+userid).show();
         updatecalc();
+        $( "#peoplelist" ).show();
     };
     
     function handlechange(id) {
@@ -238,7 +250,7 @@
             
             // add uneditable-input and disabled to the customamount textfield
             $( "#customamount-"+userid ).addClass("uneditable-input");
-            $( "#expensepart-"+userid ).prop( "disabled", true );
+            $( "#customamount-"+userid ).prop( "disabled", true );
             
             // uncheck expensepart
             $( "#expensepart-"+userid ).prop("checked", false);
