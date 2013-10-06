@@ -15,12 +15,19 @@
 
 <form method="POST">
     {% csrf_token %}
-    <table>
-        <tr><td>{{form.name.label_tag}}</td><td><div class="control-group">{{form.name}}</td></tr>
-        <tr><td>{{form.amount.label_tag}}</td><td><div class="control-group" id="controlgroup-amount">{{form.amount}}</td></tr>
-        <tr><td>{{form.currency.label_tag}}</td><td><div class="control-group">{{form.currency}}</td></tr>
-    </table>
-    
+    <div class="row">
+        <div class="span5">
+            <table>
+                <tr><td>{{form.name.label_tag}}</td><td><div class="control-group">{{form.name}}</td></tr>
+                <tr><td>{{form.amount.label_tag}}</td><td><div class="control-group" id="controlgroup-amount">{{form.amount}}</td></tr>
+                <tr><td>{{form.currency.label_tag}}</td><td><div class="control-group">{{form.currency}}</td></tr>
+            </table>
+        </div>
+        <div class="span5" id="messages">
+            <div class="alert">
+                <p>Add an expense!</p>
+            </div>
+        </div>
     
     <div class="row">
         <h4>People</h4>
@@ -40,7 +47,7 @@
                 <tr><th>Remove</th><th>Person</th><th>Amount (Calculate?)</th></tr>
                 {% for person in people %}
                 <tr style="display: none;" id="row{{person.id}}">
-                    <td>
+                    <td style="text-align: center;">
                         <div class="control-group">
                             <div class="controls form-inline">
                                 <button class="btn btn-danger btn-mini" type="button" onclick="javascript:hiderow({{person.id}});"><i class="icon-remove"></i></button>
@@ -58,7 +65,7 @@
                             <div class="controls">
                                 <div class="input-append">
                                     <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" type="text" disabled>
-                                    <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" onchange="javascript:handlechange('autoamount-{{person.id}}');" type="checkbox" class="customamountcheck">
+                                    <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" onchange="javascript:handlechange('autoamount-{{person.id}}');" type="checkbox" class="customamountcheck" checked>
                                 </div>
                             </div>
                         </div>
@@ -67,8 +74,8 @@
                 {% endfor %}
             </table>
         </div>
-        <input type="submit" method="POST" class="btn" value="Add expense" disabled>
     </div>
+    <input type="submit" method="POST" class="btn" value="Add expense" disabled>
 </form>
 
 <script>
@@ -100,16 +107,20 @@
     };
     
     function updatecalc() {
+        $( '#messages' ).html = "<p>Working...</p>";
+        
         // check if we have a valid total expense amount in the form
         if(!$.isNumeric(document.getElementById('amount').value)) {
-            document.getElementById('controlgroup-amount').className="control-group error";
+            $( '#controlgroup-amount' ).removeClass().addClass( "control-group error" );
+            $( '#messages' ).html = "<p>Invalid amount specified</p>";
+            $( '#messages' ).removeClass().addClass( "alert alert-error" );
             return;
         };
         
         // find the userids of customamount and autoamount people in this calculation
         var autoids = new Array();
         var customids = new Array();
-        $( "input[name~='person-customamount-']" ).each(function( index ) {
+        $( "input[name^='person-customamount-']" ).each(function( index ) {
             userid = this.name.substring(20);
             if (document.getElementById('expensepart-'+userid).checked == true) {
                 if (document.getElementById('autoamount-'+userid).checked == true) {
@@ -133,7 +144,7 @@
         if (customtotal > document.getElementById('amount').value) {
             // numbers not valid, mark the amount and the customamount fields with red to indicate where the problem is
             document.getElementById('controlgroup-amount').className="control-group error";
-            $( "input[name~='person-customamount-']" ).each(function( index ) {
+            $( "input[name^='person-customamount-']" ).each(function( index ) {
                 // only mark fields with non-zero value in red
                 if(this.value != None && this.value != 0) {
                     userid = this.name.substring(20);
@@ -145,7 +156,7 @@
         } else {
             // numbers are not invalid, remove any error class from the customamount controlgroups
             document.getElementById('controlgroup-amount').className="control-group";
-            $( "input[name~='person-customamount-']" ).each(function( index ) {
+            $( "input[name^='person-customamount-']" ).each(function( index ) {
                 this.className="control-group";
             });
         };
@@ -153,7 +164,7 @@
         // now find the amount that remains after custom amounts have been substracted,
         // divide by the number of autoamount people, and add it to their amount textboxes
         divamount = document.getElementById('amount').value/autoids.length;
-        $( "input[name~='person-customamount-']" ).each(function( index ) {
+        $( "input[name^='person-customamount-']" ).each(function( index ) {
             userid = this.name.substring(20);
             if (document.getElementById('expensepart-'+userid).checked == true) {
                 if (document.getElementById('autoamount-'+userid).checked == true) {
@@ -161,6 +172,8 @@
                 };
             };
         });
+        
+        alert("done with updatecalc");
     };
     
     $().ready(function(){
