@@ -28,6 +28,7 @@
                 <p>Add an expense!</p>
             </div>
         </div>
+    </div>
     
     <div class="row">
         <h4>People</h4>
@@ -83,12 +84,14 @@
         document.getElementById('row'+userid).style.display='table-row';
         document.getElementById('expensepart-'+userid).checked = 'checked';
         document.getElementById('buttonp-'+userid).style.display='none';
+        updatecalc();
     };
 
     function hiderow(userid) {
         document.getElementById('row'+userid).style.display='none';
         document.getElementById('expensepart-'+userid).checked = '';
         document.getElementById('buttonp-'+userid).style.display='block';
+        updatecalc();
     };
     
     function handlechange(id) {
@@ -172,12 +175,18 @@
                 };
             };
         });
-        
-        alert("done with updatecalc");
     };
     
     $().ready(function(){
+        // enable prettyCheckable checkboxes
         $('input.customamountcheck').prettyCheckable();
+        
+        // update calculation on input 
+        $("input[name^='person-customamount-']").on('input change',function() {
+            updatecalc();
+        });
+        
+        // initial calculation
         updatecalc();
     });
 </script>
