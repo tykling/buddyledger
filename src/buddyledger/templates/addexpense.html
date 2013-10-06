@@ -125,21 +125,28 @@
         };
         
         // check each of the customamount fields
+        var success = true;
         $( "input[name^='person-customamount-']" ).each(function( index ) {
-            userid = this.attr( "name" ).substring(20);
+            // find userid from element name
+            userid = $(this).attr( "name" ).substring(20);
             if ($(this).val().isNumeric) {
                 $( '#controlgroup-customamount-'+userid ).removeClass().addClass( "control-group" );
             } else {
                 setMessage("Invalid amount specified","alert-error");
                 $( '#controlgroup-customamount-'+userid ).removeClass().addClass( "control-group error" );
+                success = false;
                 return;
             };
+        });
+        if(!success) {
+            return;
         };
         
         // find the userids of customamount and autoamount people in this calculation
         var autoids = new Array();
         var customids = new Array();
         $( "input[name^='person-customamount-']" ).each(function( index ) {
+            // find userid from element name
             userid = this.name.substring(20);
             if (document.getElementById('expensepart-'+userid).checked == true) {
                 if (document.getElementById('autoamount-'+userid).checked == true) {
@@ -161,11 +168,12 @@
         
         // if the total customamount exceeds the amount...
         if (customtotal > document.getElementById('amount').value) {
-            // numbers not valid, mark the amount and the customamount fields with red to indicate where the problem is
+            // mark the expense amount and the customamount fields with red to indicate where the problem is
             document.getElementById('controlgroup-amount').className="control-group error";
             $( "input[name^='person-customamount-']" ).each(function( index ) {
                 // only mark fields with non-zero value in red
                 if(this.value != None && this.value != 0) {
+                    // find userid from element name
                     userid = this.name.substring(20);
                     // mark this field red (class goes on the controlgroup not the field)
                     document.getElementById('controlgroup-customamount-'+userid).className="control-group error";
@@ -173,22 +181,17 @@
             });
             setMessage("Custom amounts total exceeds expense amount","alert-error");
             return;
-        } else {
-            // numbers are not invalid, remove any error class from the customamount controlgroups
-            document.getElementById('controlgroup-amount').className="control-group";
-            $( "input[name^='person-customamount-']" ).each(function( index ) {
-                this.className="control-group";
-            });
         };
         
         // now find the amount that remains after custom amounts have been substracted,
         // divide by the number of autoamount people, and add it to their amount textboxes
         divamount = document.getElementById('amount').value/autoids.length;
         $( "input[name^='person-customamount-']" ).each(function( index ) {
-            userid = this.attr( "name" ).substring(20);
+            // find userid from element name
+            userid = $(this).attr( "name" ).substring(20);
             if (document.getElementById('expensepart-'+userid).checked == true) {
                 if (document.getElementById('autoamount-'+userid).checked == true) {
-                    document.getElementById('autoamount-'+userid).value = divamount;
+                    document.getElementById('customamount-'+userid).value = divamount;
                 };
             };
         });
