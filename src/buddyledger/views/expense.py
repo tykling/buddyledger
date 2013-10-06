@@ -34,65 +34,9 @@ def AddExpense(request, ledgerid=0):
     else:
         ### page not POSTed
         form = ExpenseForm(initial={'currency': ledger.currency.id},people=people)
-    
-    ### put the custom part of the expense form together
-    customexpenseform = []
-    for person in people:
-        temp = """
-<tr>
-    <td>
-        <div class="control-group">
-            <div class="controls">
-                <div id="expensepart-switch-%s" class="make-switch switch-small" data-animated="false" data-on="success" data-off="danger" data-on-label="Yes" data-off-label="No">
-                    <input id="expensepart-%s" name="person-expensepart-%s" type="checkbox" />
-                </div>
-            </div>
-        </div>
-    </td>
-    
-    <td>%s</td>
-
-    <td>
-        <div class="control-group">
-            <div class="controls">
-                <input id="customamount-%s" name="person-customamount-%s" type="text" disabled />
-            </div>
-        </div>
-    </td>
-
-
-    <td>
-        <div class="control-group">
-            <div class="controls">
-                <div id="autoamount-switch-%s" class="make-switch switch-small" data-animated="false" data-on="default" data-off="primary" data-on-label="Auto" data-off-label="Custom">
-                    <input id="autoamount-%s" name="person-autoamount-%s" type="checkbox" disabled />
-                </div>
-            </div>
-        </div>
-    </td>
-</tr>
-<script>
-    $( '#expensepart-switch-%s' ).on('switch-change', function (e, data) {
-        if (data.value == true) {
-            $( '#autoamount-%s' ).disabled='';
-        } else {
-            $( '#autoamount-%s' ).disabled='disabled';
-        }
-    });
-    $( '#autoamount-switch-%s' ).on('switch-change', function (e, data) {
-        if (data.value == true) {
-            $( '#customamount-%s' ).disabled='';
-        } else {
-            $( '#customamount-%s' ).disabled='disabled';
-        }
-    });
-</script>
-""" % (person.id,person.id,person.id,person.name,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id,person.id)
-        customexpenseform.append(temp)
-    
+        
     return render(request, 'addexpense.html', {
-        'form': form,
-        'customexpenseform': customexpenseform
+        'form': form
     })
 
 

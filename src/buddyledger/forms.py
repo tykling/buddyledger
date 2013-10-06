@@ -13,8 +13,8 @@ class PersonForm(forms.ModelForm):
 
 
 class ExpenseForm(forms.Form):
-    name = forms.CharField(max_length=30)
-    amount = forms.CharField(max_length=10)
+    name = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'id': 'name%s' % person.id}))
+    amount = forms.CharField(max_length=10,widget=forms.TextInput(attrs={'id': 'amount%s' % person.id, 'type': 'number'}))
 
     def __init__(self, *args, **kwargs):
         people = kwargs.pop('people')
@@ -26,13 +26,13 @@ class ExpenseForm(forms.Form):
         ### add expensepart form elements
         for person in people:
             ### does this person have a part in this expense yes/no
-            self.fields['person_expensepart_%s' % person.id] = forms.BooleanField(label=person.name,required=False, widget=forms.CheckboxInput(attrs={'id': person.id}))
+            self.fields['person_expensepart_%s' % person.id] = forms.BooleanField(label=person.name,required=False)
             
             ### is the amount to be calculated or custom (relevant if yes above)
-            self.fields['person_autoamount_%s' % person.id] = forms.BooleanField(label="autoamount",required=False, widget=forms.CheckboxInput(attrs={'id': person.id}))
+            self.fields['person_autoamount_%s' % person.id] = forms.BooleanField(label="autoamount",required=False)
             
             ### field for specifying custom amount (if custom amount above)
-            self.fields['person_customamount_%s' % person.id] = forms.CharField(label="customamount", required=False, widget=forms.TextInput(attrs={'id': person.id}))
+            self.fields['person_customamount_%s' % person.id] = forms.CharField(label="customamount", required=False)
 
 
     def get_expense_parts(self):
