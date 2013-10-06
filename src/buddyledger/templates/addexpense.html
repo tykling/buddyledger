@@ -129,13 +129,20 @@
         $( "input[name^='person-customamount-']" ).each(function( index ) {
             // find userid from element name
             userid = $(this).attr( "name" ).substring(20);
-            if ($(this).val().isNumeric) {
+            // is this user a part of this expense ?
+            if (document.getElementById('expensepart-'+userid).checked == true) {
+                // remove any extra classes on this control group
                 $( '#controlgroup-customamount-'+userid ).removeClass().addClass( "control-group" );
-            } else {
-                setMessage("Invalid amount specified","alert-error");
-                $( '#controlgroup-customamount-'+userid ).removeClass().addClass( "control-group error" );
-                success = false;
-                return;
+                // is autoamount unchecked ?
+                if (document.getElementById('autoamount-'+userid).checked == false) {
+                    // check if the value is numeric
+                    if (!$(this).val().isNumeric) {
+                        setMessage("Invalid amount specified","alert-error");
+                        $( '#controlgroup-customamount-'+userid ).removeClass().addClass( "control-group error" );
+                        success = false;
+                        return;
+                    };
+                };
             };
         });
         if(!success) {
