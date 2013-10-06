@@ -122,6 +122,8 @@
             $( '#controlgroup-amount' ).removeClass().addClass( "control-group error" );
             setMessage("Invalid expense amount specified","alert-error");
             return;
+        } else {
+            $( '#controlgroup-amount' ).removeClass().addClass( "control-group" );
         };
         
         // check each of the customamount fields
@@ -230,13 +232,15 @@
             userid = $(this).attr( "name" ).substring(20);
             
             // empty textfield
-            document.getElementById('customamount-'+userid).value = '';
+            $( "#customamount-"+userid ).val('');
             
             // uncheck expensepart
-            document.getElementById('expensepart-'+userid).checked = false;
+            $( "#expensepart-"+userid ).prop("checked", false);
+            $( "#expensepart-" + userid + " + a" ).removeClass("checked");
             
             // check autoamount
-            document.getElementById('autoamount-'+userid).checked == true;
+            $( "#autoamount-"+userid ).prop("checked", true);
+            $( "#autoamount-" + userid + " + a" ).addClass("checked");
         });
 
         // initial calculation
