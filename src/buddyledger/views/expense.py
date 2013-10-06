@@ -36,7 +36,8 @@ def AddExpense(request, ledgerid=0):
         form = ExpenseForm(initial={'currency': ledger.currency.id},people=people)
         
     return render(request, 'addexpense.html', {
-        'form': form
+        'form': form,
+        'people': people
     })
 
 

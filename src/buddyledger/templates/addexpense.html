@@ -27,7 +27,7 @@
     <div class="span2">
         <table>
             {% for person in people %}
-                <tr><td><button class="btn btn-primary" type="button" onclick="javascript:showrow({{person.id}};">{{ person.name }}</button></td></tr>
+                <tr><td><button class="btn btn-primary" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }}</button></td></tr>
             {% endfor %}
         </table>
     </div>
@@ -41,7 +41,7 @@
                     <div class="control-group">
                         <div class="controls form-inline">
                             <input id="expensepart-{{person.id}}" name="person-expensepart-{{person.id}}" type="checkbox" style="display:none;"/>
-                            <button class="btn btn-danger" type="button" onclick="javascript:hiderow({{person.id}};">Remove</button>
+                            <button class="btn btn-danger" type="button" onclick="javascript:hiderow({{person.id}});">Remove</button>
                         </div>
                     </div>
                 </td>
@@ -71,14 +71,14 @@
 </form>
 
 <script>
-    function showrow(rowid) {
-        document.getElementById('row{{person.id}}').style.display='block';
-        document.getElementById('expensepart-{{person.id}}').checked = 'checked';
+    function showrow(userid) {
+        document.getElementById('row'+userid).style.display='block';
+        document.getElementById('expensepart-'+userid).checked = 'checked';
     };
 
-    function hiderow(rowid) {
-        document.getElementById('row{{person.id}}').style.display='none';
-        document.getElementById('expensepart-{{person.id}}').checked = '';
+    function hiderow(userid) {
+        document.getElementById('row'+userid).style.display='none';
+        document.getElementById('expensepart-'+userid).checked = '';
     };
     
     function handlechange(id) {
@@ -106,7 +106,7 @@
         };
         
         // find the userids of customamount and autoamount people in this calculation
-        var activeids = new Array();
+        var autoids = new Array();
         var customids = new Array();
         $( "input[name~='person-customamount-']" ).each(function( index ) {
             userid = this.name.substring(20);
@@ -151,7 +151,7 @@
         
         // now find the amount that remains after custom amounts have been substracted,
         // divide by the number of autoamount people, and add it to their amount textboxes
-        divamount = document.getElementById('amount-'+userid).value/autoids.length;
+        divamount = document.getElementById('amount').value/autoids.length;
         $( "input[name~='person-customamount-']" ).each(function( index ) {
             userid = this.name.substring(20);
             if (document.getElementById('expensepart-'+userid).checked == true) {
