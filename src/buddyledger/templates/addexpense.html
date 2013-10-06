@@ -37,32 +37,29 @@
         
         <div class="span8">    
             <table class="table table-condensed">
-                <tr><th>Remove</th><th>Person</th><th>Amount</th><th>Edit</th></tr>
+                <tr><th>Remove</th><th>Person</th><th>Amount (Calculate?)</th></tr>
                 {% for person in people %}
                 <tr style="display: none;" id="row{{person.id}}">
                     <td>
                         <div class="control-group">
                             <div class="controls form-inline">
-                                <input id="expensepart-{{person.id}}" name="person-expensepart-{{person.id}}" type="checkbox" style="display:none;"/>
                                 <button class="btn btn-danger" type="button" onclick="javascript:hiderow({{person.id}});"><i class="icon-remove"></i></button>
                             </div>
                         </div>
                     </td>
                     
-                    <td><span class="label label-info">{{person.name}}</span></td>
+                    <td>
+                        <span class="label label-info">{{person.name}}</span>
+                        <input id="expensepart-{{person.id}}" name="person-expensepart-{{person.id}}" type="checkbox" style="display:none;"/>
+                    </td>
 
                     <td>
                         <div id="controlgroup-customamount-{{person.id}}" class="control-group">
                             <div class="controls">
-                                <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" type="text" disabled>
-                            </div>
-                        </div>
-                    </td>
-
-                    <td>
-                        <div class="control-group">
-                            <div class="controls">
-                                <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" onchange="javascript:handlechange(autoamount-{{person.id}});" type="checkbox" class="customamountcheck">
+                                <div class="input-append">
+                                    <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" type="text" disabled>
+                                    <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" onchange="javascript:handlechange('autoamount-{{person.id}}');" type="checkbox" class="customamountcheck">
+                                </div>
                             </div>
                         </div>
                     </td>
