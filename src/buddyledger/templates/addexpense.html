@@ -22,52 +22,54 @@
     </table>
     
     
-    <h4>People</h4>
-    
-    <div class="span2">
-        <table>
-            {% for person in people %}
-                <tr><td><button class="btn btn-primary" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }}</button></td></tr>
-            {% endfor %}
-        </table>
-    </div>
-    
-    <div class="span8">    
-        <table class="table table-condensed">
-            <tr><th>Remove</th><th>Person</th><th>Amount</th><th>Edit</th></tr>
-            {% for person in people %}
-            <tr style="display: none;" id="row{{person.id}}">
-                <td>
-                    <div class="control-group">
-                        <div class="controls form-inline">
-                            <input id="expensepart-{{person.id}}" name="person-expensepart-{{person.id}}" type="checkbox" style="display:none;"/>
-                            <button class="btn btn-danger" type="button" onclick="javascript:hiderow({{person.id}});">Remove</button>
+    <div class="row">
+        <h4>People</h4>
+        
+        <div class="span2">
+            <table>
+                {% for person in people %}
+                    <tr><td><button class="btn btn-primary" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }}</button></td></tr>
+                {% endfor %}
+            </table>
+        </div>
+        
+        <div class="span8">    
+            <table class="table table-condensed">
+                <tr><th>Remove</th><th>Person</th><th>Amount</th><th>Edit</th></tr>
+                {% for person in people %}
+                <tr style="display: none;" id="row{{person.id}}">
+                    <td>
+                        <div class="control-group">
+                            <div class="controls form-inline">
+                                <input id="expensepart-{{person.id}}" name="person-expensepart-{{person.id}}" type="checkbox" style="display:none;"/>
+                                <button class="btn btn-danger" type="button" onclick="javascript:hiderow({{person.id}});"><i class="icon-remove"></i></button>
+                            </div>
                         </div>
-                    </div>
-                </td>
-                
-                <td>{{person.name}}</td>
+                    </td>
+                    
+                    <td><span class="label label-info">{{person.name}}</span></td>
 
-                <td>
-                    <div id="controlgroup-customamount-{{person.id}}" class="control-group">
-                        <div class="controls">
-                            <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" type="text" disabled>
+                    <td>
+                        <div id="controlgroup-customamount-{{person.id}}" class="control-group">
+                            <div class="controls">
+                                <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" type="text" disabled>
+                            </div>
                         </div>
-                    </div>
-                </td>
+                    </td>
 
-                <td>
-                    <div class="control-group">
-                        <div class="controls">
-                            <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" onchange="javascript:handlechange(autoamount-{{person.id}});" type="checkbox" class="customamountcheck">
+                    <td>
+                        <div class="control-group">
+                            <div class="controls">
+                                <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" onchange="javascript:handlechange(autoamount-{{person.id}});" type="checkbox" class="customamountcheck">
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <input type="submit" method="POST" class="btn" value="Add expense" disabled>
     </div>
-    <input type="submit" method="POST" class="btn" value="Add expense" disabled>
 </form>
 
 <script>
