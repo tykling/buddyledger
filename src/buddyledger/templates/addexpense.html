@@ -65,7 +65,7 @@
                         <div id="controlgroup-customamount-{{person.id}}" class="control-group">
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" type="number" disabled required>
+                                    <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" class="uneditable-input" type="number" required>
                                     <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" onchange="javascript:handlechange('autoamount-{{person.id}}');" type="checkbox" class="customamountcheck" checked>
                                 </div>
                             </div>
@@ -99,12 +99,12 @@
             //autoamount unchecked for this person, enable the textbox for editing
             userid = id.substring(11);
             textboxid = "customamount-"+userid;
-            document.getElementById(textboxid).disabled="";
+            document.getElementById(textboxid).className="";
         } else {
             //autoamount checked for this person, disable the textbox
             userid = id.substring(11);
             textboxid = "customamount-"+userid;
-            document.getElementById(textboxid).disabled="disabled";
+            document.getElementById(textboxid).className="uneditable-input";
         };
         updatecalc();
     };
@@ -138,8 +138,8 @@
                 // is autoamount unchecked ?
                 if (document.getElementById('autoamount-'+userid).checked == false) {
                     // check if the value is numeric
-                    if (!$(this).val().isNumeric) {
-                        setMessage("Invalid amount specified","alert-error");
+                    if ( !$.isNumeric( $( this ).val() ) ) {
+                        setMessage("Invalid amount specified: " + $(this).val(),"alert-error");
                         $( '#controlgroup-customamount-'+userid ).removeClass().addClass( "control-group error" );
                         success = false;
                         return;
@@ -176,7 +176,7 @@
         customtotal = 0;
         if (customids.length > 0) {
             for (var i=0;i<customids.length;i++) {
-                customtotal = customtotal + customids[i];
+                customtotal = customtotal + parseFloat($( "#customamount-" + customids[i] ).val());
             };
         };
         
@@ -199,7 +199,7 @@
         
         // now find the amount that remains after custom amounts have been substracted,
         // divide by the number of autoamount people, and add it to their amount textboxes
-        divamount = document.getElementById('amount').value/autoids.length;
+        divamount = (document.getElementById('amount').value-customtotal)/autoids.length;
         $( "input[name^='person-customamount-']" ).each(function( index ) {
             // find userid from element name
             userid = $(this).attr( "name" ).substring(20);
@@ -233,6 +233,9 @@
             
             // empty textfield
             $( "#customamount-"+userid ).val('');
+            
+            // add uneditable-input to textfield
+            $( "#customamount-"+userid ).addClass("uneditable-input");
             
             // uncheck expensepart
             $( "#expensepart-"+userid ).prop("checked", false);
