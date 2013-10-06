@@ -13,8 +13,8 @@ class PersonForm(forms.ModelForm):
 
 
 class ExpenseForm(forms.Form):
-    name = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'id': 'name%s' % person.id}))
-    amount = forms.CharField(max_length=10,widget=forms.TextInput(attrs={'id': 'amount%s' % person.id, 'type': 'number'}))
+    name = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'id': 'name'}))
+    amount = forms.CharField(max_length=10,widget=forms.TextInput(attrs={'id': 'amount', 'type': 'number'}))
 
     def __init__(self, *args, **kwargs):
         people = kwargs.pop('people')
