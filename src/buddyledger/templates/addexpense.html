@@ -16,14 +16,14 @@
 <form method="POST">
     {% csrf_token %}
     <div class="row">
-        <div class="span5">
+        <div class="span4">
             <table>
                 <tr><td>{{form.name.label_tag}}</td><td><div class="control-group">{{form.name}}</td></tr>
                 <tr><td>{{form.amount.label_tag}}</td><td><div class="control-group" id="controlgroup-amount">{{form.amount}}</td></tr>
                 <tr><td>{{form.currency.label_tag}}</td><td><div class="control-group">{{form.currency}}</td></tr>
             </table>
         </div>
-        <div class="span5">
+        <div class="span6">
             <div class="alert" id="messages">
                 <p>Add an expense!</p>
             </div>
@@ -45,7 +45,7 @@
         
         <div class="span8">    
             <table class="table table-condensed">
-                <tr><th>Remove</th><th>Person</th><th>Amount (Calculate?)</th></tr>
+                <tr><th>Remove</th><th>Person</th><th>Amount owed</th></tr>
                 {% for person in people %}
                 <tr style="display: none;" id="row{{person.id}}">
                     <td style="text-align: center;">
@@ -163,6 +163,11 @@
                 };
             };
         });
+        
+        if(customids.length + autoids.length == 0) {
+            setMessage("No people selected","alert-error");
+            return;
+        };
         
         // arrays autoids and customids now contain the userid's for the calculation,
         // first do some sanity checking to check that the customamounts are less than the total expense amount
