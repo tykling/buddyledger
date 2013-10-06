@@ -43,7 +43,7 @@
                     <td>
                         <div class="control-group">
                             <div class="controls form-inline">
-                                <button class="btn btn-danger" type="button" onclick="javascript:hiderow({{person.id}});"><i class="icon-remove"></i></button>
+                                <button class="btn btn-danger btn-mini" type="button" onclick="javascript:hiderow({{person.id}});"><i class="icon-remove"></i></button>
                             </div>
                         </div>
                     </td>
@@ -89,14 +89,12 @@
             //autoamount unchecked for this person, enable the textbox for editing
             userid = id.substring(11);
             textboxid = "customamount-"+userid;
-            alert("enabling " + textboxid);
             document.getElementById(textboxid).disabled="";
         } else {
-            //autoamount unchecked for this person, enable the textbox for editing
+            //autoamount checked for this person, disable the textbox
             userid = id.substring(11);
             textboxid = "customamount-"+userid;
-            alert("enabling textbox " + textboxid);
-            document.getElementById(textboxid).disabled="";
+            document.getElementById(textboxid).disabled="disabled";
         };
         updatecalc();
     };
