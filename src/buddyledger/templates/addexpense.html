@@ -229,7 +229,7 @@
         });
         
         if(customids.length + autoids.length == 0) {
-            setMessage("No people selected","alert-error");
+            setMessage("No people selected","alert-warning");
             return;
         };
         
@@ -276,21 +276,17 @@
     };
     
     $().ready(function(){
-        // update calculation on input and change
-        $( "#amount" ).on('input change',function() {
+        // update calculation on input and change in textfields
+        $( "#amount,#name,input[name^='person-customamount-']" ).on('input change',function() {
             updatecalc();
-        });
-        $( "input[name^='person-customamount-']" ).on('input change',function() {
-            updatecalc();
-        });
-        
-        
+        });        
+
         // reset form
         $( "input[name^='person-customamount-']" ).each(function( index ) {
             // find userid from element name
             userid = $(this).attr( "name" ).substring(20);
             
-            // empty textfield
+            // remove content from textfield
             $( "#customamount-"+userid ).val('');
             
             // add uneditable-input and disabled to the customamount textfield
