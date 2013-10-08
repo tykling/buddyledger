@@ -38,20 +38,20 @@
             <div class="alert alert-info">
                 {% for person in people %}
                     <p class="personp" style="text-align: center;" id="buttonp-{{ person.id }}">
-                        <button class="btn btn-primary btn-small personbutton" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }} <i class="icon-arrow-right"></i></button>
+                        <button class="btn btn-primary personbutton" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }} <i class="icon-arrow-right"></i></button>
                     </p>
                 {% endfor %}
             </div>
         </div>
         
-        <div class="span4">    
+        <div class="span8">
             <table class="table table-condensed">
                 <tr><th>Person</th><th>Amount owed</th><th>Amount paid</th></tr>
                 {% for person in people %}
                 <tr style="display: none;" id="row{{person.id}}">
                     <td>
                         <div class="controls form-inline">
-                            <button class="btn btn-primary btn-small" type="button" onclick="javascript:hiderow({{person.id}});"><i class="icon-arrow-left"></i> {{ person.name }}</button>
+                            <button class="btn btn-primary" type="button" onclick="javascript:hiderow({{person.id}});"><i class="icon-arrow-left"></i> {{ person.name }}</button>
                             <input id="expensepart-{{person.id}}" name="person-expensepart-{{person.id}}" type="checkbox" style="display:none;"/>
                         </div>
                     </td>
@@ -60,11 +60,11 @@
                         <div id="controlgroup-customamount-{{person.id}}" class="control-group">
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="customamount-{{person.id}}" class="input-small" name="person-customamount-{{person.id}}" class="uneditable-input" type="number" disabled>
+                                    <input id="customamount-{{person.id}}" class="input-medium" name="person-customamount-{{person.id}}" class="uneditable-input" type="number" disabled>
                                     <span class="add-on">{{ ledger.currency.iso4217_code }}</span>
                                     <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" type="checkbox" checked style="display:none;">
-                                    <button id="customamount-button-{{person.id}}" class="btn btn-primary btn-small" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-edit"></i> Specify amount</button>
-                                    <button id="autoamount-button-{{person.id}}" class="btn btn-info btn-small" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-remove"></i> Calculate amount</button>
+                                    <button id="customamount-button-{{person.id}}" class="btn btn-primary" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-edit"></i> Specify amount</button>
+                                    <button id="autoamount-button-{{person.id}}" class="btn btn-info" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-remove"></i> Calculate amount</button>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                         <div id="controlgroup-paymentamount-{{person.id}}" class="control-group">
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="paymentamount-{{person.id}}" class="input-small" name="person-paymentamount-{{person.id}}" type="number" value="0">
+                                    <input id="paymentamount-{{person.id}}" class="input-medium" name="person-paymentamount-{{person.id}}" type="number" value="0">
                                     <span class="add-on">{{ ledger.currency.iso4217_code }}</span>
                                 </div>
                             </div>
