@@ -1,4 +1,5 @@
 {% extends "skeleton.html" %}
+
 {% block content %}
 <h2>Add expense to ledger</h2>
 
@@ -33,9 +34,8 @@
     <div class="row">
         <h4>People</h4>
         
-        <div class="span2">
+        <div class="span2" id="peoplebox">
             <div class="alert alert-info">
-                <p id="peoplemessage" style="display: none;">No more people left to add</p>
                 {% for person in people %}
                     <p class="personp" style="text-align: center;" id="buttonp-{{ person.id }}">
                         <button class="btn btn-primary btn-small personbutton" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }}</button>
@@ -44,7 +44,7 @@
             </div>
         </div>
         
-        <div class="span8">    
+        <div>    
             <table class="table table-condensed">
                 <tr><th>Remove</th><th>Person</th><th>Amount owed</th></tr>
                 {% for person in people %}
@@ -66,8 +66,10 @@
                         <div id="controlgroup-customamount-{{person.id}}" class="control-group">
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" class="uneditable-input" type="number" disabled required>
-                                    <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" onchange="javascript:handlechange('autoamount-{{person.id}}');" type="checkbox" class="customamountcheck" data-label="Calculate" checked>
+                                    <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" class="uneditable-input" type="number" disabled>
+                                    <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" type="checkbox" checked>
+                                    <button id="customamount-button-{{person.id}}" class="btn btn-primary btn-small" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-edit"></i> Specify</button>
+                                    <button id="autoamount-button-{{person.id}}" class="btn btn-primary btn-small" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-edit-sign"></i> Calculate</button>
                                 </div>
                             </div>
                         </div>
@@ -87,7 +89,7 @@
         $( '#buttonp-'+userid ).hide();
         updatecalc();
         
-        // find out if all rows are now hidden, shhide the whole table if so
+        // find out if all rows are now hidden, hide the whole table if so
         var temp = "allhidden";
         $( ".personp" ).each(function( index ) {
             if( $( this ).css("display") != "none" ) {
@@ -95,9 +97,9 @@
             };
         });
         if(temp == "atleastoneisvisible") {
-            $( "#peoplemessage" ).hide();
+            $( "#peoplebox" ).hide();
         } else {
-            $( "#peoplemessage" ).show();
+            $( "#peoplembox" ).show();
         };
     };
 
@@ -107,25 +109,20 @@
         $( '#buttonp-'+userid ).show();
         updatecalc();
         // hide the message if it is shown
-        if( $( "#peoplemessage" ).css("display") != "none") {
-            $( "#peoplemessage" ).hide();
+        if( $( "#peoplebox" ).css("display") != "none") {
+            $( "#peoplebox" ).hide();
         };
     };
     
-    function handlechange(id) {
-        if(document.getElementById(id).checked == false) {
-            //autoamount unchecked for this person, enable the textbox for editing
-            userid = id.substring(11);
-            textboxid = "customamount-"+userid;
-            document.getElementById(textboxid).className="";
-            document.getElementById(textboxid).disabled="";
-        } else {
-            //autoamount checked for this person, disable the textbox
-            userid = id.substring(11);
-            textboxid = "customamount-"+userid;
-            document.getElementById(textboxid).className="uneditable-input";
-            document.getElementById(textboxid).disabled="disabled";
-        };
+    function toggleautoamount(id) {
+        // toggle checkbox
+        $( '#autoamount-'+id ).toggle();
+
+        // toggle button visibility
+        $( '#customamount-button-'+id ).toggle();
+        $( '#autoamount-button-'+id ).toggle();
+
+        // update calculation
         updatecalc();
     };
     
@@ -234,17 +231,14 @@
     };
     
     $().ready(function(){
-        // enable prettyCheckable checkboxes
-        $( "input.customamountcheck" ).prettyCheckable();
-        
-        // update calculation on input 
+        // update calculation on input and change
+        $( "#amount" ).on('input change',function() {
+            updatecalc();
+        });
         $( "input[name^='person-customamount-']" ).on('input change',function() {
             updatecalc();
         });
         
-        $( "#amount" ).on('input change',function() {
-            updatecalc();
-        });
         
         // reset form
         $( "input[name^='person-customamount-']" ).each(function( index ) {
@@ -265,6 +259,10 @@
             // check autoamount
             $( "#autoamount-"+userid ).prop("checked", true);
             $( "#autoamount-" + userid + " + a" ).addClass("checked");
+            
+            // hide and show autoamount buttons
+            $( '#customamount-button-'+id ).show();
+            $( '#autoamount-button-'+id ).hide();
         });
 
         // initial calculation
