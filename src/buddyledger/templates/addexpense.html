@@ -19,7 +19,7 @@
     <div class="row">
         <div class="span4">
             <table>
-                <tr><td>{{form.name.label_tag}}</td><td><div class="control-group">{{form.name}}</td></tr>
+                <tr><td>{{form.name.label_tag}}</td><td><div class="control-group" id="controlgroup-name">{{form.name}}</td></tr>
                 <tr><td>{{form.amount.label_tag}}</td><td><div class="control-group" id="controlgroup-amount">{{form.amount}}</td></tr>
                 <tr><td>{{form.currency.label_tag}}</td><td><div class="control-group">{{form.currency}}</td></tr>
             </table>
@@ -31,7 +31,7 @@
         </div>
     </div>
     
-    <div class="row">
+    <div id="peoplediv" class="row" style="display: none;">
         <h4>People</h4>
         
         <div class="span2" id="peoplebox">
@@ -151,13 +151,32 @@
     function updatecalc() {
         setMessage("Working...","alert-info")
         
+        // check if we have a valid name for this expense
+        if(document.getElementById('name').value == '') {
+            $( '#controlgroup-name' ).removeClass().addClass( "control-group error" );
+            setMessage("Please add a name for this expense!","alert-warning");
+            $( '#controlgroup-name' ).focus();
+            $( '#peoplediv' ).hide();
+            return;        
+        };
+        
         // check if we have a valid total expense amount in the form
+        if(document.getElementById('amount').value == '') {
+            $( '#controlgroup-amount' ).removeClass().addClass( "control-group error" );
+            setMessage("Please specify a total amount for this expense!","alert-warning");
+            $( '#controlgroup-amount' ).focus();
+            $( '#peoplediv' ).hide();
+            return;            
+        }
         if(!$.isNumeric(document.getElementById('amount').value)) {
             $( '#controlgroup-amount' ).removeClass().addClass( "control-group error" );
-            setMessage("Invalid expense amount specified","alert-error");
+            setMessage("Invalid expense amount specified!","alert-error");
+            $( '#controlgroup-amount' ).focus();
+            $( '#peoplediv' ).hide();
             return;
         } else {
             $( '#controlgroup-amount' ).removeClass().addClass( "control-group" );
+            $( '#peoplediv' ).show();
         };
         
         // check each of the customamount fields
@@ -167,14 +186,23 @@
             userid = $(this).attr( "name" ).substring(20);
             // is this user a part of this expense ?
             if (document.getElementById('expensepart-'+userid).checked == true) {
-                // remove any extra classes on this control group
+                // remove any error classes on this control group
                 $( '#controlgroup-customamount-'+userid ).removeClass().addClass( "control-group" );
                 // is autoamount unchecked ?
                 if (document.getElementById('autoamount-'+userid).checked == false) {
-                    // check if the value is numeric
+                    // check if anything has been entered in the field
+                    if ( $( this ).val() == '' ) {
+                        setMessage("Please specify how much of the expense this user should pay for","alert-warning");
+                        $( '#controlgroup-customamount-'+userid ).removeClass().addClass( "control-group error" );
+                        $( '#controlgroup-customamount-'+userid ).focus();
+                        success = false;
+                    };
+                    
+                    // check if the entered value is numeric
                     if ( !$.isNumeric( $( this ).val() ) ) {
                         setMessage("Invalid amount specified: " + $(this).val(),"alert-error");
                         $( '#controlgroup-customamount-'+userid ).removeClass().addClass( "control-group error" );
+                        $( '#controlgroup-customamount-'+userid ).focus();
                         success = false;
                         return;
                     };
