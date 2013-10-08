@@ -38,7 +38,7 @@
             <div class="alert alert-info">
                 {% for person in people %}
                     <p class="personp" style="text-align: center;" id="buttonp-{{ person.id }}">
-                        <button class="btn btn-primary btn-small personbutton" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }}</button>
+                        <button class="btn btn-primary btn-small personbutton" type="button" onclick="javascript:showrow({{person.id}});"><i class="icon-arrow-right"></i> {{ person.name }}</button>
                     </p>
                 {% endfor %}
             </div>
@@ -46,20 +46,19 @@
         
         <div>    
             <table class="table table-condensed">
-                <tr><th>Remove</th><th>Person</th><th>Amount owed</th></tr>
+                <tr><th>Person</th><th>Amount owed</th></tr>
                 {% for person in people %}
                 <tr style="display: none;" id="row{{person.id}}">
                     <td style="text-align: center;">
                         <div class="control-group">
-                            <div class="controls form-inline">
-                                <button class="btn btn-danger btn-mini" type="button" onclick="javascript:hiderow({{person.id}});"><i class="icon-remove"></i></button>
-                            </div>
                         </div>
                     </td>
                     
                     <td>
-                        <span class="label label-info">{{person.name}}</span>
-                        <input id="expensepart-{{person.id}}" name="person-expensepart-{{person.id}}" type="checkbox" style="display:none;"/>
+                        <div class="controls form-inline">
+                            <button class="btn btn-primary btn-small" type="button" onclick="javascript:hiderow({{person.id}});"><i class="icon-arrow-left"></i> {{ person.name }}</button>
+                            <input id="expensepart-{{person.id}}" name="person-expensepart-{{person.id}}" type="checkbox" style="display:none;"/>
+                        </div>
                     </td>
 
                     <td>
