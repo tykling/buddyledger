@@ -37,7 +37,8 @@ def AddExpense(request, ledgerid=0):
         
     return render(request, 'addexpense.html', {
         'form': form,
-        'people': people
+        'people': people,
+        'ledger': ledger
     })
 
 
