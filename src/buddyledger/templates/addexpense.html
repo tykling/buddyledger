@@ -1,4 +1,4 @@
-{% extends "skeleton.html" %}
+7{% extends "skeleton.html" %}
 
 {% block content %}
 <h2>Add expense to ledger</h2>
@@ -115,8 +115,14 @@
     };
     
     function toggleautoamount(id) {
-        // toggle checkbox
-        $( '#autoamount-'+id ).toggle();
+        // if checkbox is checked...
+        if( $( '#autoamount-'+id ).attr('checked') ) {
+            // uncheck it
+            $( '#autoamount-'+id ).attr('checked', false);
+        } else {
+            // check it
+            $( '#autoamount-'+id ).attr('checked', true);
+        };
 
         // toggle button visibility
         $( '#customamount-button-'+id ).toggle();
@@ -261,8 +267,8 @@
             $( "#autoamount-" + userid + " + a" ).addClass("checked");
             
             // hide and show autoamount buttons
-            $( '#customamount-button-'+id ).show();
-            $( '#autoamount-button-'+id ).hide();
+            $( '#customamount-button-'+userid ).show();
+            $( '#autoamount-button-'+userid ).hide();
         });
 
         // initial calculation
