@@ -60,9 +60,9 @@
                         <div id="controlgroup-customamount-{{person.id}}" class="control-group">
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" class="uneditable-input" type="number" disabled>
+                                    <input id="customamount-{{person.id}}" class="input-mini" name="person-customamount-{{person.id}}" class="uneditable-input" type="number" disabled>
                                     <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" type="checkbox" checked style="display:none;">
-                                    <button id="customamount-button-{{person.id}}" class="btn btn-primary btn-mini" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-edit"></i> Edit amount</button>
+                                    <button id="customamount-button-{{person.id}}" class="btn btn-primary btn-mini" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-edit"></i> Specify amount</button>
                                     <button id="autoamount-button-{{person.id}}" class="btn btn-info btn-mini" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-star-empty"></i> Calculate amount</button>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                         <div id="controlgroup-paymentamount-{{person.id}}" class="control-group">
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="paymentamount-{{person.id}}" name="person-customamount-{{person.id}}" type="number" value="0">
+                                    <input id="paymentamount-{{person.id}}" class="input-mini" name="person-paymentamount-{{person.id}}" type="number" value="0">
                                 </div>
                             </div>
                         </div>
@@ -102,7 +102,7 @@
         if(temp == "atleastoneisvisible") {
             $( "#peoplebox" ).show();
         } else {
-            $( "#peoplembox" ).hide();
+            $( "#peoplebox" ).hide();
         };
     };
 
