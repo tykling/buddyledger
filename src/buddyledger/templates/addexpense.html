@@ -116,12 +116,18 @@
     
     function toggleautoamount(id) {
         // if checkbox is checked...
-        if( $( '#autoamount-'+id ).attr('checked') ) {
+        if( $( '#autoamount-'+id ).attr( 'checked' ) ) {
             // uncheck it
-            $( '#autoamount-'+id ).attr('checked', false);
+            $( '#autoamount-'+id ).attr( 'checked', false );
+            // enable checkbox
+            document.getElementById("customamount-"+id).className="";
+            document.getElementById("customamount-"+id).disabled="";
         } else {
             // check it
-            $( '#autoamount-'+id ).attr('checked', true);
+            $( '#autoamount-'+id ).attr( 'checked', true );
+            // disable checkbox
+            document.getElementById("customamount-"+id).className="uneditable-input";
+            document.getElementById("customamount-"+id).disabled="disabled";
         };
 
         // toggle button visibility
