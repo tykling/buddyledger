@@ -60,7 +60,7 @@
                         <div id="controlgroup-customamount-{{person.id}}" class="control-group">
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="customamount-{{person.id}}" class="input-medium" name="person-customamount-{{person.id}}" class="uneditable-input" type="number" disabled>
+                                    <input id="customamount-{{person.id}}" class="input-small" name="person-customamount-{{person.id}}" class="uneditable-input" type="number" disabled>
                                     <span class="add-on">{{ ledger.currency.iso4217_code }}</span>
                                     <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" type="checkbox" checked style="display:none;">
                                     <button id="customamount-button-{{person.id}}" class="btn btn-primary" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-edit"></i> Specify amount</button>
@@ -73,7 +73,7 @@
                         <div id="controlgroup-paymentamount-{{person.id}}" class="control-group">
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="paymentamount-{{person.id}}" class="input-medium" name="person-paymentamount-{{person.id}}" type="number" value="0">
+                                    <input id="paymentamount-{{person.id}}" class="input-small" name="person-paymentamount-{{person.id}}" type="number" value="0">
                                     <span class="add-on">{{ ledger.currency.iso4217_code }}</span>
                                 </div>
                             </div>
@@ -124,11 +124,11 @@
         // if checkbox is checked...
         if ( $( '#autoamount-'+id ).prop( "checked" ) ) {
             // enable textbox
-            document.getElementById("customamount-"+id).className="";
+            document.getElementById("customamount-"+id).className="input-small";
             document.getElementById("customamount-"+id).disabled="";
         } else {
             // disable textbox
-            document.getElementById("customamount-"+id).className="uneditable-input";
+            document.getElementById("customamount-"+id).className="uneditable-input input-small";
             document.getElementById("customamount-"+id).disabled="disabled";
         };
 
