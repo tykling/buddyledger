@@ -67,9 +67,9 @@
                             <div class="controls">
                                 <div class="input-append">
                                     <input id="customamount-{{person.id}}" name="person-customamount-{{person.id}}" class="uneditable-input" type="number" disabled>
-                                    <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" type="checkbox" checked>
+                                    <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" type="checkbox" checked style="display:none;">
                                     <button id="customamount-button-{{person.id}}" class="btn btn-primary btn-small" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-edit"></i> Specify</button>
-                                    <button id="autoamount-button-{{person.id}}" class="btn btn-primary btn-small" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-edit-sign"></i> Calculate</button>
+                                    <button id="autoamount-button-{{person.id}}" class="btn btn-warning btn-small" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-edit-sign"></i> Calculate</button>
                                 </div>
                             </div>
                         </div>
@@ -97,9 +97,9 @@
             };
         });
         if(temp == "atleastoneisvisible") {
-            $( "#peoplebox" ).hide();
+            $( "#peoplebox" ).show();
         } else {
-            $( "#peoplembox" ).show();
+            $( "#peoplembox" ).hide();
         };
     };
 
@@ -108,9 +108,10 @@
         $( '#expensepart-'+userid ).prop("checked", false);
         $( '#buttonp-'+userid ).show();
         updatecalc();
-        // hide the message if it is shown
-        if( $( "#peoplebox" ).css("display") != "none") {
-            $( "#peoplebox" ).hide();
+        
+        // show the box if it is hidden
+        if( $( "#peoplebox" ).css("display") == "none") {
+            $( "#peoplebox" ).show();
         };
     };
     
