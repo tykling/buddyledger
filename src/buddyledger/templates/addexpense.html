@@ -282,8 +282,9 @@
         };
         
         // sanity: check if the total amount owed equal the total expense amount
-        if(Number(autototal+customtotal).toFixed(2) != Number(document.getElementById('amount').value).toFixed(2)) {
-            setMessage("Error: The total amount owed (" + autototal+customtotal + ") should equal the expense amount (" + document.getElementById('amount').value + ")!","alert-error");
+        totalowed = Number(autototal+customtotal).toFixed(2)
+        if(totalowed != Number(document.getElementById('amount').value).toFixed(2)) {
+            setMessage("Error: The total amount owed (" + totalowed + ") should equal the expense amount (" + document.getElementById('amount').value + ")!","alert-error");
             $( '#controlgroup-amount' ).removeClass().addClass( "control-group error" );
             if (customids.length > 0) {
                 for (var i=0;i<customids.length;i++) {
