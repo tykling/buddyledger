@@ -213,7 +213,7 @@ function updatecalc() {
 	// find the total amount paíd
 	totalpaid = 0;
 	$( "input[name^='person-paymentamount-']" ).each(function( index ) {
-		userid = $(this).attr( "name" ).substring(20);
+		userid = $(this).attr( "name" ).substring(21);
 		if (document.getElementById('expensepart-'+userid).checked == true) {
 			if( $( this ).val() != '') {
 				if ( !$.isNumeric( $( this ).val() ) ) {
