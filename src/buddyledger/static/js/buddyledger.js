@@ -232,8 +232,13 @@ function updatecalc() {
 	
 	// check that the total amount paid equals the expense amount
 	if(totalpaid.toFixed(2) != Number(document.getElementById('amount').value).toFixed(2)) {
-		$( "div[id^='controlgroup-paymentamount-']" ).removeClass().addClass( "control-group error" );
-		setMessage("Error: Payments do not add up (" + totalpaid.toFixed(2) + ") to the expense amount (" + Number(document.getElementById('amount').value).toFixed(2) + ")","alert-error");
+		// give an appropriate message
+		if(totalpaid == 0) {
+			$( "div[id^='controlgroup-paymentamount-']" ).removeClass().addClass( "control-group error" );
+			setMessage("Please add payments in the 'Amount paid' column to indicate who paid for this expense. The payments must add up to the expense amount: " + document.getElementById('amount').value,"alert-error");
+		} else {
+			$( "div[id^='controlgroup-paymentamount-']" ).removeClass().addClass( "control-group error" );
+			setMessage("Error: Payments do not add up (" + totalpaid.toFixed(2) + ") to the expense amount (" + Number(document.getElementById('amount').value).toFixed(2) + ")","alert-error");
 		return;
 	};
 	
@@ -246,7 +251,7 @@ function updatecalc() {
 
 $().ready(function(){
 	// update calculation on input and change in textfields
-	$( "#amount,#name,input[name^='person-customamount-']" ).on('input change',function() {
+	$( "#amount,#name,input[name^='person-customamount-'],input[name^='person-paymentamount-']" ).on('input change',function() {
 		updatecalc();
 	});        
 
