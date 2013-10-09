@@ -66,7 +66,7 @@ function updatecalc() {
 	
 	// check if we have a valid name for this expense
 	if(document.getElementById('name').value == '') {
-		$( '#controlgroup-name' ).removeClass().addClass( "control-group error" );
+		$( '#controlgroup-name' ).removeClass().addClass( "control-group warning" );
 		setMessage("Please add a name for this expense!","alert-warning");
 		$( '#controlgroup-name' ).focus();
 		$( '#peoplediv' ).hide();
@@ -75,7 +75,7 @@ function updatecalc() {
 	
 	// check if we have a valid total expense amount in the form
 	if(document.getElementById('amount').value == '') {
-		$( '#controlgroup-amount' ).removeClass().addClass( "control-group error" );
+		$( '#controlgroup-amount' ).removeClass().addClass( "control-group warning" );
 		setMessage("Please specify a total amount for this expense!","alert-warning");
 		$( '#controlgroup-amount' ).focus();
 		$( '#peoplediv' ).hide();
