@@ -214,17 +214,19 @@ function updatecalc() {
 	totalpaid = 0;
 	$( "input[name^='person-paymentamount-']" ).each(function( index ) {
 		userid = $(this).attr( "name" ).substring(20);
-		if( $( this ).val() != '') {
-			if ( !$.isNumeric( $( this ).val() ) ) {
-					setMessage("Invalid amount specified: " + $(this).val(),"alert-error");
-					$( '#controlgroup-paymentamount-'+userid ).removeClass().addClass( "control-group error" );
-					$( '#controlgroup-paymentamount-'+userid ).focus();
-					success = false;
-					return;
-			} else {
-				// amount OK, remove any error classes on this field
-				totalpaid = totalpaid + Number($( this ).val());
-				$( '#controlgroup-paymentamount-'+userid ).removeClass();
+		if (document.getElementById('expensepart-'+userid).checked == true) {
+			if( $( this ).val() != '') {
+				if ( !$.isNumeric( $( this ).val() ) ) {
+						setMessage("Invalid amount specified: " + $(this).val(),"alert-error");
+						$( '#controlgroup-paymentamount-'+userid ).removeClass().addClass( "control-group error" );
+						$( '#controlgroup-paymentamount-'+userid ).focus();
+						success = false;
+						return;
+				} else {
+					// amount OK, remove any error classes on this field
+					totalpaid = totalpaid + Number($( this ).val());
+					$( '#controlgroup-paymentamount-'+userid ).removeClass();
+				};
 			};
 		};
 	});
