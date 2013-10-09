@@ -232,10 +232,7 @@ function updatecalc() {
 	
 	// check that the total amount paid equals the expense amount
 	if(totalpaid.toFixed(2) != Number(document.getElementById('amount').value).toFixed(2)) {
-		userid = $(this).attr( "name" ).substring(20);
-		$( "input[name^='person-paymentamount-']" ).each(function( index ) {
-			$( '#controlgroup-paymentamount-'+userid ).removeClass().addClass( "control-group error" );
-		});
+		$( "div[id^='controlgroup-paymentamount-']" ).removeClass().addClass( "control-group error" );
 		setMessage("Error: Payments do not add up to the expense amount","alert-error");
 		return;
 	};
