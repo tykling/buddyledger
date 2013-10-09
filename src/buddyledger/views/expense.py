@@ -18,7 +18,7 @@ def AddExpense(request, ledgerid=0):
         return response
     
     ### get all people associated with this ledger
-    people = Person.objects.filter(ledger_id=ledgerid)
+    people = Person.objects.filter(ledger_id=ledgerid).order_by('name')
     
     if request.method == 'POST':
         form = ExpenseForm(request.POST,people=people)
