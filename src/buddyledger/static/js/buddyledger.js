@@ -207,6 +207,9 @@ function updatecalc() {
 		return false;
 	};
 	
+	// reset classes on payment fields
+	$( "div[id^='controlgroup-paymentamount-']" ).removeClass().addClass( "control-group" );
+	
 	// find the total amount paíd
 	totalpaid = 0;
 	$( "input[name^='person-paymentamount-']" ).each(function( index ) {
