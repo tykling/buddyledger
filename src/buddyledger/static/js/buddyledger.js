@@ -234,8 +234,8 @@ function updatecalc() {
 	if(totalpaid.toFixed(2) != Number(document.getElementById('amount').value).toFixed(2)) {
 		// give an appropriate message
 		if(totalpaid == 0) {
-			$( "div[id^='controlgroup-paymentamount-']" ).removeClass().addClass( "control-group error" );
-			setMessage("Please add payments in the 'Amount paid' column to indicate who paid for this expense. The payments must add up to the expense amount: " + document.getElementById('amount').value,"alert-error");
+			$( "div[id^='controlgroup-paymentamount-']" ).removeClass().addClass( "control-group warning" );
+			setMessage("Please add payments in the 'Amount paid' column to indicate who paid for this expense. The payments must add up to the expense amount: " + document.getElementById('amount').value,"alert-warning");
 		} else {
 			$( "div[id^='controlgroup-paymentamount-']" ).removeClass().addClass( "control-group error" );
 			setMessage("Error: Payments do not add up (" + totalpaid.toFixed(2) + ") to the expense amount (" + Number(document.getElementById('amount').value).toFixed(2) + ")","alert-error");
