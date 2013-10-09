@@ -238,12 +238,12 @@
         customtotal = 0;
         if (customids.length > 0) {
             for (var i=0;i<customids.length;i++) {
-                customtotal = customtotal + parseFloat($( "#customamount-" + customids[i] ).val());
+                customtotal = customtotal + Number($( "#customamount-" + customids[i] ).val());
             };
         };
 
         // if the total customamount exceeds the amount...
-        if (customtotal > document.getElementById('amount').value) {
+        if (customtotal > Number(document.getElementById('amount').value)) {
             // mark the expense amount and the customamount fields with red to indicate where the problem is
             document.getElementById('controlgroup-amount').className="control-group error";
             $( "input[name^='person-customamount-']" ).each(function( index ) {
@@ -261,18 +261,14 @@
         
         // now find the amount that remains after custom amounts have been substracted,
         // divide by the number of autoamount people, and add it to their amount textboxes
-        divamount = (document.getElementById('amount').value-customtotal)/autoids.length;
-        
-        // round to two decimals
-        divamount = divamount.toPrecision(2);
-        divamount = divamount.toFixed(2);
+        divamount = Number((document.getElementById('amount').value-customtotal)/autoids.length);
         
         $( "input[name^='person-customamount-']" ).each(function( index ) {
             // find userid from element name
             userid = $(this).attr( "name" ).substring(20);
             if (document.getElementById('expensepart-'+userid).checked == true) {
                 if (document.getElementById('autoamount-'+userid).checked == true) {
-                    document.getElementById('customamount-'+userid).value = divamount;
+                    document.getElementById('customamount-'+userid).value = divamount.toFixed(2);
                 };
             };
         });
@@ -281,13 +277,13 @@
         autototal = 0;
         if (autoids.length > 0) {
             for (var i=0;i<autoids.length;i++) {
-                autototal = autototal + parseFloat($( "#customamount-" + customids[i] ).val());
+                autototal = autototal + Number($( "#customamount-" + customids[i] ).val());
             };        
         };
         
-        // check if the added pay and owe totals equal the total expense amount
-        if(autototal+customtotal != document.getElementById('amount').value) {
-            setMessage("Error: The total amount owed should equal the expense amount!","alert-error");
+        // sanity: check if the total amount owed equal the total expense amount
+        if(Number(autototal+customtotal).toFixed(2) != Number(document.getElementById('amount').value).toFixed(2)) {
+            setMessage("Error: The total amount owed (" + autototal+customtotal + ") should equal the expense amount (" + document.getElementById('amount').value + ")!","alert-error");
             $( '#controlgroup-amount' ).removeClass().addClass( "control-group error" );
             if (customids.length > 0) {
                 for (var i=0;i<customids.length;i++) {
@@ -297,7 +293,7 @@
             return false;
         };
         
-        // check that the total amount paid equals the expense amount
+        // find the total amount paíd
         totalpaid = 0;
         $( "input[name^='person-paymentamount-']" ).each(function( index ) {
             userid = $(this).attr( "name" ).substring(20);
@@ -309,7 +305,7 @@
                         success = false;
                         return;
                 } else {
-                    totalpaid = totalpaid + $( this ).val();
+                    totalpaid = totalpaid + Number($( this ).val());
                 };
             };
         });
@@ -318,13 +314,14 @@
             return;
         };
         
-        if(totalpaid != document.getElementById('amount').value) {
+        // check that the total amount paid equals the expense amount
+        if(totalpaid.toFixed(2) != Number(document.getElementById('amount').value).toFixed(2)) {
             userid = $(this).attr( "name" ).substring(20);
             $( "input[name^='person-paymentamount-']" ).each(function( index ) {
                 if( $( this ).val() != '') {
                     $( '#controlgroup-paymentamount-'+userid ).removeClass().addClass( "control-group error" );
                 };
-            };
+            });
             setMessage("Error: Payments do not add up to the expense amount","alert-error");
             return;
         };
