@@ -239,6 +239,7 @@ function updatecalc() {
 		} else {
 			$( "div[id^='controlgroup-paymentamount-']" ).removeClass().addClass( "control-group error" );
 			setMessage("Error: Payments do not add up (" + totalpaid.toFixed(2) + ") to the expense amount (" + Number(document.getElementById('amount').value).toFixed(2) + ")","alert-error");
+		};
 		return;
 	};
 	
