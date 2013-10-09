@@ -214,8 +214,8 @@
         };
         
         // find the userids of customamount and autoamount people in this calculation
-        var autoids = new Array();
-        var customids = new Array();
+        autoids = new Array();
+        customids = new Array();
         $( "input[name^='person-customamount-']" ).each(function( index ) {
             // find userid from element name
             userid = $(this).attr( "name" ).substring(20);
@@ -277,8 +277,8 @@
         autototal = 0;
         if (autoids.length > 0) {
             for (var i=0;i<autoids.length;i++) {
-                autototal = autototal + Number($( "#customamount-" + customids[i] ).val());
-            };        
+                autototal = autototal + divamount;
+            };
         };
         
         // sanity: check if the total amount owed equal the total expense amount
