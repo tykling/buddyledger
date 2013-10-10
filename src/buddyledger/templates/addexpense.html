@@ -20,7 +20,7 @@
         <div class="span4">
             <table>
                 <tr><td>{{form.name.label_tag}}</td><td><div class="control-group" id="controlgroup-name">{{form.name}}</td></tr>
-                <tr><td>{{form.amount.label_tag}}</td><td><div class="control-group" id="controlgroup-amount">{{form.amount}}</td></tr>
+                <tr><td>{{form.amount.label_tag}}</td><td><div class="control-group" id="controlgroup-amount"><div class="input-append">{{form.amount}}<span class="add-on currencylabel">{{ ledger.currency.iso4217_code }}</span></div></td></tr>
                 <tr><td>{{form.currency.label_tag}}</td><td><div class="control-group">{{form.currency}}</td></tr>
             </table>
         </div>
@@ -61,7 +61,7 @@
                             <div class="controls">
                                 <div class="input-append">
                                     <input id="customamount-{{person.id}}" class="input-small" name="person-customamount-{{person.id}}" class="uneditable-input" type="number" disabled>
-                                    <span class="add-on">{{ ledger.currency.iso4217_code }}</span>
+                                    <span class="add-on currencylabel">{{ ledger.currency.iso4217_code }}</span>
                                     <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" type="checkbox" checked style="display:none;">
                                     <button id="customamount-button-{{person.id}}" class="btn btn-primary" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-edit"></i> Specify amount</button>
                                     <button id="autoamount-button-{{person.id}}" class="btn btn-info" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-remove"></i> Calculate amount</button>
@@ -74,7 +74,7 @@
                             <div class="controls">
                                 <div class="input-append">
                                     <input id="paymentamount-{{person.id}}" class="input-small" name="person-paymentamount-{{person.id}}" type="number" value="0">
-                                    <span class="add-on">{{ ledger.currency.iso4217_code }}</span>
+                                    <span class="add-on currencylabel">{{ ledger.currency.iso4217_code }}</span>
                                 </div>
                             </div>
                         </div>

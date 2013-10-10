@@ -19,6 +19,7 @@ function showrow(userid) {
 	};
 };
 
+
 // hides a row in the add/edit expense table
 function hiderow(userid) {
 	$( '#row'+userid ).hide();
@@ -56,10 +57,12 @@ function toggleautoamount(id) {
 	updatecalc();
 };
 
+
 function setMessage(message,type) {
 	$( '#messages' ).removeClass().addClass( "alert " + type );
 	$( '#messages' ).html("<p>" + message + "</p>");
 };
+
 
 function updatecalc() {
 	setMessage("Working...","alert-info")
@@ -255,11 +258,21 @@ function updatecalc() {
 	setMessage("Bueno!","alert-success");
 };
 
+
+function updatecurrency() {
+	$( ".currencylabel" ).html($( "#id_currency option:selected" ).text());
+};
+
 $().ready(function(){
 	// update calculation on input and change in textfields
 	$( "#amount,#name,input[name^='person-customamount-'],input[name^='person-paymentamount-']" ).on('input change',function() {
 		updatecalc();
-	});        
+	});
+
+	// update currency labels on input and change
+	$( "#currency" ).on('input change',function() {
+		updatecurrency();
+	});
 
 	// reset form
 	$( "input[name^='person-customamount-']" ).each(function( index ) {
