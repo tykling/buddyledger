@@ -66,6 +66,7 @@ function setMessage(message,type) {
 
 function updatecalc() {
 	setMessage("Working...","alert-info")
+	$( "#submit" ).prop( "disabled", true );
 	
 	// check if we have a valid name for this expense
 	if(document.getElementById('name').value == '') {
@@ -256,6 +257,7 @@ function updatecalc() {
 	};
 	
 	setMessage("Bueno!","alert-success");
+	$( "#submit" ).prop( "disabled", false );
 };
 
 
@@ -270,7 +272,7 @@ $().ready(function(){
 	});
 
 	// update currency labels on input and change
-	$( "#currency" ).on('input change',function() {
+	$( "#id_currency" ).on('input change',function() {
 		updatecurrency();
 	});
 
