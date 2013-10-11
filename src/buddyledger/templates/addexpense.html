@@ -38,7 +38,7 @@
             <div class="alert alert-info">
                 {% for person in people %}
                     <p class="personp" style="text-align: center;" id="buttonp-{{ person.id }}">
-                        <button class="btn btn-primary personbutton" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }} <i class="icon-arrow-right"></i></button>
+                        <button class="btn btn-primary personbutton btn-block" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }} <i class="icon-arrow-right"></i></button>
                     </p>
                 {% endfor %}
             </div>

@@ -37,19 +37,20 @@ class ExpenseForm(forms.Form):
 
     def get_expense_parts(self):
         for fieldname, value in self.cleaned_data.items():
-            ### if this is a customamount textfield
-            if fieldname.startswith('person_customamount_'):
-                ### and the person is part of this expense
-                if 'person_expensepart_%s' % self.fields[fieldname].id in self.cleaned_data:
-                    ### return userid and amount
-                    yield (self.fields[fieldname].id, value)
-            ### if this is an autoamount checkbox
-            if fieldname.startswith('person_autoamount_'):
-                ### and the person is part of this expense
-                if 'person_expensepart_%s' % self.fields[fieldname].id in self.cleaned_data:
-                    ### return userid and None for amount
-                    yield (self.fields[fieldname].id, None)
-
+            ### get the userid from the expensepart field
+            if fieldname.startswith('person_expensepart_'):
+                userid = fieldname[19:]
+                
+                ### find out if this user has a custom amount specified
+                if self.fields['person_autoamount_%s' % userid].value == 'on':
+                    ### calculate the amount for this user
+                    amount = "auto"
+                else:
+                    ### get the customamount for this user
+                    amount = "custom"
+                    
+                ### return this user
+                yield (userid, shouldpay, haspaid)
 
 class PaymentForm(forms.ModelForm):
     class Meta:
