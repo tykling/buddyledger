@@ -49,42 +49,28 @@ def ShowLedger(request, ledgerid=0):
     ### get all expenses related to this ledger
     expenses = Expense.objects.filter(ledger_id=ledgerid)
     
-    ### get all payments related to one of the expenses
-    payments = Payment.objects.filter(expense_id__in=expenses)
-    
-    ### put the input data structure for calculation together
-    errorlist = []
-    calcdata = []
-    showresult = False
-    for expense in expenses:
-        expensepayments = Payment.objects.filter(expense_id = expense.id)
-        ### no calculation if there are no payments
-        if expensepayments != []:
+    showresult = True
+    if expenses.length > 0:
+        ### build the calcdata structure for calculation input
+        errorlist = []
+        calcdata = []
+        for expense in expenses:
+            ### loop through expenseparts (people) for this expense
             paymentlist = []
-            totalamount = 0
-            for payment in expensepayments:
-                paymentlist.append(dict(personId=payment.person.id,amount=Fraction(payment.amount_native)))
-                totalamount += payment.amount_native
-            ### no calculation if the payments dont add up to the total expense
-            if totalamount == expense.amount_native:
-                showresult = True
-                whoshouldpay = dict()
-                for person in expense.people.all():
-                    expensepart = ExpensePart.objects.get(expense=expense, person=person)
-                    whoshouldpay[person.id]=expensepart.amount
-                calcdata.append(dict(whopaid=paymentlist, whoshouldpay=whoshouldpay))
-            elif totalamount < expense.amount_native:
-                errorlist.append("The expense %s was not included in the calculation because the sum of the payments (%s) do not add up to the total expense (%s)" % (expense.name,totalamount,expense.amount_native))
-            else:
-                errorlist.append("The expense %s was not included in the calculation because the sum of the payments (%s) is larger than the total expense (%s)" % (expense.name,totalamount,expense.amount_native))
-                
-    ### create dict with uid <> username mappings
-    userdict = OrderedDict()
-    for person in people:
-        userdict[person.id] = person.name
+            whoshouldpay = dict()
+            for person in expense.expenseparts:
+                if person.haspaid != 0:
+                    paymentlist.append(dict(personId=person.id,amount=Fraction(person.haspaid)))
+                whoshouldpay[person.id]=person.shouldpay
+            ### add data for this expense to calcdata
+            calcdata.append(dict(whopaid=paymentlist, whoshouldpay=whoshouldpay))
 
-    ### do the calculation ? (true if at least one expense has payment(s) equal to the total expense)
-    if showresult:
+        ### create dict with uid <> username mappings
+        userdict = OrderedDict()
+        for person in people:
+            userdict[person.id] = person.name
+
+        ### do the calculation
         if ledger.calcmethod == "optimized":
             fracresult = solve_mincost_problem_for_expenses(calcdata, [person.id for person in people])
         elif ledger.calcmethod == "basic":
@@ -92,7 +78,10 @@ def ShowLedger(request, ledgerid=0):
         else:
             errorlist.append("Unknown calculation method selected for this ledger: <b>%s</b>. No result will be calculated.")
             showresult = False
-        
+    else:
+        showresult = False
+    
+    ### do we have a result to show ?
     if showresult:
         ### convert the Fractions in the result to Decimal
         result = resultdict_to_decimal(fracresult)
@@ -107,7 +96,6 @@ def ShowLedger(request, ledgerid=0):
             'ledger': ledger,
             'people': people,
             'expenses': expenses,
-            'payments': payments,
             'debugdata': calcdata,
             'matrixdict': matrixdict,
             'tabledict': tabledict,
@@ -120,7 +108,6 @@ def ShowLedger(request, ledgerid=0):
             'ledger': ledger,
             'people': people,
             'expenses': expenses,
-            'payments': payments,
             'debugdata': calcdata,
             'errorlist': errorlist
         })
