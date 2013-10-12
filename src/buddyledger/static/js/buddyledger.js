@@ -93,6 +93,7 @@ function updatecalc() {
 		return;
 	} else {
 		$( '#controlgroup-amount' ).removeClass().addClass( "control-group" );
+		$( '#controlgroup-amount' ).val($('#controlgroup-amount').val().toFixed(2))
 		$( '#peoplediv' ).show();
 	};
 	
@@ -122,6 +123,8 @@ function updatecalc() {
 					$( '#controlgroup-customamount-'+userid ).focus();
 					success = false;
 					return;
+				} else {
+					$(this).val($(this).val().toFixed(2))
 				};
 			};
 		};
@@ -230,6 +233,7 @@ function updatecalc() {
 					// amount OK, remove any error classes on this field
 					totalpaid = totalpaid + Number($( this ).val());
 					$( '#controlgroup-paymentamount-'+userid ).removeClass();
+					$(this).val($(this).val().toFixed(2));
 				};
 			};
 		};
@@ -266,6 +270,8 @@ function updatecurrency() {
 };
 
 $().ready(function(){
+	
+	$('element').length == 0;
 	// update calculation on input and change in textfields
 	$( "#amount,#name,input[name^='person-customamount-'],input[name^='person-paymentamount-']" ).on('input change',function() {
 		updatecalc();

@@ -42,16 +42,15 @@ class ExpenseForm(forms.Form):
                 userid = fieldname[19:]
                 
                 ### find out if this user has a custom amount specified
-                if self.fields['person_autoamount_%s' % userid].value == 'on':
+                if 'person_autoamount_%s' % userid in self.fields:
                     ### calculate the amount for this user
-                    amount = "auto"
+                    shouldpay = "auto"
                 else:
                     ### get the customamount for this user
-                    amount = "custom"
-                    
+                    shouldpay = self.fields['person_customamount_%s' % userid].value
+                
+                ### find out how much the user has paid
+                haspaid = self.fields['person_paymentamount_%s' % userid].value
+                
                 ### return this user
                 yield (userid, shouldpay, haspaid)
-
-class PaymentForm(forms.ModelForm):
-    class Meta:
-        model = Payment

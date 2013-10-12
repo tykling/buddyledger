@@ -4,7 +4,7 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 
 from buddyledger.forms import PersonForm
-from buddyledger.models import Ledger, Person, Expense, Payment, Currency
+from buddyledger.models import Ledger, Person, Expense, Currency
 
 def AddPerson(request,ledgerid=0):
     ### check if the ledger exists, bail out if not

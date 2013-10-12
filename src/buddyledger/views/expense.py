@@ -4,8 +4,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from django.forms.models import inlineformset_factory
 
-from buddyledger.models import Ledger, Person, Expense, Payment, Currency
-from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, PaymentForm
+from buddyledger.models import Ledger, Person, Expense, Currency
+from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm
 
 from buddyledger.views.misc import ConvertCurrency
 
@@ -25,8 +25,8 @@ def AddExpense(request, ledgerid=0):
         if form.is_valid(): # All validation rules pass
             expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=Decimal(form['amount'].data),amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,ledger.currency.id),currency_id=form['currency'].data)
             expense.save() # save the new expense
-            for (uid,amount) in form.get_expense_parts():
-                ExpensePart.objects.create(person_id=uid,expense_id=expense.id,amount=amount)
+            for (uid,shouldpay,haspaid) in form.get_expense_parts():
+                ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=shouldpay,haspaid=haspaid)
             return HttpResponseRedirect('/expense/%s/addpayment/' % expense.id) # go straight to add payment page after save
         else:
             ### form not valid
