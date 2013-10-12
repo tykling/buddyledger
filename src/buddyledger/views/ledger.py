@@ -50,7 +50,7 @@ def ShowLedger(request, ledgerid=0):
     expenses = Expense.objects.filter(ledger_id=ledgerid)
     
     showresult = True
-    if expenses.length > 0:
+    if len(expenses) > 0:
         ### build the calcdata structure for calculation input
         errorlist = []
         calcdata = []
@@ -58,7 +58,8 @@ def ShowLedger(request, ledgerid=0):
             ### loop through expenseparts (people) for this expense
             paymentlist = []
             whoshouldpay = dict()
-            for person in expense.expenseparts:
+
+            for person in ExpensePart.objects.filter(expense_id=expense.id):
                 if person.haspaid != 0:
                     paymentlist.append(dict(personId=person.id,amount=Fraction(person.haspaid)))
                 whoshouldpay[person.id]=person.shouldpay
