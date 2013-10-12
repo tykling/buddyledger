@@ -26,16 +26,16 @@ class ExpenseForm(forms.Form):
         ### add expensepart form elements
         for person in people:
             ### does this person have a part in this expense yes/no
-            self.fields['person_expensepart_%s' % person.id] = forms.BooleanField(label=person.name,required=False)
+            self.fields['person-expensepart-%s' % person.id] = forms.BooleanField(label=person.name,required=False)
             
             ### is the amount to be calculated or custom (relevant if yes above)
-            self.fields['person_autoamount_%s' % person.id] = forms.BooleanField(label="autoamount",required=False)
+            self.fields['person-autoamount-%s' % person.id] = forms.BooleanField(label="autoamount",required=False)
             
             ### field for specifying custom amount (if custom amount above)
-            self.fields['person_customamount_%s' % person.id] = forms.CharField(label="customamount", required=False)
+            self.fields['person-customamount-%s' % person.id] = forms.CharField(label="customamount", required=False)
             
             ### field for specifying payment amount
-            self.fields['person_paymentamount_%s' % person.id] = forms.CharField(label="paymentamount", required=False)
+            self.fields['person-paymentamount-%s' % person.id] = forms.CharField(label="paymentamount", required=False)
 
 
     def get_expense_parts(self):
@@ -45,20 +45,20 @@ class ExpenseForm(forms.Form):
         
         for fieldname,value in fielddict.iteritems():
             ### get the userid from the expensepart field
-            if fieldname.startswith('person_expensepart_'):
+            if fieldname.startswith('person-expensepart-'):
                 userid = fieldname[19:]
                 
                 ### find out if this user has a custom amount specified
-                if 'person_autoamount_%s' % userid in fielddict:
+                if 'person-autoamount-%s' % userid in fielddict:
                     ### calculate the amount for this user
                     shouldpay = "auto"
                 else:
                     ### get the customamount for this user
-                    shouldpay = fielddict['person_customamount_%s' % userid]
+                    shouldpay = fielddict['person-customamount-%s' % userid]
                 
                 ### find out if this user paid anything
-                if 'person_paymentamount_%s' % userid in fielddict:
-                    haspaid = fielddict['person_paymentamount_%s' % userid]
+                if 'person-paymentamount-%s' % userid in fielddict:
+                    haspaid = fielddict['person-paymentamount-%s' % userid]
                 else:
                     haspaid = 0
                 

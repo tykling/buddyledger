@@ -29,9 +29,9 @@ def AddExpense(request, ledgerid=0):
             ### loop through the expenseparts
             expenseparts = dict()
             for (uid,shouldpay,haspaid) in form.get_expense_parts():
-                if haspaid = '':
+                if haspaid == '':
                     haspaid = 0
-                if shouldpay = '':
+                if shouldpay == '':
                     shouldpay = 0
                 expenseparts[uid] = dict(shouldpay=shouldpay,haspaid=haspaid)
             
