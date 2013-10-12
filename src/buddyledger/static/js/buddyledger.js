@@ -270,47 +270,49 @@ function updatecurrency() {
 };
 
 $().ready(function(){
-	
-	$('element').length == 0;
-	// update calculation on input and change in textfields
-	$( "#amount,#name,input[name^='person-customamount-'],input[name^='person-paymentamount-']" ).on('input change',function() {
+	if ( $( "input[name^='person-customamount-'],input[name^='person-paymentamount-']" ).length == 0 ) {
+		// this seems to be the add/edit expense page...
+
+		// update calculation on input and change in textfields
+		$( "#amount,#name,input[name^='person-customamount-'],input[name^='person-paymentamount-']" ).on('input change',function() {
+			updatecalc();
+		});
+
+		// update currency labels on input and change
+		$( "#id_currency" ).on('input change',function() {
+			updatecurrency();
+		});
+
+		// reset form
+		$( "input[name^='person-customamount-']" ).each(function( index ) {
+			// find userid from element name
+			userid = $(this).attr( "name" ).substring(20);
+			
+			// remove content from textfields
+			$( "#customamount-"+userid ).val(0);
+			$( "input[name^='person-paymentamount-']" ).val(0);
+			
+			// remove classes from payment fields
+			$( "input[name^='person-paymentamount-']" ).removeClass();
+			
+			// add uneditable-input and disabled to the customamount textfield
+			$( "#customamount-"+userid ).addClass("uneditable-input");
+			$( "#customamount-"+userid ).prop( "disabled", true );
+			
+			// uncheck expensepart
+			$( "#expensepart-"+userid ).prop("checked", false);
+			$( "#expensepart-" + userid + " + a" ).removeClass("checked");
+			
+			// check autoamount
+			$( "#autoamount-"+userid ).prop("checked", true);
+			$( "#autoamount-" + userid + " + a" ).addClass("checked");
+			
+			// hide and show autoamount buttons
+			$( '#customamount-button-'+userid ).show();
+			$( '#autoamount-button-'+userid ).hide();
+		});
+
+		// initial calculation
 		updatecalc();
-	});
-
-	// update currency labels on input and change
-	$( "#id_currency" ).on('input change',function() {
-		updatecurrency();
-	});
-
-	// reset form
-	$( "input[name^='person-customamount-']" ).each(function( index ) {
-		// find userid from element name
-		userid = $(this).attr( "name" ).substring(20);
-		
-		// remove content from textfields
-		$( "#customamount-"+userid ).val(0);
-		$( "input[name^='person-paymentamount-']" ).val(0);
-		
-		// remove classes from payment fields
-		$( "input[name^='person-paymentamount-']" ).removeClass();
-		
-		// add uneditable-input and disabled to the customamount textfield
-		$( "#customamount-"+userid ).addClass("uneditable-input");
-		$( "#customamount-"+userid ).prop( "disabled", true );
-		
-		// uncheck expensepart
-		$( "#expensepart-"+userid ).prop("checked", false);
-		$( "#expensepart-" + userid + " + a" ).removeClass("checked");
-		
-		// check autoamount
-		$( "#autoamount-"+userid ).prop("checked", true);
-		$( "#autoamount-" + userid + " + a" ).addClass("checked");
-		
-		// hide and show autoamount buttons
-		$( '#customamount-button-'+userid ).show();
-		$( '#autoamount-button-'+userid ).hide();
-	});
-
-	// initial calculation
-	updatecalc();
+	};
 });
