@@ -33,6 +33,9 @@ class ExpenseForm(forms.Form):
             
             ### field for specifying custom amount (if custom amount above)
             self.fields['person_customamount_%s' % person.id] = forms.CharField(label="customamount", required=False)
+            
+            ### field for specifying payment amount
+            self.fields['person_paymentamount_%s' % person.id] = forms.CharField(label="paymentamount", required=False)
 
 
     def get_expense_parts(self):
