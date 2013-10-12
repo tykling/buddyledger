@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from django.forms.models import inlineformset_factory
 
-from buddyledger.models import Ledger, Person, Expense, Currency
+from buddyledger.models import Ledger, Person, Expense, Currency, ExpensePart
 from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm
 
 from buddyledger.views.misc import ConvertCurrency
@@ -25,9 +25,35 @@ def AddExpense(request, ledgerid=0):
         if form.is_valid(): # All validation rules pass
             expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=Decimal(form['amount'].data),amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,ledger.currency.id),currency_id=form['currency'].data)
             expense.save() # save the new expense
+            
+            ### loop through the expenseparts
+            expenseparts = dict()
             for (uid,shouldpay,haspaid) in form.get_expense_parts():
-                expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=shouldpay,haspaid=haspaid)
+                expenseparts[uid] = dict(shouldpay=shouldpay,haspaid=haspaid)
+            
+            ### calculate customtotal and autocount
+            customtotal = 0
+            autocount = 0
+            for expensepart in expenseparts.iteritems():
+                if expensepart['shouldpay'] != "auto":
+                    customtotal = customtotal + expensepart['shouldpay']
+                else:
+                    autocount += 1
+            
+            ### find the splitpart
+            remaining = expense.amount - customtotal
+            if remaining > 0:
+                splitpart = remaining / autocount
+            
+            ### loop through the expenseparts and add each to the DB
+            for temp in expenseparts.iteritems():
+                if expensepart['shouldpay'] != "auto":
+                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=expensepart['shouldpay'],haspaid=expensepart['haspaid'])
+                else:
+                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart,haspaid=expensepart['haspaid'])
                 expensepart.save()
+            
+            ### return to the ledger page, expense tab
             return HttpResponseRedirect('/ledger/%s/#expenses' % ledgerid)
         else:
             ### form not valid
