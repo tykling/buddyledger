@@ -1,5 +1,5 @@
 from django import forms
-from buddyledger.models import Ledger, Person, Expense, Payment, Currency
+from buddyledger.models import Ledger, Person, Expense, Currency
 
 
 class LedgerForm(forms.ModelForm):
