@@ -49,8 +49,11 @@ class ExpenseForm(forms.Form):
                     ### get the customamount for this user
                     shouldpay = self.fields['person_customamount_%s' % userid].value
                 
-                ### find out how much the user has paid
-                haspaid = self.fields['person_paymentamount_%s' % userid].value
+                ### find out if this user paid anything
+                if 'person_paymentamount_%s' % userid in self.fields:
+                    haspaid = self.fields['person_paymentamount_%s' % userid].value
+                else:
+                    haspaid = 0
                 
                 ### return this user
                 yield (userid, shouldpay, haspaid)
