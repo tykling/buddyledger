@@ -270,7 +270,7 @@ function updatecurrency() {
 };
 
 $().ready(function(){
-	if ( $( "input[name^='person-customamount-'],input[name^='person-paymentamount-']" ).length == 0 ) {
+	if ( $( "input[name^='person-customamount-'],input[name^='person-paymentamount-']" ).length != 0 ) {
 		// this seems to be the add/edit expense page...
 
 		// update calculation on input and change in textfields
