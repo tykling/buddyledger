@@ -59,10 +59,10 @@ def ShowLedger(request, ledgerid=0):
 
     
     showresult = True
+    errorlist = []
+    calcdata = []
     if len(expenses) > 0:
         ### build the calcdata structure for calculation input
-        errorlist = []
-        calcdata = []
         for expense in expenses:
             ### loop through expenseparts (people) for this expense
             paymentlist = []
@@ -115,6 +115,7 @@ def ShowLedger(request, ledgerid=0):
             'people': people,
             'expenses': expenses,
             'expenseparts': expenseparts,
+            'debugdata': calcdata,
             'userdict': userdict,
             'errorlist': errorlist
         })
