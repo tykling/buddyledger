@@ -51,6 +51,12 @@ def ShowLedger(request, ledgerid=0):
     
     ### get all expenseparts related to one of the expenses (for use in the template)
     expenseparts = ExpensePart.objects.filter(expense__in=expenses)
+
+    ### create dict with uid <> username mappings
+    userdict = OrderedDict()
+    for person in people:
+        userdict[person.id] = person.name    
+
     
     showresult = True
     if len(expenses) > 0:
@@ -68,11 +74,6 @@ def ShowLedger(request, ledgerid=0):
                 whoshouldpay[person.id]=person.shouldpay
             ### add data for this expense to calcdata
             calcdata.append(dict(whopaid=paymentlist, whoshouldpay=whoshouldpay))
-
-        ### create dict with uid <> username mappings
-        userdict = OrderedDict()
-        for person in people:
-            userdict[person.id] = person.name
 
         ### do the calculation
         if ledger.calcmethod == "optimized":
@@ -114,7 +115,6 @@ def ShowLedger(request, ledgerid=0):
             'people': people,
             'expenses': expenses,
             'expenseparts': expenseparts,
-            'debugdata': calcdata,
             'userdict': userdict,
             'errorlist': errorlist
         })
