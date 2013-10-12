@@ -278,7 +278,7 @@ $().ready(function(){
 		// this seems to be the add/edit expense page...
 
 		// update calculation on input and change in textfields
-		$( "#amount,#name,input[name^='person-customamount-'],input[name^='person-paymentamount-']" ).on('input change',function() {
+		$( "#amount,#name,input[name^='person-customamount-'],input[name^='person-paymentamount-']" ).on('focusout',function() {
 			updatecalc();
 		});
 
