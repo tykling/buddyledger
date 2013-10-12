@@ -93,7 +93,9 @@ function updatecalc() {
 		return;
 	} else {
 		$( '#controlgroup-amount' ).removeClass().addClass( "control-group" );
-		$( '#controlgroup-amount' ).val($('#controlgroup-amount').val().toFixed(2))
+		// two decimals please
+		$('#amount').val(Number($('#amount').val()).toFixed(2));
+		// show peoplediv
 		$( '#peoplediv' ).show();
 	};
 	
@@ -124,7 +126,8 @@ function updatecalc() {
 					success = false;
 					return;
 				} else {
-					$(this).val($(this).val().toFixed(2))
+					// two decimals please
+					$(this).val(Number($(this).val()).toFixed(2));
 				};
 			};
 		};
@@ -233,7 +236,8 @@ function updatecalc() {
 					// amount OK, remove any error classes on this field
 					totalpaid = totalpaid + Number($( this ).val());
 					$( '#controlgroup-paymentamount-'+userid ).removeClass();
-					$(this).val($(this).val().toFixed(2));
+					// two decimals please
+					$(this).val(Number($(this).val()).toFixed(2));
 				};
 			};
 		};
