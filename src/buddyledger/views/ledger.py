@@ -65,15 +65,15 @@ def ShowLedger(request, ledgerid=0):
         ### build the calcdata structure for calculation input
         for expense in expenses:
             ### loop through expenseparts (people) for this expense
-            paymentlist = []
+            whopaid = dict()
             whoshouldpay = dict()
 
             for person in expenseparts.filter(expense_id=expense.id):
                 if person.haspaid != 0:
-                    paymentlist.append(dict(personId=person.id,amount=Fraction(person.haspaid)))
+                    whopaid[person.id]=Fraction(person.haspaid)
                 whoshouldpay[person.id]=person.shouldpay
             ### add data for this expense to calcdata
-            calcdata.append(dict(whopaid=paymentlist, whoshouldpay=whoshouldpay))
+            calcdata.append(dict(whopaid=whopaid, whoshouldpay=whoshouldpay))
 
         ### do the calculation
         if ledger.calcmethod == "optimized":
