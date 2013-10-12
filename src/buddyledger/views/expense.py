@@ -34,9 +34,9 @@ def AddExpense(request, ledgerid=0):
             ### calculate customtotal and autocount
             customtotal = 0
             autocount = 0
-            for expensepart in expenseparts.iteritems():
-                if expensepart['shouldpay'] != "auto":
-                    customtotal = customtotal + expensepart['shouldpay']
+            for uid,temp in expenseparts.iteritems():
+                if temp['shouldpay'] != "auto":
+                    customtotal = customtotal + temp['shouldpay']
                 else:
                     autocount += 1
             
@@ -45,12 +45,12 @@ def AddExpense(request, ledgerid=0):
             if remaining > 0:
                 splitpart = remaining / autocount
             
-            ### loop through the expenseparts and add each to the DB
-            for temp in expenseparts.iteritems():
-                if expensepart['shouldpay'] != "auto":
-                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=expensepart['shouldpay'],haspaid=expensepart['haspaid'])
+            ### loop through the expenseparts again and add each to the DB
+            for uid,temp in expenseparts.iteritems():
+                if temp['shouldpay'] != "auto":
+                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=temp['shouldpay'],haspaid=temp['haspaid'])
                 else:
-                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart,haspaid=expensepart['haspaid'])
+                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart,haspaid=temp['haspaid'])
                 expensepart.save()
             
             ### return to the ledger page, expense tab
