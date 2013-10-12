@@ -62,7 +62,7 @@ def ShowLedger(request, ledgerid=0):
             paymentlist = []
             whoshouldpay = dict()
 
-            for person in expenseparts.objects.filter(expense_id=expense.id):
+            for person in expenseparts.filter(expense_id=expense.id):
                 if person.haspaid != 0:
                     paymentlist.append(dict(personId=person.id,amount=Fraction(person.haspaid)))
                 whoshouldpay[person.id]=person.shouldpay
@@ -100,6 +100,7 @@ def ShowLedger(request, ledgerid=0):
             'ledger': ledger,
             'people': people,
             'expenses': expenses,
+            'expenseparts': expenseparts,
             'debugdata': calcdata,
             'matrixdict': matrixdict,
             'tabledict': tabledict,
@@ -112,7 +113,9 @@ def ShowLedger(request, ledgerid=0):
             'ledger': ledger,
             'people': people,
             'expenses': expenses,
+            'expenseparts': expenseparts,
             'debugdata': calcdata,
+            'userdict': userdict,
             'errorlist': errorlist
         })
 

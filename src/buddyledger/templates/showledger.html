@@ -89,7 +89,7 @@
                         <td>
                             {% for expensepart in expenseparts %}
                                 {% if expensepart.expense_id == expense.id %}
-                                    {% userdict|keyvalue:expensepart.person_id %}: {{ expensepart.haspaid }} {{ expense.currency.iso4217_code }}<br>
+                                    {{ userdict|keyvalue:expensepart.person_id }}: {{ expensepart.haspaid }} {{ expense.currency.iso4217_code }}<br>
                                 {% endif %}
                             {% endfor %}
                         </td>
