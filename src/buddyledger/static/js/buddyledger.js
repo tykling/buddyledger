@@ -94,7 +94,10 @@ function updatecalc() {
 	} else {
 		$( '#controlgroup-amount' ).removeClass().addClass( "control-group" );
 		// two decimals please
-		$('#amount').val(Number($('#amount').val()).toFixed(2));
+		if (Number($('#amount').val()) != 0) {
+			$('#amount').val(Number($('#amount').val()).toFixed(2));
+		};
+		
 		// show peoplediv
 		$( '#peoplediv' ).show();
 	};
@@ -127,7 +130,9 @@ function updatecalc() {
 					return;
 				} else {
 					// two decimals please
-					$(this).val(Number($(this).val()).toFixed(2));
+					if (Number($(this).val()) != 0) {
+						$(this).val(Number($(this).val()).toFixed(2));
+					};
 				};
 			};
 		};
@@ -237,7 +242,9 @@ function updatecalc() {
 					totalpaid = totalpaid + Number($( this ).val());
 					$( '#controlgroup-paymentamount-'+userid ).removeClass();
 					// two decimals please
-					$(this).val(Number($(this).val()).toFixed(2));
+					if (Number($(this).val()) != 0) {
+						$(this).val(Number($(this).val()).toFixed(2));
+					};
 				};
 			};
 		};

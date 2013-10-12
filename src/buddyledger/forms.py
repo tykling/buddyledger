@@ -38,19 +38,19 @@ class ExpenseForm(forms.Form):
     def get_expense_parts(self):
         for fieldname, value in self.cleaned_data.items():
             ### get the userid from the expensepart field
-            if fieldname.startswith('person-expensepart-'):
+            if fieldname.startswith('person_expensepart_'):
                 userid = fieldname[19:]
                 
                 ### find out if this user has a custom amount specified
-                if 'person-autoamount-%s' % userid in self.fields:
+                if 'person_autoamount_%s' % userid in self.fields:
                     ### calculate the amount for this user
                     shouldpay = "auto"
                 else:
                     ### get the customamount for this user
-                    shouldpay = self.fields['person-customamount-%s' % userid].value
+                    shouldpay = self.fields['person_customamount_%s' % userid].value
                 
                 ### find out how much the user has paid
-                haspaid = self.fields['person-paymentamount-%s' % userid].value
+                haspaid = self.fields['person_paymentamount_%s' % userid].value
                 
                 ### return this user
                 yield (userid, shouldpay, haspaid)
