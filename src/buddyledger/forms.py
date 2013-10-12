@@ -43,7 +43,7 @@ class ExpenseForm(forms.Form):
         for fieldname, value in self.cleaned_data.items():
             fielddict[fieldname] = value
         
-        for fieldname,value in fielddict:
+        for fieldname,value in fielddict.iteritems():
             ### get the userid from the expensepart field
             if fieldname.startswith('person_expensepart_'):
                 userid = fieldname[19:]
