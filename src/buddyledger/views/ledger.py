@@ -65,12 +65,12 @@ def ShowLedger(request, ledgerid=0):
         ### build the calcdata structure for calculation input
         for expense in expenses:
             ### loop through expenseparts (people) for this expense
-            whopaid = dict()
+            whopaid = []
             whoshouldpay = dict()
 
             for person in expenseparts.filter(expense_id=expense.id):
                 if person.haspaid != 0:
-                    whopaid[person.id]=Fraction(person.haspaid)
+                    whopaid.append(dict(personId=person.id,amount=Fraction(person.haspaid)))
                 whoshouldpay[person.id]=person.shouldpay
             ### add data for this expense to calcdata
             calcdata.append(dict(whopaid=whopaid, whoshouldpay=whoshouldpay))
