@@ -49,6 +49,9 @@ def ShowLedger(request, ledgerid=0):
     ### get all expenses related to this ledger
     expenses = Expense.objects.filter(ledger_id=ledgerid)
     
+    ### get all expenseparts related to one of the expenses (for use in the template)
+    expenseparts = ExpensePart.objects.filter(expense__in=expenses)
+    
     showresult = True
     if len(expenses) > 0:
         ### build the calcdata structure for calculation input
@@ -59,7 +62,7 @@ def ShowLedger(request, ledgerid=0):
             paymentlist = []
             whoshouldpay = dict()
 
-            for person in ExpensePart.objects.filter(expense_id=expense.id):
+            for person in expenseparts.objects.filter(expense_id=expense.id):
                 if person.haspaid != 0:
                     paymentlist.append(dict(personId=person.id,amount=Fraction(person.haspaid)))
                 whoshouldpay[person.id]=person.shouldpay

@@ -76,40 +76,40 @@
                         <th style="width: 4em; text-align: center">Action</th>
                     </tr>
                 {% for expense in expenses %}
-                    <tr><td>{{ expense.name }}</td>
-                    <td>{{ expense.amount }} {{ expense.currency.iso4217_code }}</td>
-                    <td>{{ expense.amount_native }} {{ ledger.currency.iso4217_code }}</td>
-                    <td>
-                    {% if payments|length_is:"0" %}
-                        <p class="warning">No payments registered for this expense! Who paid for this ?</p>
-                    {% else %}
-                        {% for payment in payments %}
-                            {% if payment.expense_id = expense.id %}
-                                {{ payment.person.name }}: {{ payment.amount }} {{ payment.currency.iso4217_code }}&nbsp;&nbsp;
-                                <a href="/payment/{{ payment.id }}/remove/" class="btn btn-danger btn-mini pull-right"><i class="icon-remove"></i></a> 
-                                <a href="/payment/{{ payment.id }}/edit/" class="btn btn-info btn-mini pull-right"><i class="icon-edit"></i></a><br>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    <a href="/expense/{{expense.id}}/addpayment" class="btn btn-mini btn-success"><i class="icon-plus"></i> Add new payment</a><br>
-                    </td>
+                    <tr>
+                        <td>
+                            {{ expense.name }}
+                        </td>
+                        <td>
+                            {{ expense.amount }} {{ expense.currency.iso4217_code }}
+                        </td>
+                        <td>
+                            {{ expense.amount_native }} {{ ledger.currency.iso4217_code }}
+                        </td>
+                        <td>
+                            {% for expensepart in expenseparts %}
+                                {% if expensepart.expense_id == expense.id %}
+                                    {% userdict|keyvalue:expensepart.person_id %}: {{ expensepart.haspaid }} {{ expense.currency.iso4217_code }}<br>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
 
-                    <td>
-                    {% for person in expense.people.all %}
-                        <p>{{ person.name }} <a href="/expense/{{ expense.id }}/removeperson/{{ person.id }}/" class="btn btn-mini btn-danger pull-right"><i class="icon-remove"></i></a></p>
-                    {% endfor %}
-                    </td>
-                    <td>
-                    {% for person in people %}
-                        {% if person not in expense.people.all %}
-                            <p>{{ person.name }} <a href="/expense/{{ expense.id }}/addperson/{{ person.id }}/" class="btn btn-mini btn-success pull-right"><i class="icon-plus"></i></a></p>
-                        {% endif %}
-                    {% endfor %}
-                    </td>
-                    <td style="width: 3em; text-align: center">
-                    <a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>
-                    <a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a>
-                    </td>
+                        <td>
+                            {% for person in expense.people.all %}
+                                <p>{{ person.name }} <a href="/expense/{{ expense.id }}/removeperson/{{ person.id }}/" class="btn btn-mini btn-danger pull-right"><i class="icon-remove"></i></a></p>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for person in people %}
+                                {% if person not in expense.people.all %}
+                                    <p>{{ person.name }} <a href="/expense/{{ expense.id }}/addperson/{{ person.id }}/" class="btn btn-mini btn-success pull-right"><i class="icon-plus"></i></a></p>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td style="width: 3em; text-align: center">
+                        <a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>
+                        <a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </table>
