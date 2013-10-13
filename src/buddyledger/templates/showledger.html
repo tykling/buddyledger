@@ -229,7 +229,7 @@
 <script language="javascript">
     $(document).ready(function () {
         if (location.hash.substr(0,1) == "#") {
-            $("a[href='#" + location.hash.substr(2) + "']").click();
+            $("a[href='#" + location.hash.substr(1) + "']").click();
         }
         
         $("a[data-toggle='tab']").on("shown", function (e) {
