@@ -3,6 +3,7 @@ from decimal import *
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from django.forms.models import inlineformset_factory
+from django.views.generic.edit import DeleteView
 
 from buddyledger.models import Ledger, Person, Expense, Currency, ExpensePart
 from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm
@@ -73,9 +74,9 @@ def AddExpense(request, ledgerid=0):
             ### loop through the expenseparts again and save each
             for uid,temp in expenseparts.iteritems():
                 if temp['shouldpay'] != "auto":
-                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=temp['shouldpay'],shouldpay_native=ConvertCurrency(temp['shouldpay'],expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native(ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id)))
+                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=temp['shouldpay'],shouldpay_native=ConvertCurrency(temp['shouldpay'],expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native=ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id))
                 else:
-                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart,shouldpay_native=ConvertCurrency(splitpart,expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native(ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id)))
+                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart,shouldpay_native=ConvertCurrency(splitpart,expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native=ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id))
                 expensepart.save()
             
             ### return to the ledger page, expense tab
@@ -128,7 +129,7 @@ def EditExpense(request, expenseid=0):
     })
 
 
-def RemoveExpense(request, expenseid=0):
+def RemoveExpense(request, expenseid=0):    
     ### Check if the expense exists - bail out if not
     try:
         expense = Expense.objects.get(pk = expenseid)
@@ -136,6 +137,12 @@ def RemoveExpense(request, expenseid=0):
         response = render_to_response('expensedoesnotexist.html')
         return response
 
-    ledgerid = expense.ledger.id
-    expense.delete()
-    return HttpResponseRedirect('/ledger/%s' % ledgerid) # return to the ledger page
+    if request.method == 'POST':
+        ledgerid = expense.ledger.id
+        expense.delete()
+        return HttpResponseRedirect('/ledger/%s/#expenses' % ledgerid) # return to the ledger page, expenses tab
+    else:
+        return render(request, 'confirm_expense_delete.html', {
+            'form': DeleteExpenseForm(),
+            'expense': expense
+        })

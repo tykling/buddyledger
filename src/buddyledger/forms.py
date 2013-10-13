@@ -2,6 +2,9 @@ from django import forms
 from buddyledger.models import Ledger, Person, Expense, Currency
 
 
+class DeleteExpenseForm(forms.Form):
+
+
 class LedgerForm(forms.ModelForm):
     class Meta:
         model = Ledger
