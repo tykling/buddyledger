@@ -73,9 +73,9 @@ def AddExpense(request, ledgerid=0):
             ### loop through the expenseparts again and save each
             for uid,temp in expenseparts.iteritems():
                 if temp['shouldpay'] != "auto":
-                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=temp['shouldpay'],haspaid=temp['haspaid'])
+                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=temp['shouldpay'],shouldpay_native=ConvertCurrency(temp['shouldpay'],expense.currency,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native(ConvertCurrency(temp['haspaid'],expense.currency,ledger.currency.id)))
                 else:
-                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart,haspaid=temp['haspaid'])
+                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart,shouldpay_native=ConvertCurrency(splitpart,expense.currency,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native(ConvertCurrency(temp['haspaid'],expense.currency,ledger.currency.id)))
                 expensepart.save()
             
             ### return to the ledger page, expense tab
