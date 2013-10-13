@@ -7,7 +7,7 @@ def ResultToMatrix(result,userdict):
     resultdict = GetEmptyMatrix(userdict)
 
     ### now populate the matrix with the results
-    resultdict = PopulateMatrix(result,resultdict)
+    resultdict = PopulateMatrix(result,resultdict,userdict)
 
     ### return the finished matrix
     return resultdict
@@ -45,7 +45,7 @@ def GetEmptyMatrix(userdict):
     return resultdict
 
 
-def PopulateMatrix(result,resultdict):
+def PopulateMatrix(result,resultdict,userdict):
     ### loop through the result and insert the debts into the matrix,
     ### and also calculate the totals while we are here
     payertotal = OrderedDict()
@@ -80,9 +80,9 @@ def PopulateMatrix(result,resultdict):
     ### create the new bottom row for the "total pay" amounts and add it to resultdict
     temp = OrderedDict()
     temp[0] = "Total Pay"
-    for payerid, receiverdict in result.iteritems():
-        amount = payertotal[payerid]
-        temp[payerid] = amount
+    for userid,username in userdict.iteritems():
+        amount = payertotal[userid]
+        temp[userid] = amount
     temp['total'] = 'n/a'
     resultdict['total'] = temp
 
