@@ -59,7 +59,7 @@ def AddExpense(request, ledgerid=0):
                 remainder = Decimal(expense.amount - Decimal(splitpart * autocount))
             
             ### check if customtotal + remaining = expense amount
-            if customtotal + remaining + remainder != expense.amount:
+            if customtotal + (splitpart*autocount) + remainder != expense.amount:
                 ### error, bail out
                 response = render_to_response('invalidexpense.html')
                 return response
