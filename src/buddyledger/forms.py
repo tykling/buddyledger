@@ -3,7 +3,7 @@ from buddyledger.models import Ledger, Person, Expense, Currency
 
 
 class DeleteExpenseForm(forms.Form):
-
+    id = forms.IntegerField(widget=forms.HiddenInput())
 
 class LedgerForm(forms.ModelForm):
     class Meta:

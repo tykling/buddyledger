@@ -80,7 +80,8 @@ def PopulateMatrix(result,resultdict):
     ### create the new bottom row for the "total pay" amounts and add it to resultdict
     temp = OrderedDict()
     temp[0] = "Total Pay"
-    for payerid,amount in payertotal.iteritems():
+    for payerid, receiverdict in result.iteritems():
+        amount = payertotal[payerid]
         temp[payerid] = amount
     temp['total'] = 'n/a'
     resultdict['total'] = temp
