@@ -94,9 +94,9 @@ function updatecalc() {
 	} else {
 		$( '#controlgroup-amount' ).removeClass().addClass( "control-group" );
 		// two decimals please
-		if (Number($('#amount').val()) != 0) {
-			$('#amount').val(Number($('#amount').val()).toFixed(2));
-		};
+		//if (Number($('#amount').val()) != 0) {
+		//	$('#amount').val(Number($('#amount').val()).toFixed(2));
+		//};
 		
 		// show peoplediv
 		$( '#peoplediv' ).show();
@@ -130,9 +130,9 @@ function updatecalc() {
 					return;
 				} else {
 					// two decimals please
-					if (Number($(this).val()) != 0) {
-						$(this).val(Number($(this).val()).toFixed(2));
-					};
+					//if (Number($(this).val()) != 0) {
+					//	$(this).val(Number($(this).val()).toFixed(2));
+					//};
 				};
 			};
 		};
@@ -242,9 +242,9 @@ function updatecalc() {
 					totalpaid = totalpaid + Number($( this ).val());
 					$( '#controlgroup-paymentamount-'+userid ).removeClass();
 					// two decimals please
-					if (Number($(this).val()) != 0) {
-						$(this).val(Number($(this).val()).toFixed(2));
-					};
+					//if (Number($(this).val()) != 0) {
+					//	$(this).val(Number($(this).val()).toFixed(2));
+					//};
 				};
 			};
 		};
@@ -282,10 +282,10 @@ function updatecurrency() {
 
 $().ready(function(){
 	if ( $( "input[name^='person-customamount-'],input[name^='person-paymentamount-']" ).length != 0 ) {
-		// this seems to be the add/edit expense page...
+		// this is the add/edit expense page...
 
 		// update calculation on input and change in textfields
-		$( "#amount,#name,input[name^='person-customamount-'],input[name^='person-paymentamount-']" ).on('focusout',function() {
+		$( "#amount,#name,input[name^='person-customamount-'],input[name^='person-paymentamount-']" ).on('input change',function() {
 			updatecalc();
 		});
 
