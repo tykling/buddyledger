@@ -24,7 +24,6 @@ def AddExpense(request, ledgerid=0):
         form = ExpenseForm(request.POST,people=people)
         if form.is_valid(): # All validation rules pass
             expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=Decimal(form['amount'].data),amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,ledger.currency.id),currency_id=form['currency'].data)
-            expense.save() # save the new expense
             
             ### loop through the expenseparts
             expenseparts = dict()
@@ -49,6 +48,14 @@ def AddExpense(request, ledgerid=0):
             if remaining > 0:
                 splitpart = remaining / autocount
             
+            ### check if customtotal + remaining = expense amount
+            if expense.amount != customtotal + remaining:
+                ### error, bail out
+                response = render_to_response('invalidexpense.html')
+                return response
+            else:
+                expense.save() # save the new expense
+                
             ### loop through the expenseparts again and add each to the DB
             for uid,temp in expenseparts.iteritems():
                 if temp['shouldpay'] != "auto":
