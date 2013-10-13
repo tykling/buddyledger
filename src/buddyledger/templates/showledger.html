@@ -229,8 +229,9 @@
 <script language="javascript">
     $(document).ready(function () {
         if (location.hash.substr(0,1) == "#") {
-            $("a[href='#" + location.hash.substr(2) + "']").tab("show");
+            $("a[href='#" + location.hash.substr(2) + "']").click();
         }
+        
         $("a[data-toggle='tab']").on("shown", function (e) {
             var hash = $(e.target).attr("href");
             if (hash.substr(0,1) == "#") {
