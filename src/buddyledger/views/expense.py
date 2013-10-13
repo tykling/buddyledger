@@ -40,7 +40,7 @@ def AddExpense(request, ledgerid=0):
             paymenttotal = 0
             for uid,temp in expenseparts.iteritems():
                 if temp['shouldpay'] != "auto":
-                    customtotal += temp['shouldpay']
+                    customtotal += Decimal(temp['shouldpay'])
                 else:
                     autocount += 1
             

@@ -49,7 +49,7 @@ class ExpenseForm(forms.Form):
                 userid = fieldname[19:]
                 
                 ### find out if this user has a custom amount specified
-                if 'person-autoamount-%s' % userid in fielddict:
+                if 'person-autoamount-%s' % userid in fielddict and fielddict['person-autoamount-%s' % userid] == True:
                     ### calculate the amount for this user
                     shouldpay = "auto"
                 else:

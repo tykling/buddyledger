@@ -36,7 +36,9 @@ class ExpensePart(models.Model):
     expense = models.ForeignKey(Expense)
     person = models.ForeignKey(Person)
     haspaid = models.DecimalField(max_digits=20, decimal_places=2,null=True,blank=True)
+    haspaid_native = models.DecimalField(max_digits=20, decimal_places=2,null=True,blank=True)
     shouldpay = models.DecimalField(max_digits=20, decimal_places=2,null=True,blank=True)
+    shouldpay_native = models.DecimalField(max_digits=20, decimal_places=2,null=True,blank=True)
 
 
 class Backpayment(models.Model):
