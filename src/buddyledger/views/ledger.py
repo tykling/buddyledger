@@ -54,8 +54,10 @@ def ShowLedger(request, ledgerid=0):
 
     ### create dict with uid <> username mappings
     userdict = OrderedDict()
+    userlist = []
     for person in people:
-        userdict[person.id] = person.name    
+        userdict[person.id] = person.name  
+        userlist.append(person.id)
 
     
     showresult = True
@@ -68,18 +70,18 @@ def ShowLedger(request, ledgerid=0):
             whopaid = []
             whoshouldpay = dict()
 
-            for person in expenseparts.filter(expense_id=expense.id):
-                if person.haspaid != 0:
-                    whopaid.append(dict(personId=person.id,amount=Fraction(person.haspaid)))
-                whoshouldpay[person.id]=person.shouldpay
+            for expensepart in expenseparts.filter(expense_id=expense.id):
+                if expensepart.haspaid != 0:
+                    whopaid.append(dict(personId=expensepart.person_id,amount=Fraction(expensepart.haspaid)))
+                whoshouldpay[expensepart.person_id]=Fraction(expensepart.shouldpay)
             ### add data for this expense to calcdata
             calcdata.append(dict(whopaid=whopaid, whoshouldpay=whoshouldpay))
 
         ### do the calculation
         if ledger.calcmethod == "optimized":
-            fracresult = solve_mincost_problem_for_expenses(calcdata, [person.id for person in people])
+            fracresult = solve_mincost_problem_for_expenses(calcdata, userlist)
         elif ledger.calcmethod == "basic":
-            fracresult = BasicCalc(calcdata,[person.id for person in people])
+            fracresult = BasicCalc(calcdata,userlist)
         else:
             errorlist.append("Unknown calculation method selected for this ledger: <b>%s</b>. No result will be calculated.")
             showresult = False
