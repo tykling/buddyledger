@@ -79,7 +79,7 @@ def AddExpense(request, ledgerid=0):
                     expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=temp['shouldpay'],shouldpay_native=ConvertCurrency(temp['shouldpay'],expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native=ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id))
                 else:
                     if remainder > 0:
-                        expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart+remainder,shouldpay_native=ConvertCurrency(splitpart,expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native=ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id))
+                        expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart+remainder,shouldpay_native=ConvertCurrency(splitpart+remainder,expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native=ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id))
                         remainder = 0
                     else:
                         expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart,shouldpay_native=ConvertCurrency(splitpart,expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native=ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id))
