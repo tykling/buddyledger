@@ -55,8 +55,8 @@ def AddExpense(request, ledgerid=0):
             remaining = expense.amount - customtotal
             remainder = 0
             if remaining > 0:
-                splitpart = round(Decimal(remaining / autocount,2))
-                remainder = round(Decimal(expense.amount - Decimal(splitpart * autocount)),2)
+                splitpart = Decimal(round(remaining / autocount,2))
+                remainder = Decimal(round(expense.amount - Decimal(splitpart * autocount),2))
             
             ### check if customtotal + remaining = expense amount
             if customtotal + remaining + remainder != expense.amount:
