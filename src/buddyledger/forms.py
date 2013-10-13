@@ -48,7 +48,7 @@ class ExpenseForm(forms.Form):
         
         for fieldname,value in fielddict.iteritems():
             ### get the userid from the expensepart field
-            if fieldname.startswith('person-expensepart-'):
+            if fieldname.startswith('person-expensepart-') and value == True:
                 userid = fieldname[19:]
                 
                 ### find out if this user has a custom amount specified
