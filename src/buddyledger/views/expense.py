@@ -43,7 +43,13 @@ def AddExpense(request, ledgerid=0):
                     customtotal += temp['shouldpay']
                 else:
                     autocount += 1
-            paymenttotal += temp['haspaid'] 
+            
+            if temp['haspaid'] != '' and temp['haspaid'] != 0:
+                try:
+                    paymenttotal += temp['haspaid']
+                except Exception as e:
+                    response = render_to_response('invalidexpense.html')
+                    return response                
             
             ### find the splitpart
             remaining = expense.amount - customtotal
