@@ -79,22 +79,14 @@
                         <td>
                             {{ expense.name }}
                         </td>
-                        <td>
+                        <td style="text-align: right">
                             {{ expense.amount }} {{ expense.currency.iso4217_code }}
                         </td>
-                        <td>
+                        <td style="text-align: right">
                             {{ expense.amount_native }} {{ ledger.currency.iso4217_code }}
                         </td>
-                        <td>
-                            {% for expensepart in expenseparts %}
-                                {% if expensepart.expense_id == expense.id %}
-                                    {% if expensepart.haspaid != 0 %}
-                                        {{ userdict|keyvalue:expensepart.person_id }}: {{ expensepart.haspaid }} {{ expense.currency.iso4217_code }}<br>
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                        <td>
+
+                        <td style="text-align: right">
                             {% for expensepart in expenseparts %}
                                 {% if expensepart.expense_id == expense.id %}
                                     {% if expensepart.shouldpay != 0 %}
@@ -103,6 +95,17 @@
                                 {% endif %}
                             {% endfor %}
                         </td>
+                        
+                        <td style="text-align: right">
+                            {% for expensepart in expenseparts %}
+                                {% if expensepart.expense_id == expense.id %}
+                                    {% if expensepart.haspaid != 0 %}
+                                        {{ userdict|keyvalue:expensepart.person_id }}: {{ expensepart.haspaid }} {{ expense.currency.iso4217_code }}<br>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+
                         <td style="width: 3em; text-align: center">
                             <a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>
                             <a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a>
