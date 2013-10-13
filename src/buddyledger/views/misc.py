@@ -2,13 +2,17 @@ from decimal import *
 from buddyledger.models import Ledger, Person, Expense, Currency
 
 def ConvertCurrency(amount,fromcurrencyid,tocurrencyid):
-    fromcurrency = Currency.objects.get(pk=fromcurrencyid)
-    tocurrency = Currency.objects.get(pk=tocurrencyid)
-    ### first convert to DKK
-    dkkamount = Decimal(amount)*fromcurrency.dkk_price
-    ### convert to tocurrency
-    returnamount = dkkamount / tocurrency.dkk_price
-    return Decimal(returnamount)
+    if fromcurrencyid != tocurrencyid:
+        fromcurrency = Currency.objects.get(pk=fromcurrencyid)
+        tocurrency = Currency.objects.get(pk=tocurrencyid)    
+        ### first convert to DKK
+        dkkamount = Decimal(amount)*fromcurrency.dkk_price
+        ### convert to tocurrency
+        returnamount = dkkamount / tocurrency.dkk_price
+        return Decimal(returnamount)
+    else:
+        ### same currency, just return the input
+        return amount
 
 def conv_frac_to_decimal(f, precision):
     if f == 0: return Decimal("0")
