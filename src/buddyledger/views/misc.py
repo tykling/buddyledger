@@ -5,10 +5,10 @@ def ConvertCurrency(amount,fromcurrencyid,tocurrencyid):
     fromcurrency = Currency.objects.get(pk=fromcurrencyid)
     tocurrency = Currency.objects.get(pk=tocurrencyid)
     ### first convert to DKK
-    dkkamount = amount*fromcurrency.dkk_price
+    dkkamount = Decimal(amount)*fromcurrency.dkk_price
     ### convert to tocurrency
     returnamount = dkkamount / tocurrency.dkk_price
-    return returnamount
+    return Decimal(returnamount)
 
 def conv_frac_to_decimal(f, precision):
     if f == 0: return Decimal("0")
