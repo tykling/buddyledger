@@ -44,9 +44,8 @@ def AddExpense(request, ledgerid=0):
                 else:
                     autocount += 1
             
-            if temp['haspaid'] != '' and temp['haspaid'] != 0:
                 try:
-                    paymenttotal += temp['haspaid']
+                    paymenttotal += Decimal(temp['haspaid'])
                 except Exception as e:
                     response = render_to_response('invalidexpense.html')
                     return response                
