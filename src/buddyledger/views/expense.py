@@ -6,7 +6,7 @@ from django.forms.models import inlineformset_factory
 from django.views.generic.edit import DeleteView
 
 from buddyledger.models import Ledger, Person, Expense, Currency, ExpensePart
-from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm
+from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, DeleteExpenseForm
 
 from buddyledger.views.misc import ConvertCurrency
 
