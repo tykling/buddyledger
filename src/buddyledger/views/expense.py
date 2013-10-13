@@ -53,11 +53,13 @@ def AddExpense(request, ledgerid=0):
             
             ### find the splitpart
             remaining = expense.amount - customtotal
+            remainder = 0
             if remaining > 0:
-                splitpart = remaining / autocount
+                splitpart = round(Decimal(remaining / autocount,2))
+                remainder = round(Decimal(expense.amount - Decimal(splitpart * autocount)),2)
             
             ### check if customtotal + remaining = expense amount
-            if expense.amount != customtotal + remaining:
+            if customtotal + remaining + remainder != expense.amount:
                 ### error, bail out
                 response = render_to_response('invalidexpense.html')
                 return response
@@ -76,7 +78,11 @@ def AddExpense(request, ledgerid=0):
                 if temp['shouldpay'] != "auto":
                     expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=temp['shouldpay'],shouldpay_native=ConvertCurrency(temp['shouldpay'],expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native=ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id))
                 else:
-                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart,shouldpay_native=ConvertCurrency(splitpart,expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native=ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id))
+                    if remainder > 0:
+                        expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart+remainder,shouldpay_native=ConvertCurrency(splitpart,expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native=ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id))
+                        remainder = 0
+                    else:
+                        expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart,shouldpay_native=ConvertCurrency(splitpart,expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native=ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id))
                 expensepart.save()
             
             ### return to the ledger page, expense tab
