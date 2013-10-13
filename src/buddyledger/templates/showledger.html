@@ -68,11 +68,10 @@
                 <table class="table table-bordered">
                     <tr>
                         <th>Name</th>
-                        <th style="width: 3em; text-align: center">Amount</th>
-                        <th style="width: 3em; text-align: center">Amount {{ ledger.currency.iso4217_code }}</th>
-                        <th>Payments</th>
-                        <th>In</th>
-                        <th>Not in</th>
+                        <th style="width: 3em; text-align: right">Amount</th>
+                        <th style="width: 3em; text-align: right">Amount {{ ledger.currency.iso4217_code }}</th>
+                        <th style="text-align: right">Spent</th>
+                        <th style="text-align: right">Paid</th>
                         <th style="width: 4em; text-align: center">Action</th>
                     </tr>
                 {% for expense in expenses %}
@@ -89,26 +88,24 @@
                         <td>
                             {% for expensepart in expenseparts %}
                                 {% if expensepart.expense_id == expense.id %}
-                                    {{ userdict|keyvalue:expensepart.person_id }}: {{ expensepart.haspaid }} {{ expense.currency.iso4217_code }}<br>
+                                    {% if expensepart.haspaid != 0 %}
+                                        {{ userdict|keyvalue:expensepart.person_id }}: {{ expensepart.haspaid }} {{ expense.currency.iso4217_code }}<br>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                         </td>
-
                         <td>
-                            {% for person in expense.people.all %}
-                                <p>{{ person.name }} <a href="/expense/{{ expense.id }}/removeperson/{{ person.id }}/" class="btn btn-mini btn-danger pull-right"><i class="icon-remove"></i></a></p>
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% for person in people %}
-                                {% if person not in expense.people.all %}
-                                    <p>{{ person.name }} <a href="/expense/{{ expense.id }}/addperson/{{ person.id }}/" class="btn btn-mini btn-success pull-right"><i class="icon-plus"></i></a></p>
+                            {% for expensepart in expenseparts %}
+                                {% if expensepart.expense_id == expense.id %}
+                                    {% if expensepart.shouldpay != 0 %}
+                                        {{ userdict|keyvalue:expensepart.person_id }}: {{ expensepart.shouldpay }} {{ expense.currency.iso4217_code }}<br>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                         </td>
                         <td style="width: 3em; text-align: center">
-                        <a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>
-                        <a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a>
+                            <a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>
+                            <a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a>
                         </td>
                     </tr>
                 {% endfor %}

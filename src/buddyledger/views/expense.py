@@ -37,11 +37,13 @@ def AddExpense(request, ledgerid=0):
             ### calculate customtotal and autocount
             customtotal = 0
             autocount = 0
+            paymenttotal = 0
             for uid,temp in expenseparts.iteritems():
                 if temp['shouldpay'] != "auto":
-                    customtotal = customtotal + temp['shouldpay']
+                    customtotal += temp['shouldpay']
                 else:
                     autocount += 1
+            paymenttotal += temp['haspaid'] 
             
             ### find the splitpart
             remaining = expense.amount - customtotal
@@ -53,10 +55,17 @@ def AddExpense(request, ledgerid=0):
                 ### error, bail out
                 response = render_to_response('invalidexpense.html')
                 return response
-            else:
-                expense.save() # save the new expense
+            
+            ### check if the the payments add up to the expense amount
+            if expense.amount != paymenttotal:
+                ### error, bail out
+                response = render_to_response('invalidexpense.html')
+                return response
+            
+            ### OK, save the expense
+            expense.save() # save the new expense
                 
-            ### loop through the expenseparts again and add each to the DB
+            ### loop through the expenseparts again and save each
             for uid,temp in expenseparts.iteritems():
                 if temp['shouldpay'] != "auto":
                     expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=temp['shouldpay'],haspaid=temp['haspaid'])
