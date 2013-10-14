@@ -1,4 +1,5 @@
 from decimal import *
+import datetime
 
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
@@ -35,7 +36,7 @@ def AddBackPayment(request,payerid=0,receiverid=0,amount=0):
         else:
             form = BackPaymentForm(request.POST)
     else:
-        form = BackPaymentForm(initial={'currency': ledger.currency.id,'amount': amount})
+        form = BackPaymentForm(initial={'currency': ledger.currency.id,'amount': amount, 'date': datetime.date.today})
 
     return render(request, 'add_backpayment.html', {
         'form': form,
