@@ -29,7 +29,7 @@ def AddBackPayment(request,payerid=0,receiverid=0,amount=0):
     if request.method == 'POST':
         form = BackPaymentForm(request.POST)
         if form.is_valid():
-            bp = BackPayment(ledger_id=ledgerid,payer=payer,receiver=receiver,amount=form['amount'].data,amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,ledger.currency.id),currency_id=form['currency'].data)
+            bp = BackPayment(ledger_id=ledgerid,payer=payer,receiver=receiver,amount=form['amount'].data,amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,ledger.currency.id),currency_id=form['currency'].data,date=form['date'].data)
             bp.save()
             return HttpResponseRedirect('/ledger/%s/#backpayments' % ledgerid) # return to the ledger page, backpayments tab
         else:

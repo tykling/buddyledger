@@ -29,7 +29,7 @@ def AddExpense(request, ledgerid=0):
     if request.method == 'POST':
         form = ExpenseForm(request.POST,people=people)
         if form.is_valid(): # All validation rules pass
-            expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=Decimal(form['amount'].data),amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,ledger.currency.id),currency_id=form['currency'].data)
+            expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=Decimal(form['amount'].data),amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,ledger.currency.id),currency_id=form['currency'].data,date=form['date'].data)
             
             ### loop through the expenseparts
             expenseparts = dict()
