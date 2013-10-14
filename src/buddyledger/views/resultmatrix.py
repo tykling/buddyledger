@@ -97,7 +97,7 @@ def PopulateMatrix(result,resultdict,userdict):
                 continue
             if payerid == 'total' or receiverid == 'total':
                 continue
-            if cellcontent == "0":
+            if cellcontent == 0:
                 continue
             resultdict[receiverid][payerid] = '<a href="/backpayment/add/%s/%s/">%s</a>' % (payerid,receiverid,cellcontent)
             

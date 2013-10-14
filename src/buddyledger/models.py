@@ -43,11 +43,11 @@ class ExpensePart(models.Model):
 
 class BackPayment(models.Model):
     ledger = models.ForeignKey('Ledger',editable=False)
-    payer = models.ForeignKey('Person',related_name='backpayment_payer')
-    receiver = models.ForeignKey('Person',related_name='backpayment_receiver')
+    payer = models.ForeignKey('Person',related_name='backpayment_payer',editable=False)
+    receiver = models.ForeignKey('Person',related_name='backpayment_receiver',editable=False)
     amount = models.DecimalField(max_digits=20, decimal_places=2)
     amount_native = models.DecimalField(max_digits=20, decimal_places=2, editable=False)
-    currency = models.ForeignKey('Currency',editable=False)
+    currency = models.ForeignKey('Currency')
 
 
 class Currency(models.Model):
