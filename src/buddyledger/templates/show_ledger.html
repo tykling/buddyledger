@@ -42,7 +42,10 @@
             {% else %}
                 <h4>Reopen Ledger</h4>
                 <a href="/ledger/{{ ledger.id }}/reopen/" class="btn btn-danger btn-small"><i class="icon-check"></i> Reopen Ledger</a>
-                <p>If you need to go back and add/modify/remove an expense in this ledger it will need to be reopened. {% if backpayments|length > 0 %}This ledger has backpayments registered, if expenses are changed the backpayments might be too small/large because the debts changed. This means that users might have to make additional backpayments in order to settle.</p>
+                <p>If you need to go back and add/modify/remove an expense in this ledger it will need to be reopened first.</p>
+                {% if backpayments|length > 0 %}
+                    <p class="warning">This ledger has {{ backpayments|length }} backpayments registered. If the ledger is reopened and expenses are changed the existing backpayments might be too small/large because the debts changed. This means that users might have to make additional backpayments in order to settle.</p>
+                {% endif %}
             {% endif %}
         </div>
 

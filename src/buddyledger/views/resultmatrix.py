@@ -86,6 +86,17 @@ def PopulateMatrix(result,resultdict,userdict):
     temp['total'] = 'n/a'
     resultdict['total'] = temp
 
+    ### linkify all the amounts that indicate a debt relationship
+    for receiverid,row in resultdict.iteritems():
+        for payerid,cellcontent in row.iteritems():
+            if payerid == receiverid:
+                continue
+            if payerid == "Total Receive":
+                continue
+            if cellcontent == "n/a"
+                continue
+            resultdict[receiverid][payerid] = '<a href="/backpayment/add/%s/%s/">%s</a>' % (payerid,receiverid,cellcontent)
+            
     ### return the populated matrix
     return resultdict
 

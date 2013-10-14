@@ -41,7 +41,7 @@ class ExpensePart(models.Model):
     shouldpay_native = models.DecimalField(max_digits=20, decimal_places=2,null=True,blank=True)
 
 
-class Backpayment(models.Model):
+class BackPayment(models.Model):
     ledger = models.ForeignKey('Ledger',editable=False)
     payer = models.ForeignKey('Person',related_name='backpayment_payer')
     receiver = models.ForeignKey('Person',related_name='backpayment_receiver')
