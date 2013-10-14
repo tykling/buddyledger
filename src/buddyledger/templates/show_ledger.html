@@ -198,9 +198,13 @@
                                     {% if cellkey == 0 or rowkey == 'total' or cellkey == 'total' %}
                                         <b>{{ tablecell }}</b></td>
                                     {% else %}
+                                        {% if tablecell == 0 %}
+                                            {{ tablecell }}
+                                        {% else %}
                                             <a href="/backpayment/add/{{cellkey}}/{{rowkey}}/{{ tablecell }}/" class="btn btn-small btn-success btn-block">
                                                 <i class="icon-check"></i> {{ tablecell }} {{ ledger.currency }}
                                             </a>
+                                        {% endif %}
                                         </td>
                                     {% endif %}
                                 {% endif %}
