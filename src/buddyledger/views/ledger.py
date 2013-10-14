@@ -7,7 +7,7 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 
 ### django models and forms
-from buddyledger.models import Ledger, Person, Expense, ExpensePart, Currency
+from buddyledger.models import Ledger, Person, Expense, ExpensePart, Currency, BackPayment
 from buddyledger.forms import LedgerForm, PersonForm
 
 ### misc convenience functions
@@ -101,8 +101,8 @@ def ShowLedger(request, ledgerid=0):
         result = resultdict_to_decimal(fracresult)
     
         ### arrange the data for result output
-        matrixdict = ResultToMatrix(result,userdict)
-        #tabledict = ResultToTable(result,userdict)
+        matrixdict = ResultToMatrix(result,userdict,backpayments)
+        #tabledict = ResultToTable(result,userdict,backpayments)
         tabledict = dict() #not implemented yet
 
         ### render and return response
@@ -127,7 +127,7 @@ def ShowLedger(request, ledgerid=0):
             'expenseparts': expenseparts,
             'debugdata': calcdata,
             'userdict': userdict,
-            'errorlist': errorlist
+            'errorlist': errorlist,
             'backpayments': backpayments
         })
 
