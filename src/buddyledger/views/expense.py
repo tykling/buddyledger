@@ -59,6 +59,7 @@ def AddExpense(request, ledgerid=0):
             ### find the splitpart
             remaining = expense.amount - customtotal
             remainder = 0
+            splitpart = 0
             if remaining > 0:
                 splitpart = Decimal(remaining / autocount).quantize(Decimal('.01'), rounding=ROUND_DOWN)
                 remainder = Decimal((expense.amount-customtotal) - Decimal(splitpart * autocount))

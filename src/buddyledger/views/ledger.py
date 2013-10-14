@@ -52,6 +52,9 @@ def ShowLedger(request, ledgerid=0):
     ### get all expenseparts related to one of the expenses (for use in the template)
     expenseparts = ExpensePart.objects.filter(expense__in=expenses)
 
+    ### get all backpayments for this ledger
+    backpayments = BackPayment.objects.filter(ledger_id=ledgerid)
+    
     ### create dict with uid <> username mappings
     userdict = OrderedDict()
     userlist = []
@@ -112,7 +115,8 @@ def ShowLedger(request, ledgerid=0):
             'matrixdict': matrixdict,
             'tabledict': tabledict,
             'userdict': userdict,
-            'errorlist': errorlist
+            'errorlist': errorlist,
+            'backpayments': backpayments
         })
     else:
         ### render and return response
@@ -124,6 +128,7 @@ def ShowLedger(request, ledgerid=0):
             'debugdata': calcdata,
             'userdict': userdict,
             'errorlist': errorlist
+            'backpayments': backpayments
         })
 
 
