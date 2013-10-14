@@ -99,7 +99,7 @@ def PopulateMatrix(result,resultdict,userdict):
                 continue
             if cellcontent == 0:
                 continue
-            resultdict[receiverid][payerid] = '<a href="/backpayment/add/%s/%s/">%s</a>' % (payerid,receiverid,cellcontent)
+            resultdict[receiverid][payerid] = '<a href="/backpayment/add/%s/%s/%s/">%s</a>' % (payerid,receiverid,cellcontent,cellcontent)
             
     ### return the populated matrix
     return resultdict

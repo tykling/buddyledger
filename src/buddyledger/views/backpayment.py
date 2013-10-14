@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from buddyledger.forms import BackPaymentForm
 from buddyledger.models import Ledger, Person, Expense, Currency, BackPayment
 
-def AddBackPayment(request,payerid=0,receiverid=0):
+def AddBackPayment(request,payerid=0,receiverid=0,amount=0):
     ### check if the payer and receiver exists, bail out if not
     try:
         payer = Person.objects.get(pk = payerid)
@@ -33,7 +33,7 @@ def AddBackPayment(request,payerid=0,receiverid=0):
         else:
             form = BackPaymentForm(request.POST)
     else:
-        form = BackPaymentForm(initial={'currency': ledger.currency.id})
+        form = BackPaymentForm(initial={'currency': ledger.currency.id,'amount': amount})
 
     return render(request, 'add_backpayment.html', {
         'form': form,
