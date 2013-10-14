@@ -26,6 +26,7 @@ class Expense(models.Model):
     amount_native = models.DecimalField(max_digits=20, decimal_places=2, editable=False)
     ledger = models.ForeignKey('Ledger',editable=False)
     people = models.ManyToManyField('Person',through='ExpensePart',null=True)
+    date = models.DateField()
     def __unicode__(self):
         return self.name
     class Meta:
@@ -48,6 +49,7 @@ class BackPayment(models.Model):
     amount = models.DecimalField(max_digits=20, decimal_places=2)
     amount_native = models.DecimalField(max_digits=20, decimal_places=2, editable=False)
     currency = models.ForeignKey('Currency')
+    date = models.DateField()
 
 
 class Currency(models.Model):

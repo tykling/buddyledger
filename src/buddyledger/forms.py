@@ -33,7 +33,8 @@ class BackPaymentForm(forms.ModelForm):
 class ExpenseForm(forms.Form):
     name = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'id': 'name'}))
     amount = forms.CharField(max_length=10,widget=forms.TextInput(attrs={'id': 'amount', 'type': 'number'}))
-
+    date = forms.DateField(initial=datetime.date.today)
+    
     def __init__(self, *args, **kwargs):
         people = kwargs.pop('people')
         super(ExpenseForm, self).__init__(*args, **kwargs)
