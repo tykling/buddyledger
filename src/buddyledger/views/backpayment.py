@@ -3,7 +3,7 @@ from decimal import *
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 
-from buddyledger.forms import BackPaymentForm
+from buddyledger.forms import BackPaymentForm, DeleteBackPaymentForm
 from buddyledger.models import Ledger, Person, Expense, Currency, BackPayment
 
 from buddyledger.views.misc import ConvertCurrency
@@ -60,7 +60,7 @@ def EditBackPayment(request, bpid=0):
         if form.is_valid():
             bp.amount = form['amount'].data
             bp.currency_id = form['currency'].data
-            bp.amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,ledger.currency.id)
+            bp.amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,bp.ledger.currency.id)
             bp.save()
             return HttpResponseRedirect('/ledger/%s/#backpayments' % bp.ledger.id)
         else:

@@ -43,7 +43,9 @@ def EditPerson(request, personid=0):
         response = render_to_response('person_does_not_exist.html')
         return response
 
+    
     ### check if the ledger is open
+    ledger = Ledger.objects.get(pk=person.ledger.id)
     if ledger.closed:
         response = render_to_response('ledger_is_closed.html')
         return response
