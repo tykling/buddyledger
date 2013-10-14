@@ -14,6 +14,11 @@ def AddPerson(request,ledgerid=0):
         response = render_to_response('ledgerdoesnotexist.html')
         return response
 
+    ### check if the ledger is open
+    if ledger.closed:
+        response = render_to_response('ledger_is_closed.html')
+        return response
+
     if request.method == 'POST':
         form = PersonForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
@@ -25,7 +30,7 @@ def AddPerson(request,ledgerid=0):
     else:
         form = PersonForm()
 
-    return render(request, 'addperson.html', {
+    return render(request, 'add_person.html', {
         'form': form,
     })
 
@@ -35,11 +40,16 @@ def EditPerson(request, personid=0):
     try:
         person = Person.objects.get(pk = personid)
     except Person.DoesNotExist:
-        response = render_to_response('persondoesnotexist.html')
+        response = render_to_response('person_does_not_exist.html')
+        return response
+
+    ### check if the ledger is open
+    if ledger.closed:
+        response = render_to_response('ledger_is_closed.html')
         return response
 
     if request.method == 'POST':
-        form = LedgerForm(request.POST) # A form bound to the person data
+        form = PersonForm(request.POST) # A form bound to the person data
         if form.is_valid(): # All validation rules pass
             person.name = form['name'].data
             person.save()
@@ -49,7 +59,7 @@ def EditPerson(request, personid=0):
     else:
         form = PersonForm(instance=person)
 
-    return render(request, 'editperson.html', {
+    return render(request, 'edit_person.html', {
         'form': form,
         'person': person
     })
@@ -60,7 +70,12 @@ def RemovePerson(request, personid=0):
     try:
         person = Person.objects.get(pk = personid)
     except Person.DoesNotExist:
-        response = render_to_response('persondoesnotexist.html')
+        response = render_to_response('person_does_not_exist.html')
+        return response
+
+    ### check if the ledger is open
+    if person.ledger.closed:
+        response = render_to_response('ledger_is_closed.html')
         return response
 
     person.delete()

@@ -1,8 +1,6 @@
 {% extends "skeleton.html" %}
 {% block content %}
-<h2>Add payment to expense: {{ expense.name }}</h2>
-<p>The total price for this expense is: {{ expense.amount }} {{ expense.currency }}</p>
-<p class="text-warning">Note: Payments are implicitly the same currency as the expense, in this case {{ expense.currency }}</p>
+<h2>Add person to ledger</h2>
 
 {% if form.errors %}
 	<div class="alert alert-error">
@@ -20,6 +18,6 @@
     <table>
     {{form}}
     </table>
-    <input type="submit" method="POST" class="btn" value="Add payment">
+    <input type="submit" method="POST" class="btn" value="Add">
 </form>
 {% endblock %}

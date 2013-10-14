@@ -48,7 +48,6 @@ class Backpayment(models.Model):
     amount = models.DecimalField(max_digits=20, decimal_places=2)
     amount_native = models.DecimalField(max_digits=20, decimal_places=2, editable=False)
     currency = models.ForeignKey('Currency',editable=False)
-    btctxid = models.CharField(max_length=64,blank=True,null=True)
 
 
 class Currency(models.Model):

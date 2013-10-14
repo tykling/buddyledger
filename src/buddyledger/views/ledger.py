@@ -30,7 +30,7 @@ def CreateLedger(request):
     else:
         form = LedgerForm()
 
-    return render(request, 'createledger.html', {
+    return render(request, 'create_ledger.html', {
         'form': form,
     })
 
@@ -40,7 +40,7 @@ def ShowLedger(request, ledgerid=0):
     try:
         ledger = Ledger.objects.get(pk = ledgerid)
     except Ledger.DoesNotExist:
-        response = render_to_response('ledgerdoesnotexist.html')
+        response = render_to_response('ledger_does_not_exist.html')
         return response
     
     ### get all people related to this ledger
@@ -103,7 +103,7 @@ def ShowLedger(request, ledgerid=0):
         tabledict = dict() #not implemented yet
 
         ### render and return response
-        return render(request, 'showledger.html', {
+        return render(request, 'show_ledger.html', {
             'ledger': ledger,
             'people': people,
             'expenses': expenses,
@@ -116,7 +116,7 @@ def ShowLedger(request, ledgerid=0):
         })
     else:
         ### render and return response
-        return render(request, 'showledger.html', {
+        return render(request, 'show_ledger.html', {
             'ledger': ledger,
             'people': people,
             'expenses': expenses,
@@ -132,23 +132,75 @@ def EditLedger(request, ledgerid=0):
     try:
         ledger = Ledger.objects.get(pk = ledgerid)
     except Ledger.DoesNotExist:
-        response = render_to_response('ledgerdoesnotexist.html')
+        response = render_to_response('ledger_does_not_exist.html')
         return response
 
+    ### check if the ledger is open
+    if ledger.closed:
+        response = render_to_response('ledger_is_closed.html')
+        return response
+    
     if request.method == 'POST':
         form = LedgerForm(request.POST) # A form bound to the ledger data
         if form.is_valid(): # All validation rules pass
             ledger.name = form['name'].data
             ledger.currency_id = form['currency'].data
             ledger.save()
-            return HttpResponseRedirect('/ledger/%s' % ledger.id) # return to the ledger page
+            return HttpResponseRedirect('/ledger/%s/#main' % ledger.id) # return to the ledger page
         else:
             form = LedgerForm(request.POST)
     else:
         form = LedgerForm(instance=ledger)
 
-    return render(request, 'editledger.html', {
+    return render(request, 'edit_ledger.html', {
         'form': form,
         'ledgerid': ledgerid
     })
 
+
+def CloseLedger(request, ledgerid=0):
+    ### Check if the ledger exists - bail out if not
+    try:
+        ledger = Ledger.objects.get(pk = ledgerid)
+    except Ledger.DoesNotExist:
+        response = render_to_response('ledger_does_not_exist.html')
+        return response
+    
+    ### check if the ledger is open or closed
+    if ledger.closed == True:
+        response = render_to_response('ledger_not_open.html')
+        return response
+
+    if request.method == 'POST':
+        ledger.closed = True
+        ledger.save()
+        return HttpResponseRedirect('/ledger/%s/#main' % ledger.id) # return to the ledger page
+    else:
+        return render(request, 'confirm_close_ledger.html', {
+            'form': ConfirmCloseLedgerForm(),
+            'expense': ledger
+        })
+
+
+def ReopenLedger(request, ledgerid=0):
+    ### Check if the ledger exists - bail out if not
+    try:
+        ledger = Ledger.objects.get(pk = ledgerid)
+    except Ledger.DoesNotExist:
+        response = render_to_response('ledger_does_not_exist.html')
+        return response
+    
+    ### check if the ledger is open or closed
+    if ledger.closed == False:
+        response = render_to_response('ledger_not_closed.html')
+        return response
+
+    if request.method == 'POST':
+        ledger.closed = True
+        ledger.save()
+        return HttpResponseRedirect('/ledger/%s/#main' % ledger.id) # return to the ledger page
+    else:
+        return render(request, 'confirm_reopen_ledger.html', {
+            'form': ConfirmReopenLedgerForm(),
+            'expense': ledger
+        })

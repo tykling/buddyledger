@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     url(r'^ledger/(?P<ledgerid>\d+)/$', 'buddyledger.views.ShowLedger'),
     url(r'^ledger/(?P<ledgerid>\d+)/edit/$', 'buddyledger.views.EditLedger'),
     url(r'^ledger/(?P<ledgerid>\d+)/close/$', 'buddyledger.views.CloseLedger'),
+    url(r'^ledger/(?P<ledgerid>\d+)/reopen/$', 'buddyledger.views.ReopenLedger'),
 
     ### person
     url(r'^ledger/(?P<ledgerid>\d+)/addperson/$', 'buddyledger.views.AddPerson'),
@@ -22,4 +23,9 @@ urlpatterns = patterns('',
     url(r'^expense/(?P<expenseid>\d+)/remove/$', 'buddyledger.views.RemoveExpense'),
     url(r'^expense/(?P<expenseid>\d+)/addperson/(?P<personid>\d+)/$', 'buddyledger.views.ExpenseAddPerson'),
     url(r'^expense/(?P<expenseid>\d+)/removeperson/(?P<personid>\d+)/$', 'buddyledger.views.ExpenseRemovePerson'),
+    
+    ### backpayment
+    url(r'^backpayment/add/(?P<payerid>\d+)/(?P<receiverid>\d+)/', 'buddyledger.views.AddBackPayment'),
+    url(r'^backpayment/(?P<bpid>\d+)/edit/', 'buddyledger.views.EditBackPayment'),
+    url(r'^backpayment/(?P<bpid>\d+)/remove/', 'buddyledger.views.RemoveBackPayment'),
 )

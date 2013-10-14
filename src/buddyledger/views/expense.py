@@ -17,7 +17,12 @@ def AddExpense(request, ledgerid=0):
     except Ledger.DoesNotExist:
         response = render_to_response('ledgerdoesnotexist.html')
         return response
-    
+
+    ### check if the ledger is open
+    if ledger.closed:
+        response = render_to_response('ledger_is_closed.html')
+        return response
+
     ### get all people associated with this ledger
     people = Person.objects.filter(ledger_id=ledgerid).order_by('name')
     
@@ -48,7 +53,7 @@ def AddExpense(request, ledgerid=0):
                 try:
                     paymenttotal += Decimal(temp['haspaid'])
                 except Exception as e:
-                    response = render_to_response('invalidexpense.html')
+                    response = render_to_response('invalid_expense.html')
                     return response                
             
             ### find the splitpart
@@ -61,13 +66,13 @@ def AddExpense(request, ledgerid=0):
             ### check if customtotal + remaining = expense amount
             if customtotal + (splitpart*autocount) + remainder != expense.amount:
                 ### error, bail out
-                response = render_to_response('invalidexpense.html')
+                response = render_to_response('invalid_expense.html')
                 return response
             
             ### check if the the payments add up to the expense amount
             if expense.amount != paymenttotal:
                 ### error, bail out
-                response = render_to_response('invalidexpense.html')
+                response = render_to_response('invalid_expense.html')
                 return response
             
             ### OK, save the expense
@@ -94,7 +99,7 @@ def AddExpense(request, ledgerid=0):
         ### page not POSTed
         form = ExpenseForm(initial={'currency': ledger.currency.id},people=people)
         
-    return render(request, 'addexpense.html', {
+    return render(request, 'add_expense.html', {
         'form': form,
         'people': people,
         'ledger': ledger
@@ -106,7 +111,12 @@ def EditExpense(request, expenseid=0):
     try:
         expense = Expense.objects.get(pk = expenseid)
     except Expense.DoesNotExist:
-        response = render_to_response('expensedoesnotexist.html')
+        response = render_to_response('expense_does_not_exist.html')
+        return response
+
+    ### check if the ledger is open
+    if expense.ledger.closed:
+        response = render_to_response('ledger_is_closed.html')
         return response
 
     if request.method == 'POST':
@@ -129,7 +139,7 @@ def EditExpense(request, expenseid=0):
         form = ExpenseForm(instance=expense)
     
     form.fields["people"].queryset = Person.objects.filter(ledger_id=expense.ledger.id)
-    return render(request, 'editexpense.html', {
+    return render(request, 'edit_expense.html', {
         'form': form,
         'expense': expense
     })
@@ -140,7 +150,12 @@ def RemoveExpense(request, expenseid=0):
     try:
         expense = Expense.objects.get(pk = expenseid)
     except Expense.DoesNotExist:
-        response = render_to_response('expensedoesnotexist.html')
+        response = render_to_response('expense_does_not_exist.html')
+        return response
+
+    ### check if the ledger is open
+    if expense.ledger.closed:
+        response = render_to_response('ledger_is_closed.html')
         return response
 
     if request.method == 'POST':

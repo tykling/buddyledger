@@ -1,20 +1,35 @@
 from django import forms
-from buddyledger.models import Ledger, Person, Expense, Currency
+from buddyledger.models import Ledger, Person, Expense, Currency, BackPayment
 
-
+### confirmation forms
 class DeleteExpenseForm(forms.Form):
     id = forms.IntegerField(widget=forms.HiddenInput())
 
+class DeleteBackPaymentForm(forms.Form):
+    id = forms.IntegerField(widget=forms.HiddenInput())
+
+class ConfirmCloseLedgerForm(forms.Form):
+    id = forms.IntegerField(widget=forms.HiddenInput())
+
+class ConfirmReopenLedgerForm(forms.Form):
+    id = forms.IntegerField(widget=forms.HiddenInput())
+
+
+### ModelForms
 class LedgerForm(forms.ModelForm):
     class Meta:
         model = Ledger
-
 
 class PersonForm(forms.ModelForm):
     class Meta:
         model = Person
 
+class BackPaymentForm(forms.ModelForm):
+    class Meta:
+        model = BackPayment
 
+
+### custom forms
 class ExpenseForm(forms.Form):
     name = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'id': 'name'}))
     amount = forms.CharField(max_length=10,widget=forms.TextInput(attrs={'id': 'amount', 'type': 'number'}))

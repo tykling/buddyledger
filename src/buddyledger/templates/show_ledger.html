@@ -9,6 +9,7 @@
         <li><a href="#people" data-toggle="tab">People</a></li>
         <li><a href="#expenses" data-toggle="tab">Expenses</a></li>
         {% if matrixdict %}
+            <li><a href="#backpayments" data-toggle="tab">BackPayments</a></li>
             <li><a href="#resultmatrix" data-toggle="tab">Result (matrix)</a></li>
         {% endif %}
         
@@ -26,20 +27,26 @@
             Given a list of people and expenses this system will calculate the final breakdown so you can see who owes what to whom.</p>
             
             <h4>Statistics</h4>
-            <p>This ledger has <b>{{ people|length }}</b> people associated, and <b>{{ expenses|length }}</b> expenses with a total of <b>{{ payments|length }}</b> payments.</p>
+            <p>This ledger has <b>{{ people|length }}</b> people and <b>{{ expenses|length }}</b> expenses associated. There is currently {{ backpayments|length }} backpayments registered.</p>
             
             <!--
-            <h2>Advanced Settings</h2>
+            <h4>Advanced Settings</h4>
             <p>You can change the algorithm used to calculate the final result. The default should be fine for most uses.</p>
             <a href="/ledger/{{ ledger.id }}/changemethod/" class="btn btn-inverse"><i class="icon-wrench"></i> Change method</a>
             -->
 
-            
-            <h4>Close Ledger</h4>
-            <p>When all expenses and payments has been added to the ledger it should be closed before any backpayments can be registered.</p>
-            <a href="/ledger/{{ ledger.id }}/close/" class="btn btn-danger"><i class="icon-check"></i> Close Ledger</a>
+            {% if ledger.closed %}
+                <h4>Close Ledger</h4>
+                <a href="/ledger/{{ ledger.id }}/close/" class="btn btn-danger btn-small"><i class="icon-check"></i> Close Ledger</a>
+                <p>When all expenses and payments has been added to the ledger it should be closed to avoid further changes being made. The reason for this is that debts might change if expenses are changed, with a real risk of making existing backpayments too small or too large. When the ledger is closed the expenses are frozen and backpayments can be made with no such concerns.</p>
+            {% else %}
+                <h4>Reopen Ledger</h4>
+                <a href="/ledger/{{ ledger.id }}/reopen/" class="btn btn-danger btn-small"><i class="icon-check"></i> Reopen Ledger</a>
+                <p>If you need to go back and add/modify/remove an expense in this ledger it will need to be reopened. {% if backpayments|length > 0 %}This ledger has backpayments registered, if expenses are changed the backpayments might be too small/large because the debts changed. This means that users might have to make additional backpayments in order to settle.</p>
+            {% endif %}
         </div>
-        
+
+
         <div id="people" class="tab-pane">
             {% comment %}<!-- List of people -->{% endcomment %}
             <h3>People:</h3>
@@ -61,6 +68,7 @@
                 <a href="/ledger/{{ ledger.id }}/addperson/" class="btn btn-primary"><i class="icon-plus"></i> Add person</a>
             {% endif %}        
         </div>
+
 
         <div id="expenses" class="tab-pane">
             {% if expenses %}
@@ -125,6 +133,41 @@
                 {% endif %}
             {% endif %}
         </div>
+
+        
+        <div id="backpayments" class="tab-pane">
+            {% comment %}<!-- List of backpayments -->{% endcomment %}
+            <h3>BackPayments:</h3>
+            {% if backpayments %}
+                <table class="table table-bordered table-striped" style="width: 50%;">
+                    <tr><th>Payer</th><th>Receiver</th><th>Amount</th><th>Amount {{ ledger.currency.iso4217_code }}</th><th style="width: 5em; text-align: center">Action</th></tr>
+                    {% for bp in backpayments %}
+                    <tr>
+                        <td>
+                            {{ bp.payer.name }}
+                        </td>
+                        <td>
+                            {{ bp.receiver.name }}
+                        </td>
+                        <td>
+                            {{ bp.amount }} {{ bp.currency.iso4217_code }}
+                        </td>
+                        <td>
+                            {{ bp.amount }} {{ ledger.currency.iso4217_code }}
+                        </td>
+
+                        <td style="width: 5em; text-align: center">
+                            <a href="/person/{{ person.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>&nbsp;
+                            <a href="/person/{{ person.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p class="text-warning">No backpayments found. You can register backpayments from the results display, by pressing the individual debt that has been settled (partially or fully).</p>
+            {% endif %}        
+        </div>
+        
 
         <div id="resultmatrix" class="tab-pane">
             <table class="table table-bordered">
@@ -210,6 +253,7 @@
                 </tbody>
             </table>
         </div>
+
 
         <div id="debug" class="tab-pane">
             <h4>Debug calculation input</h4>
