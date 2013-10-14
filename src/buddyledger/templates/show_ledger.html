@@ -198,7 +198,7 @@
                                     {% if cellkey == 0 or rowkey == 'total' or cellkey == 'total' %}
                                         <b>{{ tablecell }}</b></td>
                                     {% else %}
-                                        {{ tablecell }}</td>
+                                        <span style="text-align: right;">{{ tablecell|safe }}</span></td>
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}

@@ -1,6 +1,6 @@
 {% extends "skeleton.html" %}
 {% block content %}
-<h2>Add person to ledger</h2>
+<h2>Add backpayment</h2>
 
 {% if form.errors %}
 	<div class="alert alert-error">
@@ -16,7 +16,7 @@
 <form method="POST">
     {% csrf_token %}
     <table>
-    {{form}}
+        {{form}}
     </table>
     <input type="submit" method="POST" class="btn" value="Add">
 </form>
