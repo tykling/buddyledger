@@ -37,6 +37,10 @@ def AddBackPayment(request,payerid=0,receiverid=0,amount=0):
 
     return render(request, 'add_backpayment.html', {
         'form': form,
+        'payer': payer,
+        'receiver': receiver,
+        'amount': amount,
+        'ledger': ledger
     })
 
 
