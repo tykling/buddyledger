@@ -79,6 +79,7 @@
                 <table class="table table-bordered">
                     <tr>
                         <th>Name</th>
+                        <th>Date</th>
                         <th style="width: 3em; text-align: right">Amount</th>
                         <th style="width: 3em; text-align: right">Amount {{ ledger.currency.iso4217_code }}</th>
                         <th style="text-align: right">Should Pay</th>
@@ -89,6 +90,9 @@
                     <tr>
                         <td>
                             {{ expense.name }}
+                        </td>
+                        <td>
+                            {{ expense.date }}
                         </td>
                         <td style="text-align: right">
                             {{ expense.amount }} {{ expense.currency.iso4217_code }}
@@ -143,7 +147,7 @@
             <h3>BackPayments:</h3>
             {% if backpayments %}
                 <table class="table table-bordered table-striped" style="width: 50%;">
-                    <tr><th>Payer</th><th>Receiver</th><th>Amount</th><th>Amount {{ ledger.currency.iso4217_code }}</th><th style="width: 5em; text-align: center">Action</th></tr>
+                    <tr><th>Payer</th><th>Receiver</th><th>Date</th><th>Amount</th><th>Amount {{ ledger.currency.iso4217_code }}</th><th style="width: 5em; text-align: center">Action</th></tr>
                     {% for bp in backpayments %}
                     <tr>
                         <td>
@@ -151,6 +155,9 @@
                         </td>
                         <td>
                             {{ bp.receiver.name }}
+                        </td>
+                        <td>
+                            {{ bp.date }}
                         </td>
                         <td>
                             {{ bp.amount }} {{ bp.currency.iso4217_code }}
