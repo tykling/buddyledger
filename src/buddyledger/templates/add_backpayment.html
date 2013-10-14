@@ -16,8 +16,25 @@
 <form method="POST">
     {% csrf_token %}
     <table>
-        {{form}}
+        <tr>
+            <td>
+                {{form.amount.label_tag}}
+            </td>
+            <td>
+                <div class="control-group" id="controlgroup-name">
+                    <div class="input-append">
+                        {{form.amount}}
+                        {{form.currency}}
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <input type="submit" method="POST" class="btn" value="Add">
+            </td>
+        </tr>
     </table>
-    <input type="submit" method="POST" class="btn" value="Add">
 </form>
 {% endblock %}
