@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from buddyledger.forms import BackPaymentForm
 from buddyledger.models import Ledger, Person, Expense, Currency, BackPayment
 
+from buddyledger.views.misc import ConvertCurrency
+
 def AddBackPayment(request,payerid=0,receiverid=0,amount=0):
     ### check if the payer and receiver exists, bail out if not
     try:
