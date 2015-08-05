@@ -74,12 +74,12 @@ def ShowLedger(request, ledgerid=0):
             
             ### loop through expenseparts (people) for this expense
             for expensepart in expenseparts.filter(expense_id=expense.id):
-                if expensepart.haspaid != 0:
-                    whopaid.append(dict(personId=expensepart.person_id,amount=Fraction(expensepart.haspaid)))
-                if expensepart.shouldpay == None:
+                if expensepart.haspaid_native != 0:
+                    whopaid.append(dict(personId=expensepart.person_id,amount=Fraction(expensepart.haspaid_native)))
+                if expensepart.shouldpay_native == None:
                     whoshouldpay[expensepart.person_id]=Fraction(0)
                 else:
-                    whoshouldpay[expensepart.person_id]=Fraction(expensepart.shouldpay)
+                    whoshouldpay[expensepart.person_id]=Fraction(expensepart.shouldpay_native)
             
             ### add data for this expense to calcdata
             calcdata.append(dict(whopaid=whopaid, whoshouldpay=whoshouldpay))
