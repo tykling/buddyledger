@@ -1,0 +1,44 @@
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+# make this a long 100+ chars random string
+SECRET_KEY = ''
+
+# debug settings - remember to set allowed_hosts if debug is disabled
+DEBUG = True
+TEMPLATE_DEBUG = True
+ALLOWED_HOSTS = []
+
+# Database settings
+# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+#
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'dbname',
+#        'USER': 'dbuser',
+#        'PASSWORD': 'dbpass',
+#        'HOST': 'dbip',
+#        'PORT': '',
+#    },
+#}
+#
+
+# email settings
+EMAIL_HOST='mailhost.example.com'
+EMAIL_PORT=587
+EMAIL_HOST_USER='mymailuser'
+EMAIL_HOST_PASSWORD='mymailpassword'
+EMAIL_USE_TLS=True
+EMAIL_FROM='noreply@example.com'
+
+ADMINS = (
+    ('buddyledger admin', 'mail@example.com'),
+)
+
