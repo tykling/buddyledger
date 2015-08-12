@@ -85,8 +85,8 @@ class ExpenseForm(forms.Form):
 
 
 CALCMETHODS = (
-    ('1', 'basic'),
-    ('2', 'optimized'),
+    ('basic', 'basic'),
+    ('optimized', 'optimized'),
 )
     
 class ChangeMethodForm(forms.Form):

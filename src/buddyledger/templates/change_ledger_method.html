@@ -1,6 +1,6 @@
 {% extends "skeleton.html" %}
 {% block content %}
-<h2>Editing ledger {{ ledgerid }}</h2>
+<h2>Change calculation method for ledger: {{ ledger.name }}</h2>
 
 {% if form.errors %}
     <div class="alert alert-error">
@@ -15,10 +15,9 @@
 
 <form method="POST">
     {% csrf_token %}
-    <input type="hidden" name="id" value="{{ ledgerid }}">
     <table>
     {{form}}
     </table>
-    <input type="submit" method="POST">
+    <input class="btn" type="submit" method="POST" value="Save">
 </form>
 {% endblock %}

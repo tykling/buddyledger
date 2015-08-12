@@ -208,7 +208,7 @@ def ChangeMethod(request, ledgerid=0):
         response = render_to_response('ledger_does_not_exist.html')
         return response
     
-    form = ChangeMethodForm(request.POST or None)
+    form = ChangeMethodForm(request.POST or None, initial={'calcmethod': ledger.calcmethod})
     if form.is_valid():
         ledger.calcmethod = form['calcmethod'].data
         ledger.save()
@@ -216,5 +216,6 @@ def ChangeMethod(request, ledgerid=0):
 
     return render(request, 'change_ledger_method.html', {
         'form': form,
+        'ledger': ledger,
     })
 
