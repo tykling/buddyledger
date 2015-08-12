@@ -2,12 +2,12 @@ from collections import OrderedDict
 from decimal import *
 
 
-def ResultToMatrix(result,userdict,backpayments):
+def ResultToMatrix(result,userdict):
     ### first get an empty matrix (dict of dicts)
     resultdict = GetEmptyMatrix(userdict)
 
     ### now populate the matrix with the results
-    resultdict = PopulateMatrix(result,resultdict,userdict,backpayments)
+    resultdict = PopulateMatrix(result,resultdict,userdict)
 
     ### return the finished matrix
     return resultdict
@@ -45,7 +45,7 @@ def GetEmptyMatrix(userdict):
     return resultdict
 
 
-def PopulateMatrix(result,resultdict,userdict,backpayments):
+def PopulateMatrix(result,resultdict,userdict):
     ### loop through the result and insert the debts into the matrix,
     ### and also calculate the totals while we are here
     payertotal = OrderedDict()
@@ -87,15 +87,6 @@ def PopulateMatrix(result,resultdict,userdict,backpayments):
     resultdict['total'] = temp
 
 
-    ### substract backpayments
-    for bp in backpayments:
-        resultdict[bp.receiver.id][bp.payer.id] = resultdict[bp.receiver.id][bp.payer.id] - bp.amount
-
-
     ### return the populated matrix
     return resultdict
 
-
-def ResultToTable(result,userdict):
-    # not implemented yet
-    return OrderedDict()

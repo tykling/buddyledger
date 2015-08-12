@@ -1,12 +1,9 @@
 from django import forms
-from buddyledger.models import Ledger, Person, Expense, Currency, BackPayment
+from buddyledger.models import Ledger, Person, Expense, Currency
 import datetime
 
 ### confirmation forms
 class DeleteExpenseForm(forms.Form):
-    id = forms.IntegerField(widget=forms.HiddenInput())
-
-class DeleteBackPaymentForm(forms.Form):
     id = forms.IntegerField(widget=forms.HiddenInput())
 
 class ConfirmCloseLedgerForm(forms.Form):
@@ -24,10 +21,6 @@ class LedgerForm(forms.ModelForm):
 class PersonForm(forms.ModelForm):
     class Meta:
         model = Person
-
-class BackPaymentForm(forms.ModelForm):
-    class Meta:
-        model = BackPayment
 
 
 ### custom forms

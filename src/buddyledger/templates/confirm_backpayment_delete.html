@@ -1,9 +1,0 @@
-{% extends "skeleton.html" %}
-{% block content %}
-
-<form action="" method="post">
-    {% csrf_token %}
-    <p>Are you sure you want to delete the backpayment of <b>{{ bp.amount }} {{ bp.currency.iso4217_code }} ({{ bp.amount_native }} {{ bp.ledger.currency.iso4217_code }}) paid from <b>{{ bp.payer.name }}</b> to <b>{{ bp.receiver.name }} ?</p>
-    <input class="btn btn-warning" type="submit" value="Confirm" />
-</form>
-{% endblock %}

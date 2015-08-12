@@ -7,7 +7,7 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 
 ### django models and forms
-from buddyledger.models import Ledger, Person, Expense, ExpensePart, Currency, BackPayment
+from buddyledger.models import Ledger, Person, Expense, ExpensePart, Currency
 from buddyledger.forms import LedgerForm, PersonForm
 
 ### misc convenience functions
@@ -51,9 +51,6 @@ def ShowLedger(request, ledgerid=0):
     
     ### get all expenseparts related to one of the expenses (for use in the template)
     expenseparts = ExpensePart.objects.filter(expense__in=expenses)
-
-    ### get all backpayments for this ledger
-    backpayments = BackPayment.objects.filter(ledger_id=ledgerid)
     
     ### create dict with uid <> username mappings
     userdict = OrderedDict()
@@ -101,9 +98,7 @@ def ShowLedger(request, ledgerid=0):
         result = resultdict_to_decimal(fracresult)
     
         ### arrange the data for result output
-        matrixdict = ResultToMatrix(result,userdict,backpayments)
-        #tabledict = ResultToTable(result,userdict,backpayments)
-        tabledict = dict() #not implemented yet
+        matrixdict = ResultToMatrix(result,userdict)
 
         ### render and return response
         return render(request, 'show_ledger.html', {
@@ -116,7 +111,6 @@ def ShowLedger(request, ledgerid=0):
             'tabledict': tabledict,
             'userdict': userdict,
             'errorlist': errorlist,
-            'backpayments': backpayments
         })
     else:
         ### render and return response
@@ -128,7 +122,6 @@ def ShowLedger(request, ledgerid=0):
             'debugdata': calcdata,
             'userdict': userdict,
             'errorlist': errorlist,
-            'backpayments': backpayments
         })
 
 

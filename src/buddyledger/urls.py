@@ -19,13 +19,8 @@ urlpatterns = patterns('',
     
     ### expense
     url(r'^ledger/(?P<ledgerid>\d+)/addexpense/$', 'buddyledger.views.AddExpense'),
-    #url(r'^expense/(?P<expenseid>\d+)/edit/$', 'buddyledger.views.EditExpense'),
+    url(r'^expense/(?P<expenseid>\d+)/edit/$', 'buddyledger.views.EditExpense'),
     url(r'^expense/(?P<expenseid>\d+)/remove/$', 'buddyledger.views.RemoveExpense'),
     url(r'^expense/(?P<expenseid>\d+)/addperson/(?P<personid>\d+)/$', 'buddyledger.views.ExpenseAddPerson'),
     url(r'^expense/(?P<expenseid>\d+)/removeperson/(?P<personid>\d+)/$', 'buddyledger.views.ExpenseRemovePerson'),
-    
-    ### backpayment
-    url(r'^backpayment/add/(?P<payerid>\d+)/(?P<receiverid>\d+)/(?P<amount>\d+)/', 'buddyledger.views.AddBackPayment'),
-    url(r'^backpayment/(?P<bpid>\d+)/edit/', 'buddyledger.views.EditBackPayment'),
-    url(r'^backpayment/(?P<bpid>\d+)/remove/', 'buddyledger.views.RemoveBackPayment'),
 )

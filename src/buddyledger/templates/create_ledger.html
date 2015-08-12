@@ -4,16 +4,16 @@
 <p class="lead">To create a new ledger you need to come up with a <i>name</i> and choose a <i>native currency</i> for the ledger.</p>
 
 {% if form.errors %}
-	<div class="alert alert-error">
-		<h4>Form errors</h4>
-		<ol>
-			{% for error in form.errors %}
-				<li><strong>{{ error|escape }}</strong></li>
-			{% endfor %}
-		</ol>
-	</div>
+    <div class="alert alert-error">
+        <h4>Form errors</h4>
+        <ol>
+            {% for error in form.errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+        </ol>
+    </div>
 {% endif %}
-	
+    
 <form method="POST">
     {% csrf_token %}
     <table>
@@ -60,7 +60,6 @@
             <li>All amounts throughout the system will always be displayed in the ledgers native currency as well as the original currency.</li>
             <li>Expenses can be entered in any currency, but the default is the ledgers native currency.</li>
             <li>Payments for a given expense will always be in the same currency as the expense.</li>
-            <li>Backpayments can be in any currency, but like expenses they will default to the native currency of the ledger.</li>
         </ul>
     </div>
     <div class="modal-footer">
