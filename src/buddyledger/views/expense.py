@@ -146,7 +146,7 @@ def EditExpense(request, expenseid=0):
     })
 
 
-def RemoveExpense(request, expenseid=0):    
+def RemoveExpense(request, expenseid=0):
     ### Check if the expense exists - bail out if not
     try:
         expense = Expense.objects.get(pk = expenseid)
@@ -168,3 +168,11 @@ def RemoveExpense(request, expenseid=0):
             'form': DeleteExpenseForm(),
             'expense': expense
         })
+
+
+def ExpenseAddPerson(request, expenseid=0, personid=0):
+    pass
+
+
+def ExpenseRemovePerson(request, expenseid=0, personid=0):
+    pass
