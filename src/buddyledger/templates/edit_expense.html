@@ -3,22 +3,19 @@
 <h2>Editing expense: {{ expense.name }}</h2>
 
 {% if form.errors %}
-	<div class="alert alert-error">
-		<h4>Form errors</h4>
-		<ol>
-			{% for error in form.errors %}
-				<li><strong>{{ error|escape }}</strong></li>
-			{% endfor %}
-		</ol>
-	</div>
+    <div class="alert alert-error">
+        <h4>Form errors</h4>
+        <ol>
+            {% for error in form.errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+        </ol>
+    </div>
 {% endif %}
 
 <form method="POST">
     {% csrf_token %}
-    <input type="hidden" name="id" value="{{ expense.id }}">
-    <table>
     {{form}}
-    </table>
     <input type="submit" method="POST" class="btn" value="Save changes">
 </form>
 {% endblock %}
