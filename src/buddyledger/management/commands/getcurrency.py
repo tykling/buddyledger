@@ -10,15 +10,13 @@ except ImportError:
     from urllib import urlopen
 
 class Command(BaseCommand):
-    help = 'Gets currency exchange rates from http://nationalbanken.dk/dndk/valuta.nsf/valuta.xml and BTC rates from Bitstamp'
+    help = 'Gets currency exchange rates from nationalbanken'
 
     def handle(self, *args, **options):
-        f = urlopen('http://nationalbanken.dk/dndk/valuta.nsf/valuta.xml')
+        f = urlopen('http://www.nationalbanken.dk/_vti_bin/DN/DataService.svc/CurrencyRatesXML?lang=da')
         xml = f.read()
         f.close()
         tree = etree.fromstring(xml)
-        ### initialize usdprice variable (needed for btc price conversion later)
-        usdprice = Decimal(0)
         for child in tree[0]:
             if child.attrib['rate'] != '-':
                 rate = float(child.attrib['rate'].replace(".", "").replace(",", "."))/100
@@ -33,9 +31,6 @@ class Command(BaseCommand):
             
                 currency.save()
                 self.stdout.write('Saved%s rate: 1 %s costs %s DKK' % (temp, child.attrib['code'],rate))
-                if child.attrib['code'] == "USD":
-                    ### save usd rate for later
-                    usdprice = Decimal(rate)
             else:
                 self.stdout.write('Skipping currency %s - no price found' % child.attrib['code'])
 
@@ -52,35 +47,6 @@ class Command(BaseCommand):
         currency.save()
         self.stdout.write('Saved%s rate: 1 DKK costs 1 DKK ... ofcourse' % temp)
 
-
-        ###########################################################################################
-        if usdprice != 0:
-        ### if we have a USD/BTC rate, add BTC price based on bitstamp USD ticker
-            try:
-                f = urlopen('https://www.bitstamp.net/api/ticker/')
-                bitstampjson = f.read()
-                jsonobj = json.loads(bitstampjson)
-                f.close()
-            except Exception as e:
-                self.stderr.write('Unable to get BTC price from https://www.bitstamp.net/api/ticker/')
-                self.stderr.write(str(e))
-                self.stderr.write("This concludes the dump of Bitstamp data that couldn't be parsed. Exiting without BTC data saved...")
-                return
-            
-            ### calculate DKK price from USD price
-            btcusdprice = Decimal(jsonobj['last'])
-            btcdkkprice = btcusdprice * usdprice
-            
-            try:
-                currency = Currency.objects.get(iso4217_code='BTC')
-                currency.dkk_price = btcdkkprice
-                temp = ""
-            except Currency.DoesNotExist:
-                currency = Currency(iso4217_code='BTC',dkk_price=btcdkkprice)
-                temp = " new"
-            self.stdout.write('Saved%s rate: 1 BTC costs %s DKK' % temp)
-        
-        
         ###########################################################################################
         self.stdout.write('Done getting currencies.')
 
