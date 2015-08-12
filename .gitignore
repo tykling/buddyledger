@@ -1,1 +1,10 @@
-*.pyc
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+
+# env config
+environment_settings.py
+
+# dev database
+src/mrx/database.sqlite3
+
+*.csv
