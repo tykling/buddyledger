@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^ledger/(?P<ledgerid>\d+)/edit/$', 'buddyledger.views.EditLedger'),
     url(r'^ledger/(?P<ledgerid>\d+)/close/$', 'buddyledger.views.CloseLedger'),
     url(r'^ledger/(?P<ledgerid>\d+)/reopen/$', 'buddyledger.views.ReopenLedger'),
+    url(r'^ledger/(?P<ledgerid>\d+)/changemethod/$', 'buddyledger.views.ChangeMethod'),
 
     ### person
     url(r'^ledger/(?P<ledgerid>\d+)/addperson/$', 'buddyledger.views.AddPerson'),

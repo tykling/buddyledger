@@ -6,8 +6,10 @@ import datetime
 class DeleteExpenseForm(forms.Form):
     id = forms.IntegerField(widget=forms.HiddenInput())
 
+
 class ConfirmCloseLedgerForm(forms.Form):
     id = forms.IntegerField(widget=forms.HiddenInput())
+
 
 class ConfirmReopenLedgerForm(forms.Form):
     id = forms.IntegerField(widget=forms.HiddenInput())
@@ -17,10 +19,13 @@ class ConfirmReopenLedgerForm(forms.Form):
 class LedgerForm(forms.ModelForm):
     class Meta:
         model = Ledger
+        fields = '__all__'
+
 
 class PersonForm(forms.ModelForm):
     class Meta:
         model = Person
+        fields = '__all__'
 
 
 ### custom forms
@@ -77,3 +82,13 @@ class ExpenseForm(forms.Form):
                 
                 ### return this user
                 yield (userid, shouldpay, haspaid)
+
+
+CALCMETHODS = (
+    ('1', 'basic'),
+    ('2', 'optimized'),
+)
+    
+class ChangeMethodForm(forms.Form):
+    calcmethod = forms.ChoiceField(choices=CALCMETHODS)
+

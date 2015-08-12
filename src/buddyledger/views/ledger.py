@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 
 ### django models and forms
 from buddyledger.models import Ledger, Person, Expense, ExpensePart, Currency
-from buddyledger.forms import LedgerForm, PersonForm
+from buddyledger.forms import LedgerForm, PersonForm, ChangeMethodForm
 
 ### misc convenience functions
 from buddyledger.views.misc import ConvertCurrency, resultdict_to_decimal
@@ -21,14 +21,11 @@ from buddyledger.views.basiccalc import BasicCalc
 from buddyledger.views.resultmatrix import ResultToMatrix
 
 def CreateLedger(request):
-    if request.method == 'POST':
-        form = LedgerForm(request.POST) # A form bound to the POST data
-        if form.is_valid(): # All validation rules pass
-            ledger = Ledger(name=form['name'].data,currency_id=form['currency'].data)
-            ledger.save()
-            return HttpResponseRedirect('/ledger/%s' % ledger.id) # return to the ledger page
-    else:
-        form = LedgerForm()
+    form = LedgerForm(request.POST or None)
+    if form.is_valid(): # All validation rules pass
+        ledger = Ledger(name=form['name'].data,currency_id=form['currency'].data)
+        ledger.save()
+        return HttpResponseRedirect('/ledger/%s' % ledger.id)
 
     return render(request, 'create_ledger.html', {
         'form': form,
@@ -202,3 +199,22 @@ def ReopenLedger(request, ledgerid=0):
             'form': ConfirmReopenLedgerForm(),
             'expense': ledger
         })
+
+
+def ChangeMethod(request, ledgerid=0):
+    try:
+        ledger = Ledger.objects.get(pk = ledgerid)
+    except Ledger.DoesNotExist:
+        response = render_to_response('ledger_does_not_exist.html')
+        return response
+    
+    form = ChangeMethodForm(request.POST or None)
+    if form.is_valid():
+        ledger.calcmethod = form['calcmethod'].data
+        ledger.save()
+        return HttpResponseRedirect('/ledger/%s' % ledger.id)
+
+    return render(request, 'change_ledger_method.html', {
+        'form': form,
+    })
+
