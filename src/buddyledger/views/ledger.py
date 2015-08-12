@@ -105,7 +105,6 @@ def ShowLedger(request, ledgerid=0):
             'expenseparts': expenseparts,
             'debugdata': calcdata,
             'matrixdict': matrixdict,
-            'tabledict': tabledict,
             'userdict': userdict,
             'errorlist': errorlist,
         })
