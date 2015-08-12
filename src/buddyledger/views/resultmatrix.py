@@ -50,19 +50,19 @@ def PopulateMatrix(result,resultdict,userdict,backpayments):
     ### and also calculate the totals while we are here
     payertotal = OrderedDict()
     receivertotal = OrderedDict()
+    for userid,username in userdict.iteritems():
+        payertotal[userid] = 0
+        receivertotal[userid] = 0
+
     for payerid, receiverdict in result.iteritems():
         for receiverid, amount in receiverdict.iteritems():
             ### add to totals for this payer
-            if payerid in payertotal:
-                payertotal[payerid] += amount
-            else:
-                payertotal[payerid] = amount
+            payertotal[payerid] += amount
 
             ### add to totals for this receiver
-            if receiverid in receivertotal:
-                receivertotal[receiverid]+=amount
-            else:
-                receivertotal[receiverid]=amount
+            receivertotal[receiverid]+=amount
+
+            ### add to resultdict
             resultdict[receiverid][payerid] = amount
 
 
