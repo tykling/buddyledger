@@ -198,7 +198,7 @@ function updatecalc() {
                 document.getElementById('controlgroup-customamount-'+userid).className="control-group error";
             };
         });
-        setMessage("Custom amounts total exceeds expense amount","alert-error");
+        setMessage("Custom amounts total (" + customtotal + ") exceeds expense amount (" + Number(document.getElementById('amount').value) + ")","alert-error");
         return;
     };
 
