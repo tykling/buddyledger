@@ -15,7 +15,84 @@
 
 <form method="POST">
     {% csrf_token %}
-    {{form}}
-    <input type="submit" method="POST" class="btn" value="Save changes">
+    <div class="row">
+        <div class="span4">
+            <table>
+                <tr><td>{{form.name.label_tag}}</td><td><div class="control-group" id="controlgroup-name">{{form.name}}</div></td></tr>
+                <tr><td>{{form.currency.label_tag}}</td><td>{{form.currency}}</td></tr>
+                <tr><td>{{form.amount.label_tag}}</td><td><div class="control-group" id="controlgroup-amount"><div class="input-append">{{form.amount}}<span class="add-on currencylabel">{{ ledger.currency.iso4217_code }}</span></div></div></td></tr>
+                <tr><td>{{form.date.label_tag}}</td><td>{{form.date}}</td></tr>
+            </table>
+        </div>
+        <div class="span6">
+            <div class="alert" id="messages">
+                <p>Add an expense!</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="peoplediv" class="row" style="display: none;">
+        <h4>People</h4>
+        
+        <div class="span2" id="peoplebox">
+            <div class="alert alert-info">
+                {% for person in people %}
+                    <p class="personp" style="text-align: center;" id="buttonp-{{ person.id }}">
+                        <button class="btn btn-primary personbutton btn-block" type="button" onclick="javascript:showrow({{person.id}});">{{ person.name }} <i class="icon-arrow-right"></i></button>
+                    </p>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="span8">
+            <table class="table table-condensed">
+                <tr><th>Person</th><th>Should Pay</th><th>Has Paid</th></tr>
+                {% for person in people %}
+                <tr style="display: none;" id="row{{person.id}}">
+                    <td>
+                        <div class="controls form-inline">
+                            <button class="btn btn-primary" type="button" onclick="javascript:hiderow({{person.id}});"><i class="icon-arrow-left"></i> {{ person.name }}</button>
+                            <input id="expensepart-{{person.id}}" name="person-expensepart-{{person.id}}" type="checkbox" style="display:none;"/>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div id="controlgroup-customamount-{{person.id}}" class="control-group">
+                            <div class="controls">
+                                <div class="input-append">
+                                    <input id="customamount-{{person.id}}" class="input-small uneditable-input" name="person-customamount-{{person.id}}" type="number" disabled>
+                                    <span class="add-on currencylabel">{{ ledger.currency.iso4217_code }}</span>
+                                    <input id="autoamount-{{person.id}}" name="person-autoamount-{{person.id}}" type="checkbox" checked style="display:none;">
+                                    <button id="customamount-button-{{person.id}}" class="btn btn-primary" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-edit"></i> Specify amount</button>
+                                    <button id="autoamount-button-{{person.id}}" class="btn btn-info" type="button" onclick="javascript:toggleautoamount({{person.id}});"><i class="icon-remove"></i> Calculate amount</button>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div id="controlgroup-paymentamount-{{person.id}}" class="control-group">
+                            <div class="controls">
+                                <div class="input-append">
+                                    <input id="paymentamount-{{person.id}}" class="input-small" name="person-paymentamount-{{person.id}}" type="number" placeholder="0">
+                                    <span class="add-on currencylabel">{{ ledger.currency.iso4217_code }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <input id="submit" type="submit" method="POST" class="btn" value="Save changes" disabled>
 </form>
+<script>
+    pagetype="edit_expense";
+    {% for person in people %}{% if person not in expensepeople %}configrow({{ person.id }}, 'True', 0, 0, false);
+    {% endif %}{% endfor %}
+    {% for ep in expenseparts %}showrow({{ ep.person.id }});
+    configrow({{ ep.person.id }}, '{{ep.autoamount}}', {{ep.haspaid}}, {{ep.shouldpay}}, true);
+    {% endfor %}
+    updatecalc();
+</script>
 {% endblock %}

@@ -31,12 +31,14 @@ DATABASES = {
 #
 
 # email settings
-EMAIL_HOST='mailhost.example.com'
-EMAIL_PORT=587
-EMAIL_HOST_USER='mymailuser'
-EMAIL_HOST_PASSWORD='mymailpassword'
-EMAIL_USE_TLS=True
-EMAIL_FROM='noreply@example.com'
+#EMAIL_HOST='mailhost.example.com'
+#EMAIL_PORT=587
+#EMAIL_HOST_USER='mymailuser'
+#EMAIL_HOST_PASSWORD='mymailpassword'
+#EMAIL_USE_TLS=True
+#EMAIL_FROM='noreply@example.com'
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = '/tmp/mails' # change this to a proper location
 
 ADMINS = (
     ('buddyledger admin', 'mail@example.com'),

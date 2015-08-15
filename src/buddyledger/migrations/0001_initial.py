@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
@@ -43,7 +44,8 @@ class Migration(migrations.Migration):
                 ('haspaid_native', models.DecimalField(null=True, max_digits=20, decimal_places=2, blank=True)),
                 ('shouldpay', models.DecimalField(null=True, max_digits=20, decimal_places=2, blank=True)),
                 ('shouldpay_native', models.DecimalField(null=True, max_digits=20, decimal_places=2, blank=True)),
-                ('expense', models.ForeignKey(to='buddyledger.Expense')),
+                ('autoamount', models.BooleanField(default=False)),
+                ('expense', models.ForeignKey(related_name='expenseparts', to='buddyledger.Expense')),
             ],
         ),
         migrations.CreateModel(
@@ -70,7 +72,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='expensepart',
             name='person',
-            field=models.ForeignKey(to='buddyledger.Person'),
+            field=models.ForeignKey(to='buddyledger.Person', on_delete=django.db.models.deletion.PROTECT),
         ),
         migrations.AddField(
             model_name='expense',
@@ -81,5 +83,9 @@ class Migration(migrations.Migration):
             model_name='expense',
             name='people',
             field=models.ManyToManyField(to='buddyledger.Person', through='buddyledger.ExpensePart'),
+        ),
+        migrations.AlterUniqueTogether(
+            name='expensepart',
+            unique_together=set([('expense', 'person')]),
         ),
     ]

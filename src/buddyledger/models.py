@@ -3,8 +3,8 @@ from django.db import models
 class Ledger(models.Model):
     name = models.CharField(max_length=100)
     currency = models.ForeignKey('Currency')
-    closed = models.BooleanField(default=False,editable=False)
-    calcmethod = models.CharField(max_length=20,editable=False,default="basic")
+    closed = models.BooleanField(default=False, editable=False)
+    calcmethod = models.CharField(max_length=20, editable=False,default="basic")
     
     def __unicode__(self):
         return self.name
@@ -38,12 +38,16 @@ class Expense(models.Model):
 
 
 class ExpensePart(models.Model):
-    expense = models.ForeignKey(Expense)
-    person = models.ForeignKey(Person)
+    expense = models.ForeignKey(Expense, related_name="expenseparts")
+    person = models.ForeignKey(Person, on_delete=models.PROTECT)
     haspaid = models.DecimalField(max_digits=20, decimal_places=2,null=True,blank=True)
     haspaid_native = models.DecimalField(max_digits=20, decimal_places=2,null=True,blank=True)
     shouldpay = models.DecimalField(max_digits=20, decimal_places=2,null=True,blank=True)
     shouldpay_native = models.DecimalField(max_digits=20, decimal_places=2,null=True,blank=True)
+    autoamount = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together=('expense', 'person')
 
 
 class Currency(models.Model):

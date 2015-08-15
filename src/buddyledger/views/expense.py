@@ -1,5 +1,5 @@
 from decimal import *
-
+import datetime
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from django.forms.models import inlineformset_factory
@@ -9,6 +9,77 @@ from buddyledger.models import Ledger, Person, Expense, Currency, ExpensePart
 from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, DeleteExpenseForm
 
 from buddyledger.views.misc import ConvertCurrency
+
+def ValidateExpense(customtotal, splitpart, autocount, remainder, expense, paymenttotal):
+    ### check if customtotal + remaining = expense amount
+    if customtotal + (splitpart*autocount) + remainder != expense.amount:
+        return False
+    
+    ### check if the the payments add up to the expense amount
+    if expense.amount != paymenttotal:
+        return False
+    
+    ### all good
+    return True
+
+
+def GetTotals(expenseparts):
+    ### calculate customtotal, paymenttotal and autocount
+    customtotal = 0
+    autocount = 0
+    paymenttotal = 0
+    for uid,temp in expenseparts.iteritems():
+        print "Her", uid, temp
+        if temp['shouldpay'] != "auto":
+            customtotal += Decimal(temp['shouldpay'])
+        else:
+            autocount += 1
+
+        try:
+            paymenttotal += Decimal(temp['haspaid'])
+        except Exception as e:
+            return False
+    return customtotal, autocount, paymenttotal
+
+
+def GetSplitParts(expense, customtotal, autocount):
+    ### find the splitpart
+    remaining = expense.amount - customtotal
+    remainder = 0
+    splitpart = 0
+    if remaining > 0:
+        splitpart = Decimal(remaining / autocount).quantize(Decimal('.01'), rounding=ROUND_DOWN)
+        remainder = Decimal((expense.amount-customtotal) - Decimal(splitpart * autocount))
+    return splitpart, remainder
+
+
+def CreateExpenseParts(expenseparts, expense, ledger, splitpart, remainder):
+    for uid,temp in expenseparts.iteritems():
+        if temp['shouldpay'] != "auto":
+            expensepart = ExpensePart.objects.create(
+                person_id=uid,
+                expense_id=expense.id,
+                shouldpay=temp['shouldpay'],
+                shouldpay_native=ConvertCurrency(temp['shouldpay'], expense.currency.id, ledger.currency.id),
+                haspaid=temp['haspaid'],
+                haspaid_native=ConvertCurrency(temp['haspaid'], expense.currency.id, ledger.currency.id),
+                autoamount=False
+            )
+        else:
+            print "remainder is %s splitpart is %s" % (remainder, splitpart)
+            expensepart = ExpensePart.objects.create(
+                person_id=uid,
+                expense_id=expense.id,
+                shouldpay=splitpart+remainder,
+                shouldpay_native=ConvertCurrency(splitpart+remainder, expense.currency.id, ledger.currency.id),
+                haspaid=temp['haspaid'],
+                haspaid_native=ConvertCurrency(temp['haspaid'], expense.currency.id, ledger.currency.id),
+                autoamount=True
+            )
+            remainder = 0
+        print expensepart.shouldpay
+        expensepart.save()
+
 
 def AddExpense(request, ledgerid=0):
     ### check if the ledger exists, bail out if not
@@ -27,79 +98,55 @@ def AddExpense(request, ledgerid=0):
     people = Person.objects.filter(ledger_id=ledgerid).order_by('name')
     
     if request.method == 'POST':
-        form = ExpenseForm(request.POST,people=people)
+        form = ExpenseForm(request.POST, people=people)
         if form.is_valid(): # All validation rules pass
-            expense = Expense(ledger_id=ledgerid,name=form['name'].data,amount=Decimal(form['amount'].data),amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,ledger.currency.id),currency_id=form['currency'].data,date=form['date'].data)
+            expense = Expense(
+                ledger_id=ledgerid,
+                name=form['name'].data,
+                amount=Decimal(form['amount'].data),
+                amount_native=ConvertCurrency(Decimal(form['amount'].data),
+                form['currency'].data,
+                ledger.currency.id),
+                currency_id=form['currency'].data,
+                date=form['date'].data
+            )
             
-            ### loop through the expenseparts
-            expenseparts = dict()
-            for (uid,shouldpay,haspaid) in form.get_expense_parts():
-                if haspaid == '':
-                    haspaid = 0
-                if shouldpay == '':
-                    shouldpay = 0
-                expenseparts[uid] = dict(shouldpay=shouldpay,haspaid=haspaid)
+            ### get the expenseparts
+            expenseparts = form.get_expense_parts()
             
-            ### calculate customtotal and autocount
-            customtotal = 0
-            autocount = 0
-            paymenttotal = 0
-            for uid,temp in expenseparts.iteritems():
-                if temp['shouldpay'] != "auto":
-                    customtotal += Decimal(temp['shouldpay'])
-                else:
-                    autocount += 1
+            ### get totals
+            totals = GetTotals(expenseparts)
+            if not totals:
+                print "bailout 3"
+                return render_to_response('invalid_expense.html')
+            customtotal, autocount, paymenttotal = totals
             
-                try:
-                    paymenttotal += Decimal(temp['haspaid'])
-                except Exception as e:
-                    response = render_to_response('invalid_expense.html')
-                    return response                
+            ### get splitpart (and remainder if any)
+            splitpart, remainder = GetSplitParts(expense, customtotal, autocount)
             
-            ### find the splitpart
-            remaining = expense.amount - customtotal
-            remainder = 0
-            splitpart = 0
-            if remaining > 0:
-                splitpart = Decimal(remaining / autocount).quantize(Decimal('.01'), rounding=ROUND_DOWN)
-                remainder = Decimal((expense.amount-customtotal) - Decimal(splitpart * autocount))
-            
-            ### check if customtotal + remaining = expense amount
-            if customtotal + (splitpart*autocount) + remainder != expense.amount:
-                ### error, bail out
-                response = render_to_response('invalid_expense.html')
-                return response
-            
-            ### check if the the payments add up to the expense amount
-            if expense.amount != paymenttotal:
-                ### error, bail out
-                response = render_to_response('invalid_expense.html')
-                return response
+            ### validate ledger
+            if not ValidateExpense(customtotal, splitpart, autocount, remainder, expense, paymenttotal):
+                print "bailout 4"
+                return render_to_response('invalid_expense.html')
             
             ### OK, save the expense
             expense.save() # save the new expense
                 
             ### loop through the expenseparts again and save each
-            for uid,temp in expenseparts.iteritems():
-                if temp['shouldpay'] != "auto":
-                    expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=temp['shouldpay'],shouldpay_native=ConvertCurrency(temp['shouldpay'],expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native=ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id))
-                else:
-                    if remainder > 0:
-                        expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart+remainder,shouldpay_native=ConvertCurrency(splitpart+remainder,expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native=ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id))
-                        remainder = 0
-                    else:
-                        expensepart = ExpensePart.objects.create(person_id=uid,expense_id=expense.id,shouldpay=splitpart,shouldpay_native=ConvertCurrency(splitpart,expense.currency.id,ledger.currency.id),haspaid=temp['haspaid'],haspaid_native=ConvertCurrency(temp['haspaid'],expense.currency.id,ledger.currency.id))
-                expensepart.save()
+            CreateExpenseParts(expenseparts, expense, ledger, splitpart, remainder)
             
             ### return to the ledger page, expense tab
-            return HttpResponseRedirect('/ledger/%s/#expenses' % ledgerid)
+            return HttpResponseRedirect('/ledger/%s/#expenses' % ledger.id)
         else:
             ### form not valid
-            form = ExpenseForm(request.POST,people=people)
+            form = ExpenseForm(request.POST, people=people)
     else:
         ### page not POSTed
-        form = ExpenseForm(initial={'currency': ledger.currency.id},people=people)
-        
+        form = ExpenseForm(
+            initial={'currency': ledger.currency.id, 'date': datetime.date.today}, 
+            people=people
+        )
+
     return render(request, 'add_expense.html', {
         'form': form,
         'people': people,
@@ -120,29 +167,59 @@ def EditExpense(request, expenseid=0):
         response = render_to_response('ledger_is_closed.html')
         return response
 
-    if request.method == 'POST':
-        form = ExpenseForm(request.POST) # A form bound to the expense data
-        if form.is_valid(): # All validation rules pass
-            expense.name = form['name'].data
-            expense.amount = Decimal(form['amount'].data)
-            expense.amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,expense.ledger.currency.id)
-            currency = Currency.objects.get(pk = form['currency'].data)
-            expense.currency = currency
-            expense.save()
-            expense.people.clear()
-            for personid in form['people'].data:
-                person = Person.objects.get(pk = personid)
-                expense.people.add(person)
-            return HttpResponseRedirect('/ledger/%s' % expense.ledger.id) # return to the ledger page
-        else:
-            form = ExpenseForm(request.POST)
-    else:
-        form = ExpenseForm(instance=expense)
+    ### get all people associated with this ledger
+    people = Person.objects.filter(ledger=expense.ledger).order_by('name')
     
-    form.fields["people"].queryset = Person.objects.filter(ledger_id=expense.ledger.id)
+    ### get all people associated with this expense
+    expensepeople = Person.objects.filter(expense=expense).order_by('name')
+
+    form = ExpenseForm(request.POST or None, people=people, expenseparts=expense.expenseparts.all(), initial={
+        'name': expense.name, 
+        'amount': expense.amount,
+        'currency': expense.currency.id,
+        'date': expense.date,
+    })
+    if form.is_valid(): # All validation rules pass
+        expense.name = form['name'].data
+        expense.amount = Decimal(form['amount'].data)
+        expense.amount_native=ConvertCurrency(Decimal(form['amount'].data),form['currency'].data,expense.ledger.currency.id)
+        expense.currency = Currency.objects.get(pk = form['currency'].data)
+
+        ### get the expenseparts
+        expenseparts = form.get_expense_parts()
+
+        ### get totals
+        totals = GetTotals(expenseparts)
+        if not totals:
+            print "bailout 5"
+            return render_to_response('invalid_expense.html')
+        customtotal, autocount, paymenttotal = totals
+        
+        ### get splitpart (and remainder if any)
+        splitpart, remainder = GetSplitParts(expense, customtotal, autocount)
+        
+        ### validate expense
+        if not ValidateExpense(customtotal, splitpart, autocount, remainder, expense, paymenttotal):
+            print "bailout 6"
+            return render_to_response('invalid_expense.html')
+        
+        ### OK, save the expense
+        expense.save() # save the expense
+            
+        ### loop through the expenseparts again and save each
+        for ep in expense.expenseparts.all():
+            ep.delete()
+        CreateExpenseParts(expenseparts, expense, expense.ledger, splitpart, remainder)
+        
+        ### return response
+        return HttpResponseRedirect('/ledger/%s/#expenses' % expense.ledger.id)
+    
     return render(request, 'edit_expense.html', {
         'form': form,
-        'expense': expense
+        'expense': expense,
+        'people': people,
+        'expensepeople': expensepeople,
+        'expenseparts': expense.expenseparts.all(),
     })
 
 

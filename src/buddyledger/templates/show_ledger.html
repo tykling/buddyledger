@@ -118,7 +118,7 @@
                         </td>
 
                         <td style="width: 3em; text-align: center">
-                            <!-- <a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a> -->
+                            <a href="/expense/{{ expense.id }}/edit/" class="btn btn-info btn-mini"><i class="icon-edit"></i></a>
                             <a href="/expense/{{ expense.id }}/remove/" class="btn btn-danger btn-mini"><i class="icon-remove"></i></a>
                         </td>
                     </tr>
@@ -161,7 +161,13 @@
                                     {% endif %}
 
                                     {% if cellkey == 0 or rowkey == 'total' or cellkey == 'total' %}
-                                        <b>{{ tablecell }}</b></td>
+                                        {% if rowkey == 'total' and cellkey != 0 and tablecell != 0 %}
+                                            <span class="label label-success"><i class="icon-money"></i> {{ tablecell }} {{ ledger.currency }}
+                                        {% elif cellkey == 'total' and rowkey != 0  and tablecell != 0 %}
+                                            <span class="label label-success"><i class="icon-money"></i> {{ tablecell }} {{ ledger.currency }}
+                                        {% else %}
+                                            <b>{{ tablecell }}</b></td>
+                                        {% endif %}
                                     {% else %}
                                         {% if tablecell == 0 %}
                                             {{ tablecell }}
@@ -177,55 +183,6 @@
                 {% endfor %}
             </table>
         </div>
-
-        <div id="resultlist" class="tab-pane">
-            <table class="table table-hover table-bordered">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Receive</th>
-                        <th>Pay</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for uid,tablerow in resultdict.items %}
-                        {% if uid != "total"%}
-                            <tr>
-                                <td>{{ userdict|keyvalue:uid }}</td>
-                                <td>
-                                    <ul>
-                                        {% comment %}<!-- Loop through the people that owe this user money -->{% endcomment %}
-                                        {% for tempuid,value in tablerow.items %}
-                                            {% if tempuid != uid and tempuid != "total"%}
-                                                {% if value > 0 %}
-                                                    <li>Collect {{ value }} {{ ledger.currency.iso4217_code }} from {{ userdict|keyvalue:tempuid }}</li>                                                {% endif %}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </ul>
-                                </td>
-                                <td>
-                                    <ul>
-                                        {% comment %}<!-- Loop through the people that this user owes money to -->{% endcomment %}
-                                        {% for tempuid,temprow in resultdict.items %}
-                                            {% if tempuid != uid and tempuid != "total" %}
-                                                {% for uid2,value in temprow.items %}
-                                                    {% if uid2 == uid and uid2 != "total" %}
-                                                        {% if value > 0 %}
-                                                            <li>Pay {{ value }} {{ ledger.currency.iso4217_code }} to {{ userdict|keyvalue:tempuid }}</li>
-                                                        {% endif %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </ul>
-                                </td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
 
         <div id="debug" class="tab-pane">
             <h4>Debug calculation input</h4>

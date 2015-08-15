@@ -4,14 +4,14 @@
 <h2>Add expense to ledger</h2>
 
 {% if form.errors %}
-	<div class="alert alert-error">
-		<h4>Form errors</h4>
-		<ol>
-			{% for error in form.errors %}
-				<li><strong>{{ error|escape }}</strong></li>
-			{% endfor %}
-		</ol>
-	</div>
+    <div class="alert alert-error">
+        <h4>Form errors</h4>
+        <ol>
+            {% for error in form.errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+        </ol>
+    </div>
 {% endif %}
 
 <form method="POST">
@@ -20,8 +20,8 @@
         <div class="span4">
             <table>
                 <tr><td>{{form.name.label_tag}}</td><td><div class="control-group" id="controlgroup-name">{{form.name}}</div></td></tr>
-                <tr><td>{{form.amount.label_tag}}</td><td><div class="control-group" id="controlgroup-amount"><div class="input-append">{{form.amount}}<span class="add-on currencylabel">{{ ledger.currency.iso4217_code }}</span></div></div></td></tr>
                 <tr><td>{{form.currency.label_tag}}</td><td>{{form.currency}}</td></tr>
+                <tr><td>{{form.amount.label_tag}}</td><td><div class="control-group" id="controlgroup-amount"><div class="input-append">{{form.amount}}<span class="add-on currencylabel">{{ ledger.currency.iso4217_code }}</span></div></div></td></tr>
                 <tr><td>{{form.date.label_tag}}</td><td>{{form.date}}</td></tr>
             </table>
         </div>
@@ -87,4 +87,7 @@
     </div>
     <input id="submit" type="submit" method="POST" class="btn" value="Add expense" disabled>
 </form>
+<script>
+    pagetype="add_expense";
+</script>
 {% endblock %}
