@@ -162,9 +162,9 @@
 
                                     {% if cellkey == 0 or rowkey == 'total' or cellkey == 'total' %}
                                         {% if rowkey == 'total' and cellkey != 0 and tablecell != 0 %}
-                                            <span class="label label-success"><i class="icon-money"></i> {{ tablecell }} {{ ledger.currency }}
+                                            <b>{{ tablecell }} {{ ledger.currency }}</b>
                                         {% elif cellkey == 'total' and rowkey != 0  and tablecell != 0 %}
-                                            <span class="label label-success"><i class="icon-money"></i> {{ tablecell }} {{ ledger.currency }}
+                                            <b>{{ tablecell }} {{ ledger.currency }}</b>
                                         {% else %}
                                             <b>{{ tablecell }}</b></td>
                                         {% endif %}
