@@ -96,7 +96,6 @@ class ExpenseForm(forms.Form):
     def get_expense_parts(self):
         fielddict = dict()
         for fieldname, value in self.cleaned_data.items():
-            print "fieldname: %s value: %s" % (fieldname, value)
             fielddict[fieldname] = value
         
         expenseparts = dict()
@@ -104,17 +103,14 @@ class ExpenseForm(forms.Form):
             ### get the userid from the expensepart field
             if fieldname.startswith('person-expensepart-') and value == True:
                 userid = fieldname[19:]
-                print "processing userid %s" % userid
 
                 ### find out if this user has a custom amount specified
                 if 'person-autoamount-%s' % userid in fielddict and fielddict['person-autoamount-%s' % userid] == True:
                     ### calculate the amount for this user
                     shouldpay = "auto"
-                    print "userid %s auto" % userid
                 else:
                     ### get the customamount for this user
                     shouldpay = fielddict['person-customamount-%s' % userid]
-                    print "userid %s custom" % userid
 
                 ### find out if this user paid anything
                 if 'person-paymentamount-%s' % userid in fielddict:
@@ -128,7 +124,6 @@ class ExpenseForm(forms.Form):
                 if shouldpay == '' or not shouldpay:
                     shouldpay = 0
                 expenseparts[userid] = dict(shouldpay=shouldpay, haspaid=haspaid)
-                print userid, shouldpay, haspaid
         return expenseparts
 
 
