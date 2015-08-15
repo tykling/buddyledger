@@ -31,7 +31,7 @@ class PersonForm(forms.ModelForm):
 ### custom forms
 class ExpenseForm(forms.Form):
     name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'id': 'name'}))
-    amount = forms.CharField(max_length=10, widget=forms.TextInput(attrs={'id': 'amount', 'type': 'number', 'min': 0, 'step': 0.01}))
+    amount = forms.DecimalField(min_value=0, decimal_places=2)
     date = forms.DateField()
 
     def __init__(self, *args, **kwargs):
