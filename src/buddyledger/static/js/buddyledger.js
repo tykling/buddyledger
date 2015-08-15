@@ -184,7 +184,8 @@ function updatecalc() {
             customtotal = customtotal + Number($( "#customamount-" + customids[i] ).val());
         };
     };
-
+    customtotal = Number(customtotal).toFixed(2);
+    
     // if the total customamount exceeds the amount...
     if (customtotal > Number(document.getElementById('amount').value)) {
         // mark the expense amount and the customamount fields with red to indicate where the problem is
