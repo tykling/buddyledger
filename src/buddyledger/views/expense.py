@@ -29,7 +29,6 @@ def GetTotals(expenseparts):
     autocount = 0
     paymenttotal = 0
     for uid,temp in expenseparts.iteritems():
-        print "Her", uid, temp
         if temp['shouldpay'] != "auto":
             customtotal += Decimal(temp['shouldpay'])
         else:
@@ -66,7 +65,6 @@ def CreateExpenseParts(expenseparts, expense, ledger, splitpart, remainder):
                 autoamount=False
             )
         else:
-            print "remainder is %s splitpart is %s" % (remainder, splitpart)
             expensepart = ExpensePart.objects.create(
                 person_id=uid,
                 expense_id=expense.id,
@@ -77,7 +75,6 @@ def CreateExpenseParts(expenseparts, expense, ledger, splitpart, remainder):
                 autoamount=True
             )
             remainder = 0
-        print expensepart.shouldpay
         expensepart.save()
 
 
@@ -117,7 +114,6 @@ def AddExpense(request, ledgerid=0):
             ### get totals
             totals = GetTotals(expenseparts)
             if not totals:
-                print "bailout 3"
                 return render_to_response('invalid_expense.html')
             customtotal, autocount, paymenttotal = totals
             
@@ -126,7 +122,6 @@ def AddExpense(request, ledgerid=0):
             
             ### validate ledger
             if not ValidateExpense(customtotal, splitpart, autocount, remainder, expense, paymenttotal):
-                print "bailout 4"
                 return render_to_response('invalid_expense.html')
             
             ### OK, save the expense
@@ -191,7 +186,6 @@ def EditExpense(request, expenseid=0):
         ### get totals
         totals = GetTotals(expenseparts)
         if not totals:
-            print "bailout 5"
             return render_to_response('invalid_expense.html')
         customtotal, autocount, paymenttotal = totals
         
@@ -200,7 +194,6 @@ def EditExpense(request, expenseid=0):
         
         ### validate expense
         if not ValidateExpense(customtotal, splitpart, autocount, remainder, expense, paymenttotal):
-            print "bailout 6"
             return render_to_response('invalid_expense.html')
         
         ### OK, save the expense
