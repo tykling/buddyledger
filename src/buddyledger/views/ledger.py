@@ -5,6 +5,7 @@ from fractions import Fraction
 ### django functions
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 ### django models and forms
 from buddyledger.models import Ledger, Person, Expense, ExpensePart, Currency
@@ -56,7 +57,6 @@ def ShowLedger(request, ledgerid=0):
         userdict[person.id] = person.name  
         userlist.append(person.id)
 
-    
     showresult = True
     errorlist = []
     calcdata = []
@@ -92,7 +92,7 @@ def ShowLedger(request, ledgerid=0):
             try:
                 fracresult = solve_mincost_problem_for_expenses(calcdata, userlist)
             except nx.NetworkXUnfeasible:
-                errorlist.append("Error 'NetworkXUnfeasible' during calculation, ledger may be inconsistent. Check that all expenses are consistent, or switch to the basic calcmethod.")
+                messages.error(request, "Error 'NetworkXUnfeasible' during calculation, ledger may be inconsistent. Check that all expenses are consistent, or switch to the basic calcmethod.")
                 showresult = False                
         elif ledger.calcmethod == "basic":
             fracresult = BasicCalc(calcdata,userlist)
@@ -109,28 +109,19 @@ def ShowLedger(request, ledgerid=0):
     
         ### arrange the data for result output
         matrixdict = ResultToMatrix(result,userdict)
-
-        ### render and return response
-        return render(request, 'show_ledger.html', {
-            'ledger': ledger,
-            'people': people,
-            'expenses': expenses,
-            'debugdata': calcdata,
-            'matrixdict': matrixdict,
-            'userdict': userdict,
-            'errorlist': errorlist,
-            'inconsistent_expenses': inconsistent_expenses,
-        })
     else:
-        ### render and return response
-        return render(request, 'show_ledger.html', {
-            'ledger': ledger,
-            'people': people,
-            'expenses': expenses,
-            'debugdata': calcdata,
-            'userdict': userdict,
-            'errorlist': errorlist,
-        })
+        matrixdict = False
+
+    ### render and return response
+    return render(request, 'show_ledger.html', {
+        'ledger': ledger,
+        'people': people,
+        'expenses': expenses,
+        'debugdata': calcdata,
+        'matrixdict': matrixdict,
+        'userdict': userdict,
+        'inconsistent_expenses': inconsistent_expenses,
+    })
 
 
 def EditLedger(request, ledgerid=0):
