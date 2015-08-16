@@ -37,8 +37,7 @@ def ShowLedger(request, ledgerid=0):
     try:
         ledger = Ledger.objects.get(pk = ledgerid)
     except Ledger.DoesNotExist:
-        response = render_to_response('ledger_does_not_exist.html')
-        return response
+        return render_to_response('ledger_does_not_exist.html')
     
     ### get all people related to this ledger
     people = Person.objects.filter(ledger_id=ledgerid)
@@ -87,7 +86,11 @@ def ShowLedger(request, ledgerid=0):
 
         ### do the calculation
         if ledger.calcmethod == "optimized":
-            fracresult = solve_mincost_problem_for_expenses(calcdata, userlist)
+            try:
+                fracresult = solve_mincost_problem_for_expenses(calcdata, userlist)
+            except nx.NetworkXUnfeasible:
+                errorlist.append("Error 'NetworkXUnfeasible' during calculation, ledger may be inconsistent. Check that all expenses are consistent, or switch to the basic calcmethod.")
+                showresult = False                
         elif ledger.calcmethod == "basic":
             fracresult = BasicCalc(calcdata,userlist)
         else:
