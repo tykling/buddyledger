@@ -1,8 +1,6 @@
-from decimal import *
-
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect
-import django.template
+from django.contrib import messages
 
 from buddyledger.forms import PersonForm, DeletePersonForm
 from buddyledger.models import Ledger, Person, Expense, Currency
