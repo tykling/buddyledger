@@ -4,7 +4,7 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 import django.template
 
-from buddyledger.forms import PersonForm
+from buddyledger.forms import PersonForm, DeletePersonForm
 from buddyledger.models import Ledger, Person, Expense, Currency
 
 def AddPerson(request,ledgerid=0):
@@ -70,11 +70,7 @@ def EditPerson(request, personid=0):
 
 def RemovePerson(request, personid=0):
     ### Check if the person exists - bail out if not
-    try:
-        person = Person.objects.get(pk = personid)
-    except Person.DoesNotExist:
-        response = render_to_response('person_does_not_exist.html')
-        return response
+    person = get_object_or_404(Person, id=personid)
 
     ### check if the ledger is open
     if person.ledger.closed:
@@ -83,7 +79,21 @@ def RemovePerson(request, personid=0):
 
     expenses = person.expense_set.all()
     if expenses:
-        return render_to_response('expense_references_this_person.html', {'expenses': expenses, 'ledger_id': person.ledger.id, 'person': person})
+        return render_to_response('expense_references_this_person.html', {
+            'expenses': expenses, 
+            'ledger_id': person.ledger.id, 
+            'person': person
+        })
 
-    person.delete()
-    return HttpResponseRedirect('/ledger/%s/#people' % person.ledger.id) # return to the ledger page
+    ### confirm delete
+    form = DeletePersonForm(request.POST or None, instance=person)
+    if form.is_valid():
+        person.delete()
+        messages.success(request, 'The person "%s" has been deleted.' % person.name)
+        return HttpResponseRedirect('/ledger/%s/#people' % person.ledger.id) # return to the list of people
+
+    return render(request, 'confirm_person_delete.html', {
+        'person': person,
+        'form': form
+    })
+

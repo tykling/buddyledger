@@ -28,6 +28,13 @@ class PersonForm(forms.ModelForm):
         fields = '__all__'
 
 
+### delete person form
+class DeletePersonForm(forms.ModelForm):
+    class Meta:
+        model = Person
+        fields = []
+
+
 ### custom forms
 class ExpenseForm(forms.Form):
     name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={'id': 'name'}))
