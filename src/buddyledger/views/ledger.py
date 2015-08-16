@@ -20,6 +20,9 @@ from buddyledger.views.basiccalc import BasicCalc
 ### result layouts
 from buddyledger.views.resultmatrix import ResultToMatrix
 
+### networkx
+from networkx import nx
+
 def CreateLedger(request):
     form = LedgerForm(request.POST or None)
     if form.is_valid(): # All validation rules pass
