@@ -2,6 +2,7 @@ from decimal import *
 
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
+import django.template
 
 from buddyledger.forms import PersonForm
 from buddyledger.models import Ledger, Person, Expense, Currency
@@ -79,6 +80,10 @@ def RemovePerson(request, personid=0):
     if person.ledger.closed:
         response = render_to_response('ledger_is_closed.html')
         return response
+
+    expenses = person.expense_set.all()
+    if expenses:
+        return render_to_response('expense_references_this_person.html', {'expenses': expenses, 'ledger_id': person.ledger.id, 'person': person})
 
     person.delete()
     return HttpResponseRedirect('/ledger/%s/#people' % person.ledger.id) # return to the ledger page

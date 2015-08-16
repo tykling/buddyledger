@@ -1,0 +1,15 @@
+{% extends "skeleton.html" %}
+{% block content %}
+<h2>Can't delete the person {{ person|escape }}</h2>
+
+	<div class="alert alert-error">
+                <h4>There is at least one expense referencing it:</h4>
+		<ol>
+			{% for expense in expenses %}
+				<li>{{ expense|escape }}</li>
+			{% endfor %}
+		</ol>
+                <a href="/ledger/{{ ledger_id|escape }}#expenses">List expenses</a>
+	</div>
+
+{% endblock %}
