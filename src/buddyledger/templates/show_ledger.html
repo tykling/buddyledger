@@ -80,10 +80,14 @@
                         <th style="width: 3em; text-align: right">Amount {{ ledger.currency.iso4217_code }}</th>
                         <th style="text-align: right">Should Pay</th>
                         <th style="text-align: right">Has Paid</th>
-                        <th style="width: 4em; text-align: center">Action</th>
+                        <th style="width: 4em; text-align: center">Actions</th>
                     </tr>
                 {% for expense in expenses %}
+                    {% if expense.id in inconsistent_expenses %}
+                    <tr class="error">
+                    {% else %}
                     <tr>
+                    {% endif %}
                         <td>
                             {{ expense.name }}
                         </td>
@@ -98,22 +102,18 @@
                         </td>
 
                         <td style="text-align: right">
-                            {% for expensepart in expenseparts %}
-                                {% if expensepart.expense_id == expense.id %}
-                                    {% if expensepart.shouldpay != 0 %}
-                                        {{ userdict|keyvalue:expensepart.person_id }}: {{ expensepart.shouldpay }} {{ expense.currency.iso4217_code }}<br>
-                                    {% endif %}
+                            {% for expensepart in expense.expenseparts.all %}
+                                {% if expensepart.shouldpay != 0 %}
+                                    {{ userdict|keyvalue:expensepart.person_id }}: {{ expensepart.shouldpay }} {{ expense.currency.iso4217_code }}<br>
                                 {% endif %}
                             {% endfor %}
                         </td>
                         
                         <td style="text-align: right">
-                            {% for expensepart in expenseparts %}
-                                {% if expensepart.expense_id == expense.id %}
+                            {% for expensepart in expense.expenseparts.all %}
                                     {% if expensepart.haspaid != 0 %}
                                         {{ userdict|keyvalue:expensepart.person_id }}: {{ expensepart.haspaid }} {{ expense.currency.iso4217_code }}<br>
                                     {% endif %}
-                                {% endif %}
                             {% endfor %}
                         </td>
 

@@ -46,8 +46,6 @@ def ShowLedger(request, ledgerid=0):
     ### get all expenses related to this ledger
     expenses = Expense.objects.filter(ledger_id=ledgerid)
     
-    ### get all expenseparts related to one of the expenses (for use in the template)
-    expenseparts = ExpensePart.objects.filter(expense__in=expenses)
     
     ### create dict with uid <> username mappings
     userdict = OrderedDict()
@@ -67,13 +65,22 @@ def ShowLedger(request, ledgerid=0):
             whoshouldpay = dict()
             
             ### loop through expenseparts (people) for this expense
-            for expensepart in expenseparts.filter(expense_id=expense.id):
+            whopaid_total = 0
+            shouldpay_total = 0
+            inconsistent_expenses = []
+            for expensepart in expense.expenseparts.filter(expense_id=expense.id):
                 if expensepart.haspaid_native != 0:
                     whopaid.append(dict(personId=expensepart.person_id,amount=Fraction(expensepart.haspaid_native)))
+                    whopaid_total += expensepart.haspaid_native
                 if expensepart.shouldpay_native == None:
                     whoshouldpay[expensepart.person_id]=Fraction(0)
                 else:
                     whoshouldpay[expensepart.person_id]=Fraction(expensepart.shouldpay_native)
+                    shouldpay_total += expensepart.shouldpay_native
+            
+            ### check if this expense is consistent (neccesary because of an old bug)
+            if shouldpay_total != expense.amount_native or whopaid_total != expense.amount_native:
+                inconsistent_expenses.append(expense.id)
             
             ### add data for this expense to calcdata
             calcdata.append(dict(whopaid=whopaid, whoshouldpay=whoshouldpay))
@@ -102,11 +109,11 @@ def ShowLedger(request, ledgerid=0):
             'ledger': ledger,
             'people': people,
             'expenses': expenses,
-            'expenseparts': expenseparts,
             'debugdata': calcdata,
             'matrixdict': matrixdict,
             'userdict': userdict,
             'errorlist': errorlist,
+            'inconsistent_expenses': inconsistent_expenses,
         })
     else:
         ### render and return response
@@ -114,7 +121,6 @@ def ShowLedger(request, ledgerid=0):
             'ledger': ledger,
             'people': people,
             'expenses': expenses,
-            'expenseparts': expenseparts,
             'debugdata': calcdata,
             'userdict': userdict,
             'errorlist': errorlist,
