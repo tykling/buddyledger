@@ -60,6 +60,7 @@ def ShowLedger(request, ledgerid=0):
     showresult = True
     errorlist = []
     calcdata = []
+    inconsistent_expenses = []
     if len(expenses) > 0:
         ### build the calcdata structure for calculation input
         for expense in expenses:            
@@ -69,7 +70,7 @@ def ShowLedger(request, ledgerid=0):
             ### loop through expenseparts (people) for this expense
             whopaid_total = 0
             shouldpay_total = 0
-            inconsistent_expenses = []
+            
             for expensepart in expense.expenseparts.filter(expense_id=expense.id):
                 if expensepart.haspaid_native != 0:
                     whopaid.append(dict(personId=expensepart.person_id,amount=Fraction(expensepart.haspaid_native)))
