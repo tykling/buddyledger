@@ -36,7 +36,7 @@ DATABASES = {
 #EMAIL_HOST_USER='mymailuser'
 #EMAIL_HOST_PASSWORD='mymailpassword'
 #EMAIL_USE_TLS=True
-#EMAIL_FROM='noreply@example.com'
+#DEFAULT_FROM_EMAIL='noreply@example.com'
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/tmp/mails' # change this to a proper location
 
