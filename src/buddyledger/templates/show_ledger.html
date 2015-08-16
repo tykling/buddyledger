@@ -100,7 +100,7 @@
                         <td style="text-align: right">
                             {% for expensepart in expense.expenseparts.all %}
                                 {% if expensepart.shouldpay != 0 %}
-                                    {{ userdict|keyvalue:expensepart.person_id }}: {{ expensepart.shouldpay }} {{ expense.currency.iso4217_code }}<br>
+                                    {{ userdict|keyvalue:expensepart.person_id }}: {{ expensepart.shouldpay_native }} {{ ledger.currency.iso4217_code }}<br>
                                 {% endif %}
                             {% endfor %}
                             {% if expense.id in inconsistent_expenses %}<i>error</i>{% endif %}
@@ -109,7 +109,7 @@
                         <td style="text-align: right">
                             {% for expensepart in expense.expenseparts.all %}
                                     {% if expensepart.haspaid != 0 %}
-                                        {{ userdict|keyvalue:expensepart.person_id }}: {{ expensepart.haspaid }} {{ expense.currency.iso4217_code }}<br>
+                                        {{ userdict|keyvalue:expensepart.person_id }}: {{ expensepart.haspaid_native }} {{ ledger.currency.iso4217_code }}<br>
                                     {% endif %}
                             {% endfor %}
                             {% if expense.id in inconsistent_expenses %}<i>error</i>{% endif %}
