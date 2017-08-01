@@ -37,7 +37,7 @@ def BasicCalc(expenses, peoplelist):
                     debtdict[splituserid][payerdict['personId']] = 0
 
                 # add this users part of this payment to the users debt to the payer
-                debtdict[splituserid][payerdict['personId']] += payerdict['amount']/len(expense['whoshouldpay'])
+                debtdict[splituserid][payerdict['personId']] += payerdict['amount']/splitters
 
     ### optimize payments to the same people dont have to pay to eachother,
     for payerid in list(debtdict):
