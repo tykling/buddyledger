@@ -40,7 +40,8 @@ def BasicCalc(expenses, peoplelist):
                 debtdict[splituserid][payerdict['personId']] += payerdict['amount']/len(expense['whoshouldpay'])
 
     ### optimize payments to the same people dont have to pay to eachother,
-    for payerid,receiverdict in debtdict.iteritems():
+    for payerid in list(debtdict):
+        receiverdict = debtdict[payerid]
         for receiverid,amount in receiverdict.iteritems():
             ### make certain everything is initialized
             if not payerid in debtdict:
