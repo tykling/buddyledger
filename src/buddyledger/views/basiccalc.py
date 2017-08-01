@@ -1,4 +1,5 @@
 def BasicCalc(expenses, peoplelist):
+    print
     debtdict = dict()
     ### loop through expenses
     for expense in expenses:
@@ -15,9 +16,9 @@ def BasicCalc(expenses, peoplelist):
                 ### unless the splituser is also the payer
                 if payerdict['personId'] != splituser:
                     if payerdict['personId'] in debtdict[splituser]:
-                        debtdict[splituser][payerdict['personId']] += payerdict['amount']/len(expense['whoshouldpay'])
+                        debtdict[splituser][payerdict['personId']] += expense['whoshouldpay'][splituser]
                     else:
-                        debtdict[splituser][payerdict['personId']] = payerdict['amount']/len(expense['whoshouldpay'])
+                        debtdict[splituser][payerdict['personId']] = expense['whoshouldpay'][splituser]
 
     ### optimize payments to the same people dont have to pay to eachother,
     for payerid in list(debtdict):
