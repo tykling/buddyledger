@@ -4,21 +4,40 @@ def BasicCalc(expenses, peoplelist):
     for expense in expenses:
         ### loop through each payment in this expense
         for payerdict in expense['whopaid']:
+            ### count the number of people splitting this expense
+            splitters = 0
+            for splituserid in expense['whoshouldpay']:
+                if expense['whoshouldpay'][splituserid] == 0:
+                    # this user should not pay any part of this expense
+                    continue
+                splitters += 1
+
+            # nobody wants to pay? not supposed to happen
+            if splitters = 0:
+                return False
+
             ### loop through the users splitting this expense,
             ### and add their part of this expense to their debt to the payer
-            for splituser in expense['whoshouldpay']:
-                ### initialize dict
-                if not splituser in debtdict:
-                    debtdict[splituser] = dict()
+            for splituserid in expense['whoshouldpay']:
+                if expense['whoshouldpay'][splituserid] == 0:
+                    # this user should not pay any part of this expense
+                    continue
+
+                ### initialize this userids slot in the debtdict
+                if not splituserid in debtdict:
+                    debtdict[splituserid] = dict()
 
                 ### add this splitusers part of the payment to his debt to the payer
-                ### unless the splituser is also the payer
-                if payerdict['personId'] != splituser:
-                    if payerdict['personId'] in debtdict[splituser]:
-                        debtdict[splituser][payerdict['personId']] += payerdict['amount']/len(expense['whoshouldpay'])
-                    else:
-                        debtdict[splituser][payerdict['personId']] = payerdict['amount']/len(expense['whoshouldpay'])
+                ### unless the splituser is also the payer (no need to pay to oneself)
+                if payerdict['personId'] == splituserid:
+                    continue
 
+                # initialize dict
+                if payerdict['personId'] not in debtdict[splituserid]:
+                    debtdict[splituserid][payerdict['personId']] = 0
+
+                # add this users part of this payment to the users debt to the payer
+                debtdict[splituserid][payerdict['personId']] += payerdict['amount']/len(expense['whoshouldpay'])
 
     ### optimize payments to the same people dont have to pay to eachother,
     for payerid,receiverdict in debtdict.iteritems():
