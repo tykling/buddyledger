@@ -16,6 +16,10 @@ def BasicCalc(expenses, peoplelist):
             if not splitters:
                 return False
 
+            ### find out if the payer is paying part of this expense, if so, substract payers own part of the payment
+            if payerdict['personId'] in expense['whoshouldpay']:
+                finalamount = payerdict['amount'] - payerdict['personId']
+
             ### loop through the users splitting this expense,
             ### and add their part of this expense to their debt to the payer
             for splituserid in expense['whoshouldpay']:
@@ -37,7 +41,7 @@ def BasicCalc(expenses, peoplelist):
                     debtdict[splituserid][payerdict['personId']] = 0
 
                 # add this users part of this payment to the users debt to the payer
-                debtdict[splituserid][payerdict['personId']] += payerdict['amount']/splitters
+                debtdict[splituserid][payerdict['personId']] += finalamount/splitters
 
     ### optimize payments to the same people dont have to pay to eachother,
     for payerid in list(debtdict):
