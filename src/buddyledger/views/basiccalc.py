@@ -13,7 +13,7 @@ def BasicCalc(expenses, peoplelist):
                 splitters += 1
 
             # nobody wants to pay? not supposed to happen
-            if splitters = 0:
+            if not splitters:
                 return False
 
             ### loop through the users splitting this expense,
