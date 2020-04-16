@@ -1,27 +1,28 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, re_path
+from . import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     ### frontpage and other static pages
-    url(r'^$', 'buddyledger.views.Frontpage', name='frontpage'),
-    url(r'^usage/$', 'buddyledger.views.ShowUsage', name='show_usage'),
+    re_path(r'^$', views.Frontpage, name='frontpage'),
+    re_path(r'^usage/?$', views.ShowUsage, name='show_usage'),
     
     ### ledger
-    url(r'^ledger/create/$', 'buddyledger.views.CreateLedger', name='create_ledger'),
-    url(r'^ledger/(?P<ledgerid>\d+)/$', 'buddyledger.views.ShowLedger', name='show_ledger'),
-    url(r'^ledger/(?P<ledgerid>\d+)/edit/$', 'buddyledger.views.EditLedger', name='edit_ledger'),
-    url(r'^ledger/(?P<ledgerid>\d+)/close/$', 'buddyledger.views.CloseLedger', name='close_ledger'),
-    url(r'^ledger/(?P<ledgerid>\d+)/reopen/$', 'buddyledger.views.ReopenLedger', name='reopen_ledger'),
-    url(r'^ledger/(?P<ledgerid>\d+)/changemethod/$', 'buddyledger.views.ChangeMethod', name='change_ledger_method'),
+    re_path(r'^ledger/create/?$', views.CreateLedger, name='create_ledger'),
+    re_path(r'^ledger/(?P<ledgerid>\d+)/?$', views.ShowLedger, name='show_ledger'),
+    re_path(r'^ledger/(?P<ledgerid>\d+)/edit/?$', views.EditLedger, name='edit_ledger'),
+    re_path(r'^ledger/(?P<ledgerid>\d+)/close/?$', views.CloseLedger, name='close_ledger'),
+    re_path(r'^ledger/(?P<ledgerid>\d+)/reopen/?$', views.ReopenLedger, name='reopen_ledger'),
+    re_path(r'^ledger/(?P<ledgerid>\d+)/changemethod/?$', views.ChangeMethod, name='change_ledger_method'),
 
     ### person
-    url(r'^ledger/(?P<ledgerid>\d+)/addperson/$', 'buddyledger.views.AddPerson', name='add_person'),
-    url(r'^person/(?P<personid>\d+)/edit/$', 'buddyledger.views.EditPerson', name='edit_person'),
-    url(r'^person/(?P<personid>\d+)/remove/$', 'buddyledger.views.RemovePerson', name='remove_person'),
+    re_path(r'^ledger/(?P<ledgerid>\d+)/addperson/?$', views.AddPerson, name='add_person'),
+    re_path(r'^person/(?P<personid>\d+)/edit/?$', views.EditPerson, name='edit_person'),
+    re_path(r'^person/(?P<personid>\d+)/remove/?$', views.RemovePerson, name='remove_person'),
     
     ### expense
-    url(r'^ledger/(?P<ledgerid>\d+)/addexpense/$', 'buddyledger.views.AddExpense', name='add_expense'),
-    url(r'^expense/(?P<expenseid>\d+)/edit/$', 'buddyledger.views.EditExpense', name='edit_expense'),
-    url(r'^expense/(?P<expenseid>\d+)/remove/$', 'buddyledger.views.RemoveExpense', name='remove_expense'),
-    url(r'^expense/(?P<expenseid>\d+)/addperson/(?P<personid>\d+)/$', 'buddyledger.views.ExpenseAddPerson', name='expense_add_person'),
-    url(r'^expense/(?P<expenseid>\d+)/removeperson/(?P<personid>\d+)/$', 'buddyledger.views.ExpenseRemovePerson', name='expense_remove_person'),
-)
+    re_path(r'^ledger/(?P<ledgerid>\d+)/addexpense/?$', views.AddExpense, name='add_expense'),
+    re_path(r'^expense/(?P<expenseid>\d+)/edit/?$', views.EditExpense, name='edit_expense'),
+    re_path(r'^expense/(?P<expenseid>\d+)/remove/?$', views.RemoveExpense, name='remove_expense'),
+    re_path(r'^expense/(?P<expenseid>\d+)/addperson/(?P<personid>\d+)/?$', views.ExpenseAddPerson, name='expense_add_person'),
+    re_path(r'^expense/(?P<expenseid>\d+)/removeperson/(?P<personid>\d+)/?$', views.ExpenseRemovePerson, name='expense_remove_person'),
+]

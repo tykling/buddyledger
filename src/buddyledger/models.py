@@ -2,19 +2,19 @@ from django.db import models
 
 class Ledger(models.Model):
     name = models.CharField(max_length=100)
-    currency = models.ForeignKey('Currency')
+    currency = models.ForeignKey('Currency', on_delete=models.CASCADE)
     closed = models.BooleanField(default=False, editable=False)
     calcmethod = models.CharField(max_length=20, editable=False, default="basic")
     
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
 class Person(models.Model):
     name = models.CharField(max_length=100)
-    ledger = models.ForeignKey(Ledger,editable=False)
+    ledger = models.ForeignKey(Ledger, editable=False, on_delete=models.CASCADE)
     
-    def __unicode__(self):
+    def __str__(self):
         return self.name
     
     class Meta:
@@ -24,13 +24,13 @@ class Person(models.Model):
 class Expense(models.Model):
     name = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=20, decimal_places=2)
-    currency = models.ForeignKey('Currency')
+    currency = models.ForeignKey('Currency', on_delete=models.CASCADE)
     amount_native = models.DecimalField(max_digits=20, decimal_places=2, editable=False)
-    ledger = models.ForeignKey('Ledger',editable=False)
+    ledger = models.ForeignKey('Ledger', editable=False, on_delete=models.CASCADE)
     people = models.ManyToManyField('Person', through='ExpensePart')
     date = models.DateField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -38,7 +38,7 @@ class Expense(models.Model):
 
 
 class ExpensePart(models.Model):
-    expense = models.ForeignKey(Expense, related_name="expenseparts")
+    expense = models.ForeignKey(Expense, related_name="expenseparts", on_delete=models.CASCADE)
     person = models.ForeignKey(Person, on_delete=models.PROTECT)
     haspaid = models.DecimalField(max_digits=20, decimal_places=2,null=True,blank=True)
     haspaid_native = models.DecimalField(max_digits=20, decimal_places=2,null=True,blank=True)
@@ -54,7 +54,7 @@ class Currency(models.Model):
     iso4217_code = models.CharField(max_length=3)
     dkk_price = models.DecimalField(max_digits=20, decimal_places=2)
     
-    def __unicode__(self):
+    def __str__(self):
         return self.iso4217_code
     
     class Meta:

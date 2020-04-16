@@ -3,16 +3,16 @@ from collections import OrderedDict
 from fractions import Fraction
 
 ### django functions
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 
 ### django models and forms
 from buddyledger.models import Ledger, Person, Expense, ExpensePart, Currency
-from buddyledger.forms import LedgerForm, PersonForm, ChangeMethodForm
+from buddyledger.forms import LedgerForm, PersonForm, ChangeMethodForm, ConfirmCloseLedgerForm
 
 ### misc convenience functions
-from buddyledger.views.misc import ConvertCurrency, resultdict_to_decimal
+from buddyledger.views.misc import ConvertCurrency, resultdict_to_decimal, render_to_response
 
 ### calculation methods
 from buddyledger.views.graphbuilder import solve_mincost_problem_for_expenses

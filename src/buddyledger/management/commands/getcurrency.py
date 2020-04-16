@@ -1,38 +1,56 @@
-from django.core.management.base import BaseCommand, CommandError
-from buddyledger.models import Currency
-from decimal import *
 import urllib, json
 import xml.etree.ElementTree as etree
+from decimal import *
 
 try:
     from urllib.request import urlopen
 except ImportError:
     from urllib import urlopen
 
+def fetch():
+    f = urlopen('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml')
+    xml = f.read()
+    f.close()
+    tree = etree.fromstring(xml)
+    cube = tree[2][0]
+    eur_rates = {}
+    for child in cube:
+        a = child.attrib
+        rate = float(a['rate'])
+        code = a['currency']
+        eur_rates[code] = rate
+
+    dkk_per_eur = 1 / eur_rates['DKK']
+
+    for code, rate in eur_rates.items():
+        if code == "DKK": continue
+        yield code, rate * dkk_per_eur
+    yield "EUR", dkk_per_eur
+
+if __name__ == "__main__":
+    import pprint, sys
+    gen = fetch()
+    pprint.pprint(list(gen))
+    sys.exit(0)
+
+from django.core.management.base import BaseCommand, CommandError
+from buddyledger.models import Currency
+
 class Command(BaseCommand):
     help = 'Gets currency exchange rates from nationalbanken'
 
     def handle(self, *args, **options):
-        f = urlopen('http://www.nationalbanken.dk/_vti_bin/DN/DataService.svc/CurrencyRatesXML?lang=da')
-        xml = f.read()
-        f.close()
-        tree = etree.fromstring(xml)
-        for child in tree[0]:
-            if child.attrib['rate'] != '-':
-                rate = float(child.attrib['rate'].replace(".", "").replace(",", "."))/100
+        for code, rate in fetch():
+            try:
+                currency = Currency.objects.get(iso4217_code=code)
+                currency.dkk_price = rate
+                temp = ""
+            except Currency.DoesNotExist:
+                currency = Currency(iso4217_code=code, dkk_price=rate)
+                temp = " new"
 
-                try:
-                    currency = Currency.objects.get(iso4217_code=child.attrib['code'])
-                    currency.dkk_price=rate
-                    temp = ""
-                except Currency.DoesNotExist:
-                    currency = Currency(iso4217_code=child.attrib['code'],dkk_price=rate)
-                    temp = " new"
-            
-                currency.save()
-                self.stdout.write('Saved%s rate: 1 %s costs %s DKK' % (temp, child.attrib['code'],rate))
-            else:
-                self.stdout.write('Skipping currency %s - no price found' % child.attrib['code'])
+            self.stdout.write('Saved%s rate: 1 %s costs %s DKK' % (temp, code, rate))
+            currency.save()
 
 
         ###########################################################################################
@@ -49,4 +67,3 @@ class Command(BaseCommand):
 
         ###########################################################################################
         self.stdout.write('Done getting currencies.')
-

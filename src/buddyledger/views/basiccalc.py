@@ -23,7 +23,7 @@ def BasicCalc(expenses, peoplelist):
     ### optimize payments to the same people dont have to pay to eachother,
     for payerid in list(debtdict):
         receiverdict = debtdict[payerid]
-        for receiverid,amount in receiverdict.iteritems():
+        for receiverid,amount in receiverdict.items():
             ### make certain everything is initialized
             if not payerid in debtdict:
                 debtdict[payerid] = dict()

@@ -1,5 +1,6 @@
 from decimal import *
 from buddyledger.models import Ledger, Person, Expense, Currency
+from django.shortcuts import render
 
 def ConvertCurrency(amount,fromcurrencyid,tocurrencyid):
     if fromcurrencyid != tocurrencyid:
@@ -25,8 +26,11 @@ def conv_frac_to_decimal(f, precision):
     
 def resultdict_to_decimal(resultdict):
     returndict = dict()
-    for payerid, receiverdict in resultdict.iteritems():
-        for receiverid, amount in receiverdict.iteritems():
+    for payerid, receiverdict in resultdict.items():
+        for receiverid, amount in receiverdict.items():
             receiverdict[receiverid] = conv_frac_to_decimal(amount,2)
         returndict[payerid] = receiverdict
     return returndict
+
+def render_to_response(request, templatename):
+    return render(request, templatename, {}, content_type='text/html')

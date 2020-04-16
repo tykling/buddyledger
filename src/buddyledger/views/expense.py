@@ -1,14 +1,14 @@
 from decimal import *
 import datetime
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.forms.models import inlineformset_factory
 from django.views.generic.edit import DeleteView
 
 from buddyledger.models import Ledger, Person, Expense, Currency, ExpensePart
 from buddyledger.forms import LedgerForm, PersonForm, ExpenseForm, DeleteExpenseForm
 
-from buddyledger.views.misc import ConvertCurrency
+from buddyledger.views.misc import ConvertCurrency, render_to_response
 
 def ValidateExpense(customtotal, splitpart, autocount, remainder, expense, paymenttotal):
     ### check if customtotal + remaining = expense amount
@@ -28,7 +28,7 @@ def GetTotals(expenseparts):
     customtotal = 0
     autocount = 0
     paymenttotal = 0
-    for uid,temp in expenseparts.iteritems():
+    for uid,temp in expenseparts.items():
         if temp['shouldpay'] != "auto":
             customtotal += Decimal(temp['shouldpay'])
         else:
@@ -53,7 +53,7 @@ def GetSplitParts(expense, customtotal, autocount):
 
 
 def CreateExpenseParts(expenseparts, expense, ledger, splitpart, remainder):
-    for uid,temp in expenseparts.iteritems():
+    for uid,temp in expenseparts.items():
         if temp['shouldpay'] != "auto":
             expensepart = ExpensePart.objects.create(
                 person_id=uid,
@@ -83,12 +83,12 @@ def AddExpense(request, ledgerid=0):
     try:
         ledger = Ledger.objects.get(pk = ledgerid)
     except Ledger.DoesNotExist:
-        response = render_to_response('ledgerdoesnotexist.html')
+        response = render_to_response(request, 'ledgerdoesnotexist.html')
         return response
 
     ### check if the ledger is open
     if ledger.closed:
-        response = render_to_response('ledger_is_closed.html')
+        response = render_to_response(request, 'ledger_is_closed.html')
         return response
 
     ### get all people associated with this ledger
@@ -114,7 +114,7 @@ def AddExpense(request, ledgerid=0):
             ### get totals
             totals = GetTotals(expenseparts)
             if not totals:
-                return render_to_response('invalid_expense.html')
+                return render_to_response(request, 'invalid_expense.html')
             customtotal, autocount, paymenttotal = totals
             
             ### get splitpart (and remainder if any)
@@ -122,7 +122,7 @@ def AddExpense(request, ledgerid=0):
             
             ### validate ledger
             if not ValidateExpense(customtotal, splitpart, autocount, remainder, expense, paymenttotal):
-                return render_to_response('invalid_expense.html')
+                return render_to_response(request, 'invalid_expense.html')
             
             ### OK, save the expense
             expense.save() # save the new expense
@@ -148,18 +148,17 @@ def AddExpense(request, ledgerid=0):
         'ledger': ledger
     })
 
-
 def EditExpense(request, expenseid=0):
     ### Check if the expense exists - bail out if not
     try:
         expense = Expense.objects.get(pk = expenseid)
     except Expense.DoesNotExist:
-        response = render_to_response('expense_does_not_exist.html')
+        response = render_to_response(request, 'expense_does_not_exist.html')
         return response
 
     ### check if the ledger is open
     if expense.ledger.closed:
-        response = render_to_response('ledger_is_closed.html')
+        response = render_to_response(request, 'ledger_is_closed.html')
         return response
 
     ### get all people associated with this ledger
@@ -186,7 +185,7 @@ def EditExpense(request, expenseid=0):
         ### get totals
         totals = GetTotals(expenseparts)
         if not totals:
-            return render_to_response('invalid_expense.html')
+            return render_to_response(request, 'invalid_expense.html')
         customtotal, autocount, paymenttotal = totals
         
         ### get splitpart (and remainder if any)
@@ -194,7 +193,7 @@ def EditExpense(request, expenseid=0):
         
         ### validate expense
         if not ValidateExpense(customtotal, splitpart, autocount, remainder, expense, paymenttotal):
-            return render_to_response('invalid_expense.html')
+            return render_to_response(request, 'invalid_expense.html')
         
         ### OK, save the expense
         expense.save() # save the expense
@@ -221,12 +220,12 @@ def RemoveExpense(request, expenseid=0):
     try:
         expense = Expense.objects.get(pk = expenseid)
     except Expense.DoesNotExist:
-        response = render_to_response('expense_does_not_exist.html')
+        response = render_to_response(request, 'expense_does_not_exist.html')
         return response
 
     ### check if the ledger is open
     if expense.ledger.closed:
-        response = render_to_response('ledger_is_closed.html')
+        response = render_to_response(request, 'ledger_is_closed.html')
         return response
 
     if request.method == 'POST':
