@@ -1,3 +1,5 @@
+from fractions import Fraction
+
 def BasicCalc(expenses, peoplelist):
     print
     debtdict = dict()
@@ -23,7 +25,7 @@ def BasicCalc(expenses, peoplelist):
     ### optimize payments to the same people dont have to pay to eachother,
     for payerid in list(debtdict):
         receiverdict = debtdict[payerid]
-        for receiverid,amount in receiverdict.iteritems():
+        for receiverid,amount in receiverdict.items():
             ### make certain everything is initialized
             if not payerid in debtdict:
                 debtdict[payerid] = dict()
@@ -39,7 +41,7 @@ def BasicCalc(expenses, peoplelist):
                 continue
             
             ### if either one is 0 skip it
-            if debtdict[payerid][receiverid] == 0 or debtdict[receiverid][payerid] == 0:
+            if debtdict[payerid][receiverid] <= Fraction(1,100) or debtdict[receiverid][payerid] <= Fraction(1,100):
                 continue
 
             ### check if receiver is to receive more than he is paying to this payer
@@ -56,6 +58,11 @@ def BasicCalc(expenses, peoplelist):
                 if debtdict[payerid][receiverid] != 0:
                     debtdict[payerid][receiverid] = 0
                     debtdict[receiverid][payerid] = 0
-    
+
+            if debtdict[payerid][receiverid] <= Fraction(1,100):
+                debtdict[payerid][receiverid] = 0
+            if debtdict[receiverid][payerid] <= Fraction(1,100):
+                debtdict[receiverid][payerid] = 0
+
     ### return the result
     return debtdict

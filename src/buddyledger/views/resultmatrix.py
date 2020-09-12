@@ -22,19 +22,19 @@ def GetEmptyMatrix(userdict):
     temp = OrderedDict()
     temp[0] = "n/a" # the 0,0 field is the upper left position
 
-    for userid,username in userdict.iteritems():
+    for userid,username in userdict.items():
         temp[userid] = "%s pay" % username
     resultdict[0] = temp
     
     ### now create a row per user
-    for receiverid,receivername in userdict.iteritems():
+    for receiverid,receivername in userdict.items():
         ### create new empty table row
         temp = OrderedDict()
         ### add the rows leftmost column with the name
         temp[0] = "%s receive" % receivername
         
         ### loop through users, add Decimal(0) or "n/a"
-        for payerid,payername in userdict.iteritems():
+        for payerid,payername in userdict.items():
             if receivername == payername:
                 temp[payerid] = "n/a"
             else:
@@ -50,12 +50,12 @@ def PopulateMatrix(result,resultdict,userdict):
     ### and also calculate the totals while we are here
     payertotal = OrderedDict()
     receivertotal = OrderedDict()
-    for userid,username in userdict.iteritems():
+    for userid,username in userdict.items():
         payertotal[userid] = 0
         receivertotal[userid] = 0
 
-    for payerid, receiverdict in result.iteritems():
-        for receiverid, amount in receiverdict.iteritems():
+    for payerid, receiverdict in result.items():
+        for receiverid, amount in receiverdict.items():
             ### add to totals for this payer
             payertotal[payerid] += amount
 
@@ -67,7 +67,7 @@ def PopulateMatrix(result,resultdict,userdict):
 
 
     ### add totals columns and row to the matrix (bottom row and rightmost column)
-    for receiverid,row in resultdict.iteritems():
+    for receiverid,row in resultdict.items():
         
         ### add the rightmost column for this row
         if receiverid == 0:
@@ -80,7 +80,7 @@ def PopulateMatrix(result,resultdict,userdict):
     ### create the new bottom row for the "total pay" amounts and add it to resultdict
     temp = OrderedDict()
     temp[0] = "Total Pay"
-    for userid,username in userdict.iteritems():
+    for userid,username in userdict.items():
         amount = payertotal[userid]
         temp[userid] = amount
     temp['total'] = 'n/a'

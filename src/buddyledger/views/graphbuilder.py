@@ -48,6 +48,13 @@ def solve_mincost_problem_for_expenses(expenses, people, debug=False):
     return flowDict
 
 if __name__ == "__main__":
+    print(solve_mincost_problem_for_expenses([{'whopaid': [
+        {'amount': Fraction(33, 100), 'personId': 60},
+        {'amount': Fraction(33, 100), 'personId': 61},
+        {'amount': Fraction(34, 100), 'personId': 62}], 'whoshouldpay': {
+            60: Fraction(33, 100),
+            61: Fraction(33, 100),
+            62: Fraction(34, 100)}}], [62, 61, 60], 1))
     print(solve_mincost_problem_for_expenses([{"whopaid": [{"personId": 10, "amount": Fraction(1,2)}, {"personId": 11, "amount": Fraction(1,2)}], "whoshouldpay": {10: None, 11: None, 12: Fraction(1,2)}}] , [10,11,12], 1))
     # invalid problems (invalid constraint because all people contribute an amount which is unequal the paid amount:
     # from buddyledger.baconsvin.org/ledger/17

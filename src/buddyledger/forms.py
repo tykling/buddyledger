@@ -106,7 +106,7 @@ class ExpenseForm(forms.Form):
             fielddict[fieldname] = value
         
         expenseparts = dict()
-        for fieldname,value in fielddict.iteritems():
+        for fieldname,value in fielddict.items():
             ### get the userid from the expensepart field
             if fieldname.startswith('person-expensepart-') and value == True:
                 userid = fieldname[19:]

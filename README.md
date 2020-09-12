@@ -20,7 +20,7 @@ First, make sure you have Django and NetworkX installed.
 
 Change directory to `<repository_root>/buddyledger/src` (the one containing `manage.py`).
 
-Create `buddyledger/settings.py` relative to current directory (example content):
+Create `buddyledger/environment_settings.py` relative to current directory (example content):
 ```
 ROOT_URLCONF="buddyledger.urls"
 INSTALLED_APPS=(
@@ -30,7 +30,7 @@ INSTALLED_APPS=(
     'buddyledger'
 )
 
-TEMPLATE_DIRS=("templates")
+TEMPLATE_DIRS=("templates",)
 
 DEBUG = True
 DEFAULT_FROM_EMAIL = 'webmaster@example.com'
@@ -46,8 +46,8 @@ DATABASES = {
 
 Now execute (example for Windows):
 
-    c:\Python33\python manage.py syncdb
-    c:\Python33\python manage.py getcurrency
-    c:\Python33\python manage.py runserver
+    c:\Python38\python manage.py migrate
+    c:\Python38\python manage.py getcurrency
+    c:\Python38\python manage.py runserver
 
 The web application is available at http://localhost:8000/ .
